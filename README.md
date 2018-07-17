@@ -6,15 +6,103 @@
 
 > A simple Cryptography Implementation in Java for the ARK Blockchain.
 
-[![Build Status](https://img.shields.io/travis/ArkEcosystem/java-crypto/master.svg?style=flat-square)](https://travis-ci.org/ArkEcosystem/java-crypto)
-[![Latest Version](https://img.shields.io/github/release/ArkEcosystem/java-crypto.svg?style=flat-square)](https://github.com/ArkEcosystem/java-crypto/releases)
+[![Build Status](https://img.shields.io/travis/ArkEcosystem/java-crypto/master.svg)](https://travis-ci.org/ArkEcosystem/java-crypto)
+[![Codecov](https://img.shields.io/codecov/c/github/arkecosystem/java-crypto.svg)](https://codecov.io/gh/arkecosystem/java-crypto)
+[![Latest Version](https://img.shields.io/github/release/ArkEcosystem/java-crypto.svg)](https://github.com/ArkEcosystem/java-crypto/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Installation
+## TO-DO
 
-```bash
-...
-```
+### AIP11 Serialization
+- [ ] Transfer
+- [ ] Second Signature Registration
+- [ ] Delegate Registration
+- [ ] Vote
+- [ ] Multi Signature Registration
+- [ ] IPFS
+- [ ] Timelock Transfer
+- [ ] Multi Payment
+- [ ] Delegate Resignation
+
+### AIP11 Deserialization
+- [ ] Transfer
+- [ ] Second Signature Registration
+- [ ] Delegate Registration
+- [ ] Vote
+- [ ] Multi Signature Registration
+- [ ] IPFS
+- [ ] Timelock Transfer
+- [ ] Multi Payment
+- [ ] Delegate Resignation
+
+### Transaction Signing
+- [ ] Transfer
+- [ ] Second Signature Registration
+- [ ] Delegate Registration
+- [ ] Vote
+- [ ] Multi Signature Registration
+
+### Transaction Verifying
+- [ ] Transfer
+- [ ] Second Signature Registration
+- [ ] Delegate Registration
+- [ ] Vote
+- [ ] Multi Signature Registration
+
+### Transaction
+- [ ] getId
+- [ ] sign
+- [ ] secondSign
+- [ ] verify
+- [ ] secondverify
+- [ ] parseSignatures
+- [ ] serialize
+- [ ] deserialize
+- [ ] toBytes
+- [ ] toArray
+- [ ] toJson
+
+### Message
+- [ ] sign
+- [ ] verify
+- [ ] toArray
+- [ ] toJson
+
+### Address
+- [ ] fromPassphrase
+- [ ] fromPublicKey
+- [ ] fromPrivateKey
+- [ ] validate
+
+### Private Key
+- [ ] fromPassphrase
+- [ ] fromHex
+
+### Public Key
+- [ ] fromPassphrase
+- [ ] fromHex
+
+### WIF
+- [ ] fromPassphrase
+
+### Configuration
+- [ ] getNetwork
+- [ ] setNetwork
+- [ ] getFee
+- [ ] setFee
+
+### Slot
+- [ ] time
+- [ ] epoch
+
+### Networks (Mainnet, Devnet & Testnet)
+- [ ] epoch
+- [ ] version
+- [ ] wif
+
+## Documentation
+
+You can find installation instructions and detailed instructions on how to use this package at the [dedicated documentation site](https://docs.ark.io/v1.0/docs/cryptography-java).
 
 ## Security
 

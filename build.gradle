@@ -40,7 +40,7 @@ dependencies {
     // Build blows up without this?
     compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
 
-    testCompile group: 'org.spockframework', name: 'spock-core', version: 'spock-1.1'
+    testCompile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 

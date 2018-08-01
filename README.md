@@ -25,7 +25,7 @@
 - [ ] Delegate Resignation
 
 ### AIP11 Deserialization
-- [ ] Transfer
+- [x] Transfer
 - [ ] Second Signature Registration
 - [ ] Delegate Registration
 - [ ] Vote
@@ -55,7 +55,7 @@
 - [x] secondSign
 - [x] verify
 - [x] secondverify
-- [ ] parseSignatures
+- [x] parseSignatures
 - [ ] serialize
 - [ ] deserialize
 - [x] toBytes

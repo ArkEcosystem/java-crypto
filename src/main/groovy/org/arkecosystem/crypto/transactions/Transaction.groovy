@@ -189,6 +189,14 @@ class Transaction extends Object {
         return result
     }
 
+    ByteBuffer serialize()  {
+        return new Serializer().serialize(this)
+    }
+
+    static Transaction deserialize (String serialized) {
+        return new Deserializer().deserialize(serialized)
+    }
+
     String toObject() {
         this.properties.subMap([
             'id', 'timestamp', 'recipientId', 'amount', 'fee', 'type', 'asset',

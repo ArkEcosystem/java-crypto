@@ -1,5 +1,6 @@
 package org.arkecosystem.crypto.transactions
 
+import org.arkecosystem.crypto.identities.*
 import com.google.gson.Gson
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -9,6 +10,20 @@ import org.bitcoinj.core.Sha256Hash
 import static com.google.common.io.BaseEncoding.base16
 
 class Transaction extends Object {
+    String id
+    int version
+    int network
+    int timestamp
+    String recipientId
+    Long amount
+    Long fee
+    int type
+    String vendorField
+    String signature
+    String signSignature
+    String senderPublicKey
+    Map<String, Object> asset = [:]
+
     String getId() {
         base16().lowerCase().encode Sha256Hash.hash(toBytes(false, false))
     }
@@ -16,7 +31,7 @@ class Transaction extends Object {
     Transaction sign(String passphrase) {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase)
 
-        byte[] txbytes = toBytes(t)
+        byte[] bytes = toBytes()
         privateKey.sign(Sha256Hash.of(bytes))
 
         senderPublicKey = base16().lowerCase().encode(privateKey.getPubKey())
@@ -28,9 +43,9 @@ class Transaction extends Object {
     Transaction secondSign(String passphrase) {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase)
 
-        byte[] txbytes = toBytes(false)
+        byte[] bytes = toBytes(false)
 
-        signSignature = base16().lowerCase().encode(privateKey.sign(Sha256Hash.of(txbytes)).encodeToDER())
+        signSignature = base16().lowerCase().encode(privateKey.sign(Sha256Hash.of(bytes)).encodeToDER())
 
         return this
     }
@@ -39,15 +54,15 @@ class Transaction extends Object {
         ECKey keys = ECKey.fromPublicOnly(base16().lowerCase().decode(t.senderPublicKey))
 
         byte[] signature = base16().lowerCase().decode(t.signature)
-        byte[] bytes = toBytes(t)
+        byte[] bytes = toBytes()
 
         return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey())
     }
 
     boolean secondVerify(String secondPublicKey) {
-        ECKey keys = ECKey.fromPublicOnly base16().lowerCase().decode(secondPublicKeyHex)
+        ECKey keys = ECKey.fromPublicOnly base16().lowerCase().decode(secondPublicKey)
 
-        byte[] signature = base16().lowerCase().decode(t.signSignature)
+        byte[] signature = base16().lowerCase().decode(this.signSignature)
         byte[] bytes = toBytes(false)
 
         return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey())
@@ -57,13 +72,9 @@ class Transaction extends Object {
         ByteBuffer buffer = ByteBuffer.allocate(1000)
         buffer.order(ByteOrder.LITTLE_ENDIAN)
 
-        buffer.put type.getByteValue()
+        buffer.put this.type.byteValue()
         buffer.putInt timestamp
         buffer.put base16().lowerCase().decode(senderPublicKey)
-
-        if (requesterPublicKey) {
-            buffer.put base16().lowerCase().decode(requesterPublicKey)
-        }
 
         if (recipientId) {
             buffer.put Base58.decodeChecked(recipientId)

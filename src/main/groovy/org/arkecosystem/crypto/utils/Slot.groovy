@@ -15,6 +15,6 @@ class Slot {
 
     static Date epoch() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        dateFormat.parse(Network.get().epoch)
+        dateFormat.parse Network.get().epoch
     }
 }

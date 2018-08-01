@@ -5,7 +5,6 @@ class TransferTest extends Specification {
     def "create with a passphrase"() {
         when:
             def actual = new Transfer()
-                .initialize()
                 .recipient('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25')
                 .amount(133380000000)
                 .vendorField('This is a transaction from PHP')
@@ -17,7 +16,6 @@ class TransferTest extends Specification {
     def "create with a second passphrase"() {
         when:
             def actual = new Transfer()
-                .initialize()
                 .recipient('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25')
                 .amount(133380000000)
                 .vendorField('This is a transaction from PHP')

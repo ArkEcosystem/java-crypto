@@ -36,14 +36,14 @@
 - [ ] Delegate Resignation
 
 ### Transaction Signing
-- [ ] Transfer
+- [x] Transfer
 - [ ] Second Signature Registration
 - [ ] Delegate Registration
 - [ ] Vote
 - [ ] Multi Signature Registration
 
 ### Transaction Verifying
-- [ ] Transfer
+- [x] Transfer
 - [ ] Second Signature Registration
 - [ ] Delegate Registration
 - [ ] Vote

@@ -154,11 +154,11 @@ class Transaction extends Object {
         buffer.putLong fee
 
         if (this.type == Types.SECOND_SIGNATURE_REGISTRATION.getValue()) {
-            buffer.put base16().lowerCase().decode(asset?.get("signature")?.get("publicKey"))
+            buffer.put base16().lowerCase().decode(asset.signature.publicKey)
         }
 
         if (this.type == Types.DELEGATE_REGISTRATION.getValue()) {
-            buffer.put asset.username.bytes
+            buffer.put asset.delegate.username.bytes
         }
 
         if (this.type == Types.VOTE.getValue()) {
@@ -172,6 +172,7 @@ class Transaction extends Object {
         if (!skipSignature && signature) {
             buffer.put base16().lowerCase().decode(signature)
         }
+
         if (!skipSecondSignature && signSignature) {
             buffer.put base16().lowerCase().decode(signSignature)
         }

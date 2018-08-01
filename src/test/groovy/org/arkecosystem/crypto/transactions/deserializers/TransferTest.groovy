@@ -7,8 +7,7 @@ import org.arkecosystem.crypto.transactions.*
 import java.util.List
 import com.google.gson.Gson
 
-class TransferTest
-extends Specification {
+class TransferTest extends Specification {
     def "passphrase"() {
         setup:
             Object fixture = FixtureLoader.load(getClass(), "transactions/transfer/passphrase")

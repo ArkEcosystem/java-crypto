@@ -1,0 +1,17 @@
+package org.arkecosystem.crypto.transactions.serializers
+
+import org.arkecosystem.crypto.FixtureLoader
+import spock.lang.Specification
+import org.arkecosystem.crypto.transactions.*
+import static com.google.common.io.BaseEncoding.base16
+
+class SecondSignatureRegistrationTest extends Specification {
+    def "second-passphrase"() {
+        setup:
+            Object fixture = FixtureLoader.load(getClass(), "transactions/second_signature_registration/second-passphrase")
+        when:
+            def actual = new Serializer().serialize(FixtureLoader.transaction(fixture))
+        then:
+            base16().lowerCase().encode(actual) == fixture.serialized
+    }
+}

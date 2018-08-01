@@ -109,9 +109,9 @@ class Deserializer {
         }
 
         if (Types.MULTI_SIGNATURE_REGISTRATION.getValue() == transaction.type) {
-            // transaction.asset['multisignature']['keysgroup'] = array_map(function ($key) {
-            //     return '+'.$key
-            // }, transaction.asset['multisignature']['keysgroup'])
+            for (int i = 0; i < transaction.asset.multisignature.keysgroup.size(); i++) {
+                transaction.asset.multisignature.keysgroup[i] = '+' + transaction.asset.multisignature.keysgroup[i]
+            }
         }
 
         if (transaction.vendorFieldHex) {
@@ -122,9 +122,9 @@ class Deserializer {
             transaction.id = transaction.getId()
         }
 
-        if (Types.SECOND_SIGNATURE_REGISTRATION.getValue() == transaction.type
-            || Types.MULTI_SIGNATURE_REGISTRATION.getValue() == transaction.type) {
-            transaction.recipientId = Address.fromPublicKey(transaction.senderPublicKey)
-        }
+        // if (Types.SECOND_SIGNATURE_REGISTRATION.getValue() == transaction.type
+        //     || Types.MULTI_SIGNATURE_REGISTRATION.getValue() == transaction.type) {
+        //     transaction.recipientId = Address.fromPublicKey(transaction.senderPublicKey)
+        // }
     }
 }

@@ -1,9 +1,6 @@
 package org.arkecosystem.crypto.identities
 
-
-import org.bitcoinj.core.ECKey
-import org.bitcoinj.core.Sha256Hash
-
+import org.bitcoinj.core.*
 import static com.google.common.io.BaseEncoding.base16
 
 class PrivateKey {

@@ -1,7 +1,7 @@
 package org.arkecosystem.crypto.transactions.deserializers
 
 import org.arkecosystem.crypto.transactions.Transaction
-import org.bitcoinj.core.VersionedChecksummedBytes
+import org.arkecosystem.crypto.helpers.Base58
 import java.nio.ByteBuffer
 
 class Transfer extends AbstractDeserializer {
@@ -15,10 +15,9 @@ class Transfer extends AbstractDeserializer {
         this.transaction.amount     = this.buffer.getLong()
         this.transaction.expiration = this.buffer.getInt()
 
-        /* FIX: the address currently does not start with D as expected for devnet */
         def recipientId = new byte[21]
         this.buffer.get(recipientId)
-        this.transaction.recipientId = new VersionedChecksummedBytes(this.transaction.network, recipientId).toBase58()
+        this.transaction.recipientId = Base58.encodeChecked(recipientId)
 
         this.transaction.parseSignatures(this.serialized, assetOffset + (8 + 4 + 21) * 2)
     }

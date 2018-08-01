@@ -1,6 +1,8 @@
 package org.arkecosystem.crypto.identities
 
 import com.google.common.io.BaseEncoding
+import org.arkecosystem.crypto.configuration.Network
+import org.bitcoinj.core.Base58
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.core.VersionedChecksummedBytes
 import org.spongycastle.crypto.digests.RIPEMD160Digest
@@ -26,6 +28,6 @@ class Address {
     }
 
     static Boolean validate(String address) {
-        //
+        return Base58.decodeChecked(address)[0] == Network.get().addressByte()
     }
 }

@@ -1,13 +1,14 @@
 package org.arkecosystem.crypto.transactions
 
-
-import org.arkecosystem.crypto.enums.Types
-import org.arkecosystem.crypto.identities.Address
-import org.arkecosystem.crypto.transactions.deserializers.Transfer
-
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-
+import org.arkecosystem.crypto.enums.Types
+import org.arkecosystem.crypto.identities.Address
+import org.arkecosystem.crypto.transactions.deserializers.DelegateRegistration
+import org.arkecosystem.crypto.transactions.deserializers.MultiSignatureRegistration
+import org.arkecosystem.crypto.transactions.deserializers.SecondSignatureRegistration
+import org.arkecosystem.crypto.transactions.deserializers.Transfer
+import org.arkecosystem.crypto.transactions.deserializers.Vote
 import static com.google.common.io.BaseEncoding.base16
 import static javax.xml.bind.DatatypeConverter.parseHexBinary
 
@@ -60,21 +61,21 @@ class Deserializer {
                 new Transfer(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
             break
 
-            // case Types.SECOND_SIGNATURE_REGISTRATION.getValue():
-            //     new SecondSignatureRegistration(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
-            // break
+            case Types.SECOND_SIGNATURE_REGISTRATION.getValue():
+                new SecondSignatureRegistration(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
+            break
 
-            // case Types.DELEGATE_REGISTRATION.getValue():
-            //     new DelegateRegistration(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
-            // break
+            case Types.DELEGATE_REGISTRATION.getValue():
+                new DelegateRegistration(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
+            break
 
-            // case Types.VOTE.getValue():
-            //     new Vote(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
-            // break
+            case Types.VOTE.getValue():
+                new Vote(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
+            break
 
-            // case Types.MULTI_SIGNATURE_REGISTRATION.getValue():
-            //     new MultiSignatureRegistration(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
-            // break
+            case Types.MULTI_SIGNATURE_REGISTRATION.getValue():
+                new MultiSignatureRegistration(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
+            break
 
             // case Types.IPFS.getValue():
             //     new Ipfs(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
@@ -107,12 +108,11 @@ class Deserializer {
             transaction.recipientId = Address.fromPublicKey(transaction.senderPublicKey)
         }
 
-        // if (Types.MULTI_SIGNATURE_REGISTRATION.getValue() == transaction.type) {
-        //     transaction.asset['multisignature']['keysgroup'] = array_map(function ($key) {
-        //         return '+'.$key
-        //     }, transaction.asset['multisignature']['keysgroup'])
-        // }
-        //
+        if (Types.MULTI_SIGNATURE_REGISTRATION.getValue() == transaction.type) {
+            // transaction.asset['multisignature']['keysgroup'] = array_map(function ($key) {
+            //     return '+'.$key
+            // }, transaction.asset['multisignature']['keysgroup'])
+        }
 
         if (transaction.vendorFieldHex) {
             transaction.vendorField = new String(base16().lowerCase().decode(transaction.vendorFieldHex))
@@ -122,11 +122,8 @@ class Deserializer {
             transaction.id = transaction.getId()
         }
 
-        if (Types.SECOND_SIGNATURE_REGISTRATION.getValue() == transaction.type) {
-            transaction.recipientId = Address.fromPublicKey(transaction.senderPublicKey)
-        }
-
-        if (Types.MULTI_SIGNATURE_REGISTRATION.getValue() == transaction.type) {
+        if (Types.SECOND_SIGNATURE_REGISTRATION.getValue() == transaction.type
+            || Types.MULTI_SIGNATURE_REGISTRATION.getValue() == transaction.type) {
             transaction.recipientId = Address.fromPublicKey(transaction.senderPublicKey)
         }
     }

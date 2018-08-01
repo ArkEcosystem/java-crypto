@@ -1,22 +1,20 @@
 package org.arkecosystem.crypto.configuration
 
-
-import org.arkecosystem.crypto.networks.AbstractNetwork
-import org.arkecosystem.crypto.networks.Mainnet
+import org.arkecosystem.crypto.networks.*
 
 class Network {
-    private static AbstractNetwork network;
+    private static INetwork network;
 
     static
     {
         network = new Mainnet()
     }
 
-    static AbstractNetwork get() {
+    static INetwork get() {
         return network
     }
 
-    static void set(AbstractNetwork network) {
+    static void set(INetwork network) {
         Network.network = network
     }
 }

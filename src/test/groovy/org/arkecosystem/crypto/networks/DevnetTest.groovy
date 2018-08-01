@@ -20,6 +20,6 @@ class DevnetTest extends Specification {
         when:
             def actual = new Devnet().epoch()
         then:
-            actual == '2017-03-21T13:00:00.000Z'
+            actual =='2017-03-21 13:00:00'
     }
 }

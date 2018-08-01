@@ -10,6 +10,6 @@ class Mainnet implements INetwork {
     }
 
     String epoch() {
-        '2017-03-21T13:00:00.000Z'
+        '2017-03-21 13:00:00'
     }
 }

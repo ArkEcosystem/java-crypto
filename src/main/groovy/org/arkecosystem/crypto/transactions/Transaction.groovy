@@ -114,12 +114,16 @@ class Transaction extends Object {
                 def mLength = Integer.parseInt(signatures.substring(2, 4), 16) + 2
 
                 if (mLength > 0) {
-                    this.signatures.add(signatures.substring(0, (mLength + 2) * 2))
+                    this.signatures.add(signatures.substring(0, mLength * 2))
                 } else {
                     moreSignatures = false
                 }
 
-                signatures = signatures.substring((mLength + 2) * 2)
+                signatures = signatures.substring(mLength * 2)
+
+                if (!signatures.length()) {
+                    break
+                }
             }
         }
 
@@ -166,7 +170,9 @@ class Transaction extends Object {
         }
 
         if (this.type == Types.MULTI_SIGNATURE_REGISTRATION.getValue()) {
-            buffer.put base16().lowerCase().decode(asset.signature)
+            buffer.put asset.multisignature.min.byteValue()
+            buffer.put asset.multisignature.lifetime.byteValue()
+            buffer.put asset.multisignature.keysgroup.join("").getBytes()
         }
 
         if (!skipSignature && signature) {

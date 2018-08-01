@@ -34,11 +34,8 @@ class Transaction extends Object {
     Transaction sign(String passphrase) {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase)
 
-        byte[] bytes = toBytes()
-        privateKey.sign(Sha256Hash.of(bytes))
-
-        senderPublicKey = base16().lowerCase().encode(privateKey.getPubKey())
-        signature = base16().lowerCase().encode(privateKey.sign(Sha256Hash.of(bytes)).encodeToDER())
+        this.senderPublicKey = privateKey.getPublicKeyAsHex()
+        this.signature = base16().lowerCase().encode(privateKey.sign(Sha256Hash.of(toBytes())).encodeToDER())
 
         return this
     }
@@ -46,9 +43,7 @@ class Transaction extends Object {
     Transaction secondSign(String passphrase) {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase)
 
-        byte[] bytes = toBytes(false)
-
-        signSignature = base16().lowerCase().encode(privateKey.sign(Sha256Hash.of(bytes)).encodeToDER())
+        this.signSignature = base16().lowerCase().encode(privateKey.sign(Sha256Hash.of(toBytes(false))).encodeToDER())
 
         return this
     }
@@ -98,20 +93,20 @@ class Transaction extends Object {
         buffer.putLong amount
         buffer.putLong fee
 
-        if (type == Types.SECOND_SIGNATURE_REGISTRATION.getValue()) {
+        if (this.type == Types.SECOND_SIGNATURE_REGISTRATION.getValue()) {
             buffer.put base16().lowerCase().decode(asset?.get("signature")?.get("publicKey"))
         }
 
-        if (type == Types.DELEGATE_REGISTRATION.getValue()) {
+        if (this.type == Types.DELEGATE_REGISTRATION.getValue()) {
             buffer.put asset.username.bytes
         }
 
-        if (type == Types.VOTE.getValue()) {
+        if (this.type == Types.VOTE.getValue()) {
             buffer.put asset.votes.join("").bytes
         }
 
-        if (type == Types.MULTI_SIGNATURE_REGISTRATION.getValue()) {
-            buffer.put BaseEncoding.base16().lowerCase().decode(asset.signature)
+        if (this.type == Types.MULTI_SIGNATURE_REGISTRATION.getValue()) {
+            buffer.put base16().lowerCase().decode(asset.signature)
         }
 
         if (!skipSignature && signature) {

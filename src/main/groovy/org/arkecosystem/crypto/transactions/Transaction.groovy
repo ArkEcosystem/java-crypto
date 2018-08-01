@@ -18,7 +18,7 @@ class Transaction extends Object {
     int network
     int timestamp
     String recipientId
-    Long amount
+    Long amount = 0
     Long fee
     int type
     String vendorField

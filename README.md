@@ -19,21 +19,13 @@
 - [ ] Delegate Registration
 - [ ] Vote
 - [ ] Multi Signature Registration
-- [ ] IPFS
-- [ ] Timelock Transfer
-- [ ] Multi Payment
-- [ ] Delegate Resignation
 
 ### AIP11 Deserialization
 - [x] Transfer
-- [ ] Second Signature Registration
-- [ ] Delegate Registration
-- [ ] Vote
-- [ ] Multi Signature Registration
-- [ ] IPFS
-- [ ] Timelock Transfer
-- [ ] Multi Payment
-- [ ] Delegate Resignation
+- [x] Second Signature Registration
+- [x] Delegate Registration
+- [x] Vote
+- [x] Multi Signature Registration
 
 ### Transaction Signing
 - [x] Transfer

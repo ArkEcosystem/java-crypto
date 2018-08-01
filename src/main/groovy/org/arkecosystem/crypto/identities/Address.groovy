@@ -18,8 +18,6 @@ class Address {
         byte[] out = new byte[20]
         digest.doFinal(out, 0)
 
-        System.out.write(Network.get().version())
-
         new VersionedChecksummedBytes(Network.get().version(), out).toBase58()
     }
 

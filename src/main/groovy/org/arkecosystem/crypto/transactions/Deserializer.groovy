@@ -61,35 +61,35 @@ class Deserializer {
             break
 
             // case Types.SECOND_SIGNATURE_REGISTRATION.getValue():
-            //     deserializeSecondSignatureRegistration(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
+            //     new SecondSignatureRegistration(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
             // break
 
             // case Types.DELEGATE_REGISTRATION.getValue():
-            //     deserializeDelegateRegistration(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
+            //     new DelegateRegistration(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
             // break
 
             // case Types.VOTE.getValue():
-            //     deserializeVote(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
+            //     new Vote(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
             // break
 
             // case Types.MULTI_SIGNATURE_REGISTRATION.getValue():
-            //     deserializeMultiSignatureRegistration(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
+            //     new MultiSignatureRegistration(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
             // break
 
             // case Types.IPFS.getValue():
-            //     deserializeIpfs(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
+            //     new Ipfs(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
             // break
 
             // case Types.TIMELOCK_TRANSFER.getValue():
-            //     deserializeTimelockTransfer(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
+            //     new TimelockTransfer(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
             // break
 
             // case Types.MULTI_PAYMENT.getValue():
-            //     deserializeMultiPayment(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
+            //     new MultiPayment(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
             // break
 
             // case Types.DELEGATE_RESIGNATION.getValue():
-            //     deserializeDelegateResignation(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
+            //     new DelegateResignation(this.serialized, this.buffer, this.transaction).deserialize(assetOffset)
             // break
         }
     }

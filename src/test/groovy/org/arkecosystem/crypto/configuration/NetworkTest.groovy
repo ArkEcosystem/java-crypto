@@ -1,3 +1,5 @@
+package org.arkecosystem.crypto.configuration
+
 import spock.lang.Specification
 import org.arkecosystem.crypto.configuration.*
 import org.arkecosystem.crypto.networks.*

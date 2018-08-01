@@ -1,3 +1,5 @@
+package org.arkecosystem.crypto.identities
+
 import spock.lang.Specification
 import org.arkecosystem.crypto.identities.*
 

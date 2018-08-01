@@ -1,3 +1,5 @@
+package org.arkecosystem.crypto.transactions.builder
+
 import spock.lang.Specification
 import org.arkecosystem.crypto.transactions.builder.*
 

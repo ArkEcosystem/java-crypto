@@ -1,3 +1,5 @@
+package org.arkecosystem.crypto.utils
+
 import spock.lang.Specification
 import org.arkecosystem.crypto.utils.*
 

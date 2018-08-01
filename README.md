@@ -63,24 +63,24 @@
 - [x] toJson
 
 ### Message
-- [ ] sign
-- [ ] verify
-- [ ] toArray
-- [ ] toJson
+- [x] sign
+- [x] verify
+- [x] toArray
+- [x] toJson
 
 ### Address
 - [x] fromPassphrase
 - [x] fromPublicKey
 - [x] fromPrivateKey
-- [ ] validate
+- [x] validate
 
 ### Private Key
 - [x] fromPassphrase
-- [ ] fromHex
+- [x] fromHex
 
 ### Public Key
 - [x] fromPassphrase
-- [ ] fromHex
+- [ ] ~~fromHex~~
 
 ### WIF
 - [ ] fromPassphrase

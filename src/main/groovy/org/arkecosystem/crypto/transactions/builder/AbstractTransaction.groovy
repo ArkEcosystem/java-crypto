@@ -7,17 +7,15 @@ import org.arkecosystem.crypto.utils.Slot
 abstract class AbstractTransaction {
     Transaction transaction
 
-    AbstractTransaction initialize() {
+    AbstractTransaction() {
         this.transaction = new Transaction(
             type: this.getType(),
             fee: Fee.get(this.getType()),
+            timestamp: Slot.time()
         )
-
-        return this
     }
 
     AbstractTransaction sign(String passphrase) {
-        this.transaction.timestamp = Slot.time()
         this.transaction.sign(passphrase)
         this.transaction.id = this.transaction.getId()
 

@@ -13,6 +13,6 @@ class SlotTest extends Specification {
         when:
             def actual = Slot.epoch()
         then:
-            actual.toString() == 'Tue Mar 21 15:00:00 EET 2017'
+            actual.getTime() == 1490101200000
     }
 }

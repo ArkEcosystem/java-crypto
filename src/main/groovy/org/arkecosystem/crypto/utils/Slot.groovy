@@ -1,6 +1,7 @@
 package org.arkecosystem.crypto.utils
 
 import org.arkecosystem.crypto.configuration.Network
+
 import java.text.SimpleDateFormat
 
 class Slot {

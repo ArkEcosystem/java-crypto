@@ -80,10 +80,9 @@
 
 ### Public Key
 - [x] fromPassphrase
-- [ ] ~~fromHex~~
 
 ### WIF
-- [ ] fromPassphrase
+- [x] fromPassphrase
 
 ### Configuration
 - [x] getNetwork

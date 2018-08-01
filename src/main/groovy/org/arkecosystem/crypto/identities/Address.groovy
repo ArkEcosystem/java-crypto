@@ -2,9 +2,7 @@ package org.arkecosystem.crypto.identities
 
 import com.google.common.io.BaseEncoding
 import org.arkecosystem.crypto.configuration.Network
-import org.bitcoinj.core.Base58
-import org.bitcoinj.core.ECKey
-import org.bitcoinj.core.VersionedChecksummedBytes
+import org.bitcoinj.core.*
 import org.spongycastle.crypto.digests.RIPEMD160Digest
 
 class Address {
@@ -20,7 +18,9 @@ class Address {
         byte[] out = new byte[20]
         digest.doFinal(out, 0)
 
-        new VersionedChecksummedBytes(0x1e, out).toBase58()
+        System.out.write(Network.get().version())
+
+        new VersionedChecksummedBytes(Network.get().version(), out).toBase58()
     }
 
     static String fromPrivateKey(ECKey privateKey) {
@@ -28,6 +28,6 @@ class Address {
     }
 
     static Boolean validate(String address) {
-        return Base58.decodeChecked(address)[0] == Network.get().addressByte()
+        Base58.decodeChecked(address)[0] == Network.get().version()
     }
 }

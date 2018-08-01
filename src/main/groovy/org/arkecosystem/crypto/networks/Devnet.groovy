@@ -1,12 +1,12 @@
 package org.arkecosystem.crypto.networks
 
 class Devnet implements INetwork {
-    byte addressByte() {
-        0x1e
+    int version() {
+        30
     }
 
-    byte wif() {
-        0xaa
+    int wif() {
+        170
     }
 
     String epoch() {

@@ -1,11 +1,11 @@
 package org.arkecosystem.crypto.utils
 
-import org.arkecosystem.crypto.identities.*
 import com.google.gson.Gson
-import org.bitcoinj.core.*
-import com.google.common.io.BaseEncoding
+import org.arkecosystem.crypto.identities.PrivateKey
+import org.bitcoinj.core.ECKey
+import org.bitcoinj.core.Sha256Hash
 
-import static com.google.common.io.BaseEncoding.*
+import static com.google.common.io.BaseEncoding.base16
 
 class Message {
     String publickey
@@ -29,8 +29,7 @@ class Message {
         )
     }
 
-    boolean verify()
-    {
+    boolean verify() {
         ECKey keys = ECKey.fromPublicOnly(base16().lowerCase().decode(this.publickey))
 
         byte[] signature = base16().lowerCase().decode this.signature

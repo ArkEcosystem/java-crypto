@@ -1,12 +1,12 @@
 package org.arkecosystem.crypto.networks
 
 class Mainnet implements INetwork {
-    byte addressByte() {
-        0x17
+    int version() {
+        23
     }
 
-    byte wif() {
-        0xaa
+    int wif() {
+        170
     }
 
     String epoch() {

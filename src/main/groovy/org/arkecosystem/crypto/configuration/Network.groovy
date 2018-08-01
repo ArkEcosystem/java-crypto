@@ -7,7 +7,7 @@ class Network {
 
     static
     {
-        network = new Mainnet()
+        network = new Devnet()
     }
 
     static INetwork get() {

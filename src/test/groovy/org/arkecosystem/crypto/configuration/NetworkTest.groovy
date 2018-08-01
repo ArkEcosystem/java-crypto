@@ -7,7 +7,7 @@ class NetworkTest extends Specification {
         when:
             def network = Network.get()
         then:
-            network.addressByte() == new Mainnet().addressByte()
+            network.version() == new Devnet().version()
     }
 
     def "set"() {
@@ -15,6 +15,7 @@ class NetworkTest extends Specification {
             Network.set(new Testnet())
             def network = Network.get()
         then:
-            network.addressByte() == new Testnet().addressByte()
+            network.version() == new Testnet().version()
+            Network.set(new Devnet())
     }
 }

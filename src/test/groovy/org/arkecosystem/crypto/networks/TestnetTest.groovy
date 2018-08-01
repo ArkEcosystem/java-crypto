@@ -2,9 +2,9 @@ import spock.lang.Specification
 import org.arkecosystem.crypto.networks.*
 
 class TestnetTest extends Specification {
-    def "addressByte"() {
+    def "version"() {
         when:
-            def actual = new Testnet().addressByte()
+            def actual = new Testnet().version()
         then:
             actual == 0x17.byteValue()
     }
@@ -13,7 +13,7 @@ class TestnetTest extends Specification {
         when:
             def actual = new Testnet().wif()
         then:
-            actual == 0xba.byteValue()
+            actual == 186
     }
 
     def "epoch"() {

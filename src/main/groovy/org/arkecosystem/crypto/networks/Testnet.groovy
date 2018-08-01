@@ -1,12 +1,12 @@
 package org.arkecosystem.crypto.networks
 
 class Testnet implements INetwork {
-    byte addressByte() {
-        0x17
+    int version() {
+        23
     }
 
-    byte wif() {
-        0xba
+    int wif() {
+        186
     }
 
     String epoch() {

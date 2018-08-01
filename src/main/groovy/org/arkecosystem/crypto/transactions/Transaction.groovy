@@ -13,19 +13,23 @@ import java.nio.ByteOrder
 import static com.google.common.io.BaseEncoding.base16
 
 class Transaction extends Object {
-    String id
-    int version
+    int expiration
     int network
     int timestamp
-    String recipientId
+    int type
+    int version
+    List<String> signatures
     Long amount = 0
     Long fee
-    int type
-    String vendorField
+    Map<String, Object> asset = [:]
+    String id
+    String recipientId
+    String secondSignature
+    String senderPublicKey
     String signature
     String signSignature
-    String senderPublicKey
-    Map<String, Object> asset = [:]
+    String vendorField
+    String vendorFieldHex
 
     String getId() {
         base16().lowerCase().encode Sha256Hash.hash(toBytes(false, false))
@@ -64,6 +68,62 @@ class Transaction extends Object {
         byte[] bytes = toBytes(false)
 
         return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey())
+    }
+
+    Transaction parseSignatures(String serialized, int startOffset)
+    {
+        this.signature = serialized.substring(startOffset)
+
+        def multiSignatureOffset = 0
+
+        if (this.signature.length() == 0) {
+            this.signature = null
+        } else {
+            def signatureLength = Integer.parseInt(this.signature.substring(2, 4), 16) + 2
+            this.signature       = serialized.substring(startOffset, startOffset + signatureLength * 2)
+            multiSignatureOffset += signatureLength * 2
+            this.secondSignature = serialized.substring(startOffset + signatureLength * 2)
+
+            if(this.secondSignature.length() == 0) {
+                this.secondSignature = null
+            } else {
+                if ('ff' == this.secondSignature.substring(0, 2)) {
+                    this.secondSignature = null
+                } else {
+                    def secondSignatureLength = Integer.parseInt(this.secondSignature.substring(2, 4), 16) + 2
+                    this.secondSignature = this.secondSignature.substring(0, secondSignatureLength * 2)
+                    multiSignatureOffset += secondSignatureLength * 2
+                }
+            }
+
+            def signatures = serialized.substring(startOffset + multiSignatureOffset)
+
+            if (signatures.length() == 0) {
+                return this
+            }
+
+            if ('ff' != signatures.substring(0, 2)) {
+                return this
+            }
+
+            signatures      = signatures.substring(2)
+            this.signatures = []
+
+            def moreSignatures = true
+            while (moreSignatures) {
+                def mLength = Integer.parseInt(signatures.substring(2, 4), 16) + 2
+
+                if (mLength > 0) {
+                    this.signatures.add(signatures.substring(0, (mLength + 2) * 2))
+                } else {
+                    moreSignatures = false
+                }
+
+                signatures = signatures.substring((mLength + 2) * 2)
+            }
+        }
+
+        this
     }
 
     byte[] toBytes(boolean skipSignature = true, boolean skipSecondSignature = true) {

@@ -12,13 +12,13 @@ enum Types
     MULTI_PAYMENT(7),
     DELEGATE_RESIGNATION(8)
 
-    Types(Integer value) {
+    private final int value
+
+    Types(int value) {
         this.value = value
     }
 
-    private final Integer value
-
-    Integer getValue() {
+    int getValue() {
         value
     }
 }

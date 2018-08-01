@@ -1,5 +1,6 @@
 package org.arkecosystem.crypto.transactions
 
+import org.arkecosystem.crypto.enums.Types
 import org.arkecosystem.crypto.identities.*
 import com.google.gson.Gson
 import java.nio.ByteBuffer
@@ -51,9 +52,9 @@ class Transaction extends Object {
     }
 
     boolean verify() {
-        ECKey keys = ECKey.fromPublicOnly(base16().lowerCase().decode(t.senderPublicKey))
+        ECKey keys = ECKey.fromPublicOnly(base16().lowerCase().decode(senderPublicKey))
 
-        byte[] signature = base16().lowerCase().decode(t.signature)
+        byte[] signature = base16().lowerCase().decode(signature)
         byte[] bytes = toBytes()
 
         return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey())
@@ -72,7 +73,7 @@ class Transaction extends Object {
         ByteBuffer buffer = ByteBuffer.allocate(1000)
         buffer.order(ByteOrder.LITTLE_ENDIAN)
 
-        buffer.put this.type.byteValue()
+        buffer.put type.byteValue()
         buffer.putInt timestamp
         buffer.put base16().lowerCase().decode(senderPublicKey)
 
@@ -95,19 +96,19 @@ class Transaction extends Object {
         buffer.putLong amount
         buffer.putLong fee
 
-        if (type == TransactionType.SECONDSIGNATURE) {
+        if (type == Types.SECOND_SIGNATURE_REGISTRATION.getValue()) {
             buffer.put base16().lowerCase().decode(asset?.get("signature")?.get("publicKey"))
         }
 
-        if (type == TransactionType.DELEGATE) {
+        if (type == Types.DELEGATE_REGISTRATION.getValue()) {
             buffer.put asset.username.bytes
         }
 
-        if (type == TransactionType.VOTE) {
+        if (type == Types.VOTE.getValue()) {
             buffer.put asset.votes.join("").bytes
         }
 
-        if(type==4){
+        if (type == Types.MULTI_SIGNATURE_REGISTRATION.getValue()) {
           buffer.put BaseEncoding.base16().lowerCase().decode(asset.signature)
         }
 
@@ -132,6 +133,6 @@ class Transaction extends Object {
     }
 
     String toJson() {
-        new Gson().toJson(this)
+        new Gson().toJson(toObject())
     }
 }

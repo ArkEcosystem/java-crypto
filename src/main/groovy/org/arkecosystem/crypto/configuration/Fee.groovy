@@ -21,11 +21,11 @@ class Fee {
         fees.put(Types.DELEGATE_RESIGNATION.getValue(), Fees.DELEGATE_RESIGNATION.getValue())
     }
 
-    static String get(Integer type) {
+    static long get(int type) {
         return fees[type]
     }
 
-    static void set(Integer type, Long fee) {
-        fees[type] = fee
+    static void set(int type, long fee) {
+        fees.replace(type, fee)
     }
 }

@@ -5,7 +5,7 @@ import static org.arkecosystem.crypto.enums.Types.*
 class DelegateRegistration extends AbstractTransaction {
     AbstractTransaction username(String username)
     {
-        this.transaction.asset.username = username
+        this.transaction.asset.delegate = [username: username]
 
         return this
     }

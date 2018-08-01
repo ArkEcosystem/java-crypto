@@ -50,17 +50,17 @@
 - [ ] Multi Signature Registration
 
 ### Transaction
-- [ ] getId
-- [ ] sign
-- [ ] secondSign
-- [ ] verify
-- [ ] secondverify
+- [x] getId
+- [x] sign
+- [x] secondSign
+- [x] verify
+- [x] secondverify
 - [ ] parseSignatures
 - [ ] serialize
 - [ ] deserialize
-- [ ] toBytes
-- [ ] toArray
-- [ ] toJson
+- [x] toBytes
+- [x] toArray
+- [x] toJson
 
 ### Message
 - [ ] sign
@@ -69,36 +69,36 @@
 - [ ] toJson
 
 ### Address
-- [ ] fromPassphrase
-- [ ] fromPublicKey
-- [ ] fromPrivateKey
+- [x] fromPassphrase
+- [x] fromPublicKey
+- [x] fromPrivateKey
 - [ ] validate
 
 ### Private Key
-- [ ] fromPassphrase
+- [x] fromPassphrase
 - [ ] fromHex
 
 ### Public Key
-- [ ] fromPassphrase
+- [x] fromPassphrase
 - [ ] fromHex
 
 ### WIF
 - [ ] fromPassphrase
 
 ### Configuration
-- [ ] getNetwork
-- [ ] setNetwork
-- [ ] getFee
-- [ ] setFee
+- [x] getNetwork
+- [x] setNetwork
+- [x] getFee
+- [x] setFee
 
 ### Slot
-- [ ] time
-- [ ] epoch
+- [x] time
+- [x] epoch
 
 ### Networks (Mainnet, Devnet & Testnet)
-- [ ] epoch
-- [ ] version
-- [ ] wif
+- [x] epoch
+- [x] version
+- [x] wif
 
 ## Documentation
 

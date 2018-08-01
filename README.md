@@ -37,17 +37,17 @@
 
 ### Transaction Signing
 - [x] Transfer
-- [ ] Second Signature Registration
-- [ ] Delegate Registration
-- [ ] Vote
-- [ ] Multi Signature Registration
+- [x] Second Signature Registration
+- [x] Delegate Registration
+- [x] Vote
+- [x] Multi Signature Registration
 
 ### Transaction Verifying
 - [x] Transfer
-- [ ] Second Signature Registration
-- [ ] Delegate Registration
-- [ ] Vote
-- [ ] Multi Signature Registration
+- [x] Second Signature Registration
+- [x] Delegate Registration
+- [x] Vote
+- [x] Multi Signature Registration
 
 ### Transaction
 - [x] getId

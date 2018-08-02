@@ -1,6 +1,7 @@
 package org.arkecosystem.crypto.identities
 
-import com.google.common.io.BaseEncoding
+import org.arkecosystem.crypto.encoding.Hex
+import org.arkecosystem.crypto.encoding.Base58 as B58
 import org.arkecosystem.crypto.configuration.Network
 import org.bitcoinj.core.*
 import org.spongycastle.crypto.digests.RIPEMD160Digest
@@ -11,7 +12,7 @@ class Address {
     }
 
     static String fromPublicKey(String publicKey) {
-        byte[] publicKeyBytes = BaseEncoding.base16().lowerCase().decode(publicKey)
+        byte[] publicKeyBytes = Hex.decode(publicKey)
 
         RIPEMD160Digest digest = new RIPEMD160Digest()
         digest.update(publicKeyBytes, 0, publicKeyBytes.length)
@@ -26,6 +27,6 @@ class Address {
     }
 
     static Boolean validate(String address) {
-        Base58.decodeChecked(address)[0] == Network.get().version()
+        B58.decodeChecked(address)[0] == Network.get().version()
     }
 }

@@ -2,7 +2,7 @@ package org.arkecosystem.crypto.transactions.serializers
 
 import org.arkecosystem.crypto.transactions.Transaction
 import java.nio.ByteBuffer
-import static com.google.common.io.BaseEncoding.base16
+import org.arkecosystem.crypto.encoding.*
 
 class SecondSignatureRegistration extends AbstractSerializer {
     SecondSignatureRegistration(ByteBuffer buffer, Transaction transaction) {
@@ -10,6 +10,6 @@ class SecondSignatureRegistration extends AbstractSerializer {
     }
 
     void serialize() {
-        buffer.put base16().lowerCase().decode(this.transaction.asset.signature.publicKey)
+        buffer.put Hex.decode(this.transaction.asset.signature.publicKey)
     }
 }

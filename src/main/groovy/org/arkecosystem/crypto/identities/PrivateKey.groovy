@@ -1,7 +1,7 @@
 package org.arkecosystem.crypto.identities
 
 import org.bitcoinj.core.*
-import static com.google.common.io.BaseEncoding.base16
+import org.arkecosystem.crypto.encoding.*
 
 class PrivateKey {
     static ECKey fromPassphrase(String passphrase) {
@@ -11,6 +11,6 @@ class PrivateKey {
     }
 
     static ECKey fromHex(String privateKey) {
-        return ECKey.fromPrivate(base16().lowerCase().decode(privateKey), true)
+        return ECKey.fromPrivate(Hex.decode(privateKey), true)
     }
 }

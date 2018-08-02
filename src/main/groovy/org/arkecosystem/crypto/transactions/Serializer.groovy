@@ -11,7 +11,7 @@ import org.arkecosystem.crypto.transactions.serializers.Vote
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-import static com.google.common.io.BaseEncoding.base16
+import org.arkecosystem.crypto.encoding.*
 import static javax.xml.bind.DatatypeConverter.parseHexBinary
 
 class Serializer {
@@ -51,7 +51,7 @@ class Serializer {
 
         this.buffer.put this.transaction.type.byteValue()
         this.buffer.putInt this.transaction.timestamp
-        this.buffer.put base16().lowerCase().decode(this.transaction.senderPublicKey)
+        this.buffer.put Hex.decode(this.transaction.senderPublicKey)
         this.buffer.putLong this.transaction.fee
 
         if (this.transaction.vendorField) {
@@ -63,7 +63,7 @@ class Serializer {
             int vendorFieldHexLength = this.transaction.vendorFieldHex.length()
 
             this.buffer.put vendorFieldHexLength / 2 as byte
-            this.buffer.put base16().lowerCase().decode(this.transaction.vendorFieldHex)
+            this.buffer.put Hex.decode(this.transaction.vendorFieldHex)
         } else {
             this.buffer.put 0x00.byteValue()
         }
@@ -111,18 +111,18 @@ class Serializer {
 
     void serializeSignatures() {
         if (this.transaction.signature) {
-            buffer.put base16().lowerCase().decode(this.transaction.signature)
+            buffer.put Hex.decode(this.transaction.signature)
         }
 
         if (this.transaction.secondSignature) {
-            buffer.put base16().lowerCase().decode(this.transaction.secondSignature)
+            buffer.put Hex.decode(this.transaction.secondSignature)
         } else if (this.transaction.signSignature) {
-            buffer.put base16().lowerCase().decode(this.transaction.signSignature)
+            buffer.put Hex.decode(this.transaction.signSignature)
         }
 
         if (this.transaction.signatures) {
             this.buffer.put 0xff.byteValue()
-            buffer.put base16().lowerCase().decode(this.transaction.signatures.join(""))
+            buffer.put Hex.decode(this.transaction.signatures.join(""))
         }
     }
 }

@@ -1,9 +1,9 @@
 package org.arkecosystem.crypto.transactions.serializers
 
 import org.arkecosystem.crypto.transactions.Transaction
-import org.arkecosystem.crypto.helpers.Base58
+import org.arkecosystem.crypto.encoding.*
 import java.nio.ByteBuffer
-import static com.google.common.io.BaseEncoding.base16
+import org.arkecosystem.crypto.encoding.*
 
 class Vote extends AbstractSerializer {
     Vote(ByteBuffer buffer, Transaction transaction) {
@@ -18,6 +18,6 @@ class Vote extends AbstractSerializer {
         }
 
         this.buffer.put transaction.asset.votes.size().byteValue()
-        this.buffer.put base16().lowerCase().decode(votes.join(""))
+        this.buffer.put Hex.decode(votes.join(""))
     }
 }

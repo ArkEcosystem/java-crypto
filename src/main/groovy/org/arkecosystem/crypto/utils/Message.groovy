@@ -5,7 +5,7 @@ import org.arkecosystem.crypto.identities.PrivateKey
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.core.Sha256Hash
 
-import static com.google.common.io.BaseEncoding.base16
+import org.arkecosystem.crypto.encoding.*
 
 class Message {
     String publickey
@@ -24,15 +24,15 @@ class Message {
 
         return new Message(
             privateKey.getPublicKeyAsHex(),
-            base16().lowerCase().encode(privateKey.sign(messageBytes).encodeToDER()),
+            Hex.encode(privateKey.sign(messageBytes).encodeToDER()),
             message
         )
     }
 
     boolean verify() {
-        ECKey keys = ECKey.fromPublicOnly(base16().lowerCase().decode(this.publickey))
+        ECKey keys = ECKey.fromPublicOnly Hex.decode(this.publickey)
 
-        byte[] signature = base16().lowerCase().decode this.signature
+        byte[] signature = Hex.decode this.signature
         byte[] messageBytes = Sha256Hash.hash(this.message.getBytes())
 
         ECKey.verify(messageBytes, signature, keys.getPubKey())

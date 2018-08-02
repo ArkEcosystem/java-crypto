@@ -9,7 +9,7 @@ import org.arkecosystem.crypto.transactions.deserializers.MultiSignatureRegistra
 import org.arkecosystem.crypto.transactions.deserializers.SecondSignatureRegistration
 import org.arkecosystem.crypto.transactions.deserializers.Transfer
 import org.arkecosystem.crypto.transactions.deserializers.Vote
-import static com.google.common.io.BaseEncoding.base16
+import org.arkecosystem.crypto.encoding.*
 import static javax.xml.bind.DatatypeConverter.parseHexBinary
 
 class Deserializer {
@@ -41,7 +41,7 @@ class Deserializer {
 
         def senderPublicKey = new byte[33]
         this.buffer.get(senderPublicKey)
-        transaction.senderPublicKey = base16().lowerCase().encode(senderPublicKey)
+        transaction.senderPublicKey = Hex.encode(senderPublicKey)
 
         transaction.fee = this.buffer.getLong()
 
@@ -49,7 +49,7 @@ class Deserializer {
         if (vendorFieldLength > 0) {
             def vendorFieldHex = new byte[vendorFieldLength]
             this.buffer.get(vendorFieldHex)
-            transaction.vendorFieldHex = base16().lowerCase().encode(vendorFieldHex)
+            transaction.vendorFieldHex = Hex.encode(vendorFieldHex)
         }
 
         return (41 + 8 + 1) * 2 + vendorFieldLength * 2
@@ -115,7 +115,7 @@ class Deserializer {
         }
 
         if (transaction.vendorFieldHex) {
-            transaction.vendorField = new String(base16().lowerCase().decode(transaction.vendorFieldHex))
+            transaction.vendorField = new String(Hex.decode(transaction.vendorFieldHex))
         }
 
         if (!transaction.id) {

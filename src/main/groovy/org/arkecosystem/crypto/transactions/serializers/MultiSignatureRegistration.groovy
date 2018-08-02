@@ -1,9 +1,9 @@
 package org.arkecosystem.crypto.transactions.serializers
 
 import org.arkecosystem.crypto.transactions.Transaction
-import org.arkecosystem.crypto.helpers.Base58
+import org.arkecosystem.crypto.encoding.*
 import java.nio.ByteBuffer
-import static com.google.common.io.BaseEncoding.base16
+import org.arkecosystem.crypto.encoding.*
 
 class MultiSignatureRegistration extends AbstractSerializer {
     MultiSignatureRegistration(ByteBuffer buffer, Transaction transaction) {
@@ -30,6 +30,6 @@ class MultiSignatureRegistration extends AbstractSerializer {
         this.buffer.put this.transaction.asset.multisignature.min.byteValue()
         this.buffer.put this.transaction.asset.multisignature.keysgroup.size().byteValue()
         this.buffer.put this.transaction.asset.multisignature.lifetime.byteValue()
-        this.buffer.put base16().lowerCase().decode(keysgroup.join(""))
+        this.buffer.put Hex.decode(keysgroup.join(""))
     }
 }

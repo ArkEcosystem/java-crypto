@@ -10,7 +10,7 @@ import org.bitcoinj.core.Sha256Hash
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-import static com.google.common.io.BaseEncoding.base16
+import org.arkecosystem.crypto.encoding.*
 
 class Transaction extends Object {
     int expiration
@@ -32,14 +32,14 @@ class Transaction extends Object {
     String vendorFieldHex
 
     String getId() {
-        base16().lowerCase().encode Sha256Hash.hash(toBytes(false, false))
+        Hex.encode Sha256Hash.hash(toBytes(false, false))
     }
 
     Transaction sign(String passphrase) {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase)
 
         this.senderPublicKey = privateKey.getPublicKeyAsHex()
-        this.signature = base16().lowerCase().encode(privateKey.sign(Sha256Hash.of(toBytes())).encodeToDER())
+        this.signature = Hex.encode(privateKey.sign(Sha256Hash.of(toBytes())).encodeToDER())
 
         return this
     }
@@ -47,24 +47,24 @@ class Transaction extends Object {
     Transaction secondSign(String passphrase) {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase)
 
-        this.signSignature = base16().lowerCase().encode(privateKey.sign(Sha256Hash.of(toBytes(false))).encodeToDER())
+        this.signSignature = Hex.encode(privateKey.sign(Sha256Hash.of(toBytes(false))).encodeToDER())
 
         return this
     }
 
     boolean verify() {
-        ECKey keys = ECKey.fromPublicOnly(base16().lowerCase().decode(senderPublicKey))
+        ECKey keys = ECKey.fromPublicOnly Hex.decode(senderPublicKey)
 
-        byte[] signature = base16().lowerCase().decode(signature)
+        byte[] signature = Hex.decode(signature)
         byte[] bytes = toBytes()
 
         return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey())
     }
 
     boolean secondVerify(String secondPublicKey) {
-        ECKey keys = ECKey.fromPublicOnly base16().lowerCase().decode(secondPublicKey)
+        ECKey keys = ECKey.fromPublicOnly Hex.decode(secondPublicKey)
 
-        byte[] signature = base16().lowerCase().decode(this.signSignature)
+        byte[] signature = Hex.decode(this.signSignature)
         byte[] bytes = toBytes(false)
 
         return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey())
@@ -136,7 +136,7 @@ class Transaction extends Object {
 
         buffer.put type.byteValue()
         buffer.putInt timestamp
-        buffer.put base16().lowerCase().decode(senderPublicKey)
+        buffer.put Hex.decode(senderPublicKey)
 
         if (recipientId) {
             buffer.put Base58.decodeChecked(recipientId)
@@ -158,7 +158,7 @@ class Transaction extends Object {
         buffer.putLong fee
 
         if (this.type == Types.SECOND_SIGNATURE_REGISTRATION.getValue()) {
-            buffer.put base16().lowerCase().decode(asset.signature.publicKey)
+            buffer.put Hex.decode(asset.signature.publicKey)
         }
 
         if (this.type == Types.DELEGATE_REGISTRATION.getValue()) {
@@ -176,11 +176,11 @@ class Transaction extends Object {
         }
 
         if (!skipSignature && signature) {
-            buffer.put base16().lowerCase().decode(signature)
+            buffer.put Hex.decode(signature)
         }
 
         if (!skipSecondSignature && signSignature) {
-            buffer.put base16().lowerCase().decode(signSignature)
+            buffer.put Hex.decode(signSignature)
         }
 
         def result = new byte[buffer.position()]

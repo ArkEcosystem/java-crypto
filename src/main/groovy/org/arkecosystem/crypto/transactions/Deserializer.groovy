@@ -105,7 +105,7 @@ class Deserializer {
         }
 
         if (Types.VOTE.getValue() == transaction.type) {
-            transaction.recipientId = Address.fromPublicKey(transaction.senderPublicKey)
+            transaction.recipientId = Address.fromPublicKey(transaction.senderPublicKey, transaction.network)
         }
 
         if (Types.MULTI_SIGNATURE_REGISTRATION.getValue() == transaction.type) {
@@ -124,7 +124,7 @@ class Deserializer {
 
         if (Types.SECOND_SIGNATURE_REGISTRATION.getValue() == transaction.type
             || Types.MULTI_SIGNATURE_REGISTRATION.getValue() == transaction.type) {
-            transaction.recipientId = Address.fromPublicKey(transaction.senderPublicKey)
+            transaction.recipientId = Address.fromPublicKey(transaction.senderPublicKey, transaction.network)
         }
     }
 }

@@ -17,7 +17,6 @@ class MultiSignatureRegistrationTest extends Specification {
             actual.type == fixture.data.type
             actual.amount == fixture.data.amount
             actual.fee == fixture.data.fee
-            // actual.recipientId == fixture.data.recipientId
             actual.timestamp == fixture.data.timestamp
             actual.senderPublicKey == fixture.data.senderPublicKey
             actual.signature == fixture.data.signature

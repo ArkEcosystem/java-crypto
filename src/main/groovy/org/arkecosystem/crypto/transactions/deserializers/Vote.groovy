@@ -1,7 +1,6 @@
 package org.arkecosystem.crypto.transactions.deserializers
 
 import org.arkecosystem.crypto.transactions.Transaction
-import org.arkecosystem.crypto.encoding.*
 import java.nio.ByteBuffer
 
 class Vote extends AbstractDeserializer {
@@ -17,7 +16,7 @@ class Vote extends AbstractDeserializer {
 
         for (int i = 0; i < voteLength; i++) {
             def vote = this.serialized.substring(assetOffset + 2 + i * 2 * 34, assetOffset + 2 + (i + 1) * 2 * 34)
-            vote = (vote[1] == '1' ? '+' : '-') + vote.substring(2)
+            vote = "${vote[1] == '1' ? '+' : '-'}${vote.substring(2)}"
 
             transaction.asset.votes.add(vote)
         }

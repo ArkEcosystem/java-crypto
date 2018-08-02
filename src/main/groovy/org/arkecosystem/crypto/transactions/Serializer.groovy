@@ -7,12 +7,9 @@ import org.arkecosystem.crypto.transactions.serializers.MultiSignatureRegistrati
 import org.arkecosystem.crypto.transactions.serializers.SecondSignatureRegistration
 import org.arkecosystem.crypto.transactions.serializers.Transfer
 import org.arkecosystem.crypto.transactions.serializers.Vote
-
+import org.arkecosystem.crypto.encoding.*
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-
-import org.arkecosystem.crypto.encoding.*
-import static javax.xml.bind.DatatypeConverter.parseHexBinary
 
 class Serializer {
     ByteBuffer buffer
@@ -91,21 +88,21 @@ class Serializer {
                 new MultiSignatureRegistration(this.buffer, this.transaction).serialize()
                 break
 
-        // case Types.IPFS.getValue():
-        //     new Ipfs(this.buffer, this.transaction).serialize()
-        // break
+            // case Types.IPFS.getValue():
+            //     new Ipfs(this.buffer, this.transaction).serialize()
+            // break
 
-        // case Types.TIMELOCK_TRANSFER.getValue():
-        //     new TimelockTransfer(this.buffer, this.transaction).serialize()
-        // break
+            // case Types.TIMELOCK_TRANSFER.getValue():
+            //     new TimelockTransfer(this.buffer, this.transaction).serialize()
+            // break
 
-        // case Types.MULTI_PAYMENT.getValue():
-        //     new MultiPayment(this.buffer, this.transaction).serialize()
-        // break
+            // case Types.MULTI_PAYMENT.getValue():
+            //     new MultiPayment(this.buffer, this.transaction).serialize()
+            // break
 
-        // case Types.DELEGATE_RESIGNATION.getValue():
-        //     new DelegateResignation(this.buffer, this.transaction).serialize()
-        // break
+            // case Types.DELEGATE_RESIGNATION.getValue():
+            //     new DelegateResignation(this.buffer, this.transaction).serialize()
+            // break
         }
     }
 

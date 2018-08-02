@@ -1,7 +1,6 @@
 package org.arkecosystem.crypto.transactions.serializers
 
 import org.arkecosystem.crypto.transactions.Transaction
-import org.arkecosystem.crypto.encoding.*
 import java.nio.ByteBuffer
 import org.arkecosystem.crypto.encoding.*
 

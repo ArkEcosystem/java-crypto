@@ -1,8 +1,6 @@
 package org.arkecosystem.crypto.configuration
 
-
-import org.arkecosystem.crypto.enums.Fees
-import org.arkecosystem.crypto.enums.Types
+import org.arkecosystem.crypto.enums.*
 
 class Fee {
     private static Map<Integer, Long> fees

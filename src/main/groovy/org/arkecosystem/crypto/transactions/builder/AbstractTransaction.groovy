@@ -17,14 +17,14 @@ abstract class AbstractTransaction {
 
     AbstractTransaction sign(String passphrase) {
         this.transaction.sign(passphrase)
-        this.transaction.id = this.transaction.getId()
+        this.transaction.id = this.transaction.computeId()
 
         return this
     }
 
     AbstractTransaction secondSign(String passphrase) {
         this.transaction.secondSign(passphrase)
-        this.transaction.id = this.transaction.getId()
+        this.transaction.id = this.transaction.computeId()
 
         return this
     }

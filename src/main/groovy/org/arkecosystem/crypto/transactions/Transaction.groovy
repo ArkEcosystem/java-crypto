@@ -1,16 +1,13 @@
 package org.arkecosystem.crypto.transactions
 
 import com.google.gson.Gson
-import org.arkecosystem.crypto.enums.Types
-import org.arkecosystem.crypto.identities.PrivateKey
-import org.bitcoinj.core.Base58
-import org.bitcoinj.core.ECKey
-import org.bitcoinj.core.Sha256Hash
-
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-
-import org.arkecosystem.crypto.encoding.*
+import org.arkecosystem.crypto.encoding.Base58 as B58
+import org.arkecosystem.crypto.encoding.Hex
+import org.arkecosystem.crypto.enums.Types
+import org.arkecosystem.crypto.identities.PrivateKey
+import org.bitcoinj.core.*
 
 class Transaction extends Object {
     int expiration
@@ -31,7 +28,7 @@ class Transaction extends Object {
     String vendorField
     String vendorFieldHex
 
-    String getId() {
+    String computeId() {
         Hex.encode Sha256Hash.hash(toBytes(false, false))
     }
 
@@ -139,7 +136,7 @@ class Transaction extends Object {
         buffer.put Hex.decode(senderPublicKey)
 
         if (recipientId) {
-            buffer.put Base58.decodeChecked(recipientId)
+            buffer.put B58.decodeChecked(recipientId)
         } else {
             buffer.put new byte[21]
         }

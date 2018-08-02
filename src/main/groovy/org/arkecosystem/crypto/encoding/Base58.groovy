@@ -2,7 +2,6 @@ package org.arkecosystem.crypto.encoding
 
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.core.Base58 as BTCBase58
-import org.arkecosystem.crypto.encoding.*
 
 class Base58 {
     static String encodeChecked(byte[] value) {

@@ -119,12 +119,12 @@ class Deserializer {
         }
 
         if (!transaction.id) {
-            transaction.id = transaction.getId()
+            transaction.id = transaction.computeId()
         }
 
-        // if (Types.SECOND_SIGNATURE_REGISTRATION.getValue() == transaction.type
-        //     || Types.MULTI_SIGNATURE_REGISTRATION.getValue() == transaction.type) {
-        //     transaction.recipientId = Address.fromPublicKey(transaction.senderPublicKey)
-        // }
+        if (Types.SECOND_SIGNATURE_REGISTRATION.getValue() == transaction.type
+            || Types.MULTI_SIGNATURE_REGISTRATION.getValue() == transaction.type) {
+            transaction.recipientId = Address.fromPublicKey(transaction.senderPublicKey)
+        }
     }
 }

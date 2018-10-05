@@ -1,7 +1,6 @@
-package org.arkecosystem.crypto.enums
+package org.arkecosystem.crypto.enums;
 
-enum Types
-{
+public enum Types {
     TRANSFER(0),
     SECOND_SIGNATURE_REGISTRATION(1),
     DELEGATE_REGISTRATION(2),
@@ -10,15 +9,15 @@ enum Types
     IPFS(5),
     TIMELOCK_TRANSFER(6),
     MULTI_PAYMENT(7),
-    DELEGATE_RESIGNATION(8)
+    DELEGATE_RESIGNATION(8);
 
-    private final int value
+    private final int value;
 
     Types(int value) {
-        this.value = value
+        this.value = value;
     }
 
-    int getValue() {
-        value
+    public int getValue() {
+        return value;
     }
 }

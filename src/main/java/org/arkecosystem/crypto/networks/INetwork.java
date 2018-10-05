@@ -1,9 +1,11 @@
-package org.arkecosystem.crypto.networks
+package org.arkecosystem.crypto.networks;
 
-interface INetwork {
-    int version()
+public interface INetwork {
 
-    int wif()
+    int version();
 
-    String epoch()
+    int wif();
+
+    String epoch();
+
 }

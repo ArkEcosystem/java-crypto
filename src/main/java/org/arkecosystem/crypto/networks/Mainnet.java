@@ -1,15 +1,17 @@
-package org.arkecosystem.crypto.networks
+package org.arkecosystem.crypto.networks;
 
-class Mainnet implements INetwork {
-    int version() {
-        23
+public class Mainnet implements INetwork {
+
+    public int version() {
+        return 23;
     }
 
-    int wif() {
-        170
+    public int wif() {
+        return 170;
     }
 
-    String epoch() {
-        '2017-03-21 13:00:00'
+    public String epoch() {
+        return "2017-03-21 13:00:00";
     }
+
 }

@@ -2,8 +2,6 @@ package org.arkecosystem.crypto.configuration;
 
 import org.arkecosystem.crypto.networks.*;
 import org.junit.jupiter.api.Test;
-import org.testng.reporters.jq.Main;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class NetworkTest {

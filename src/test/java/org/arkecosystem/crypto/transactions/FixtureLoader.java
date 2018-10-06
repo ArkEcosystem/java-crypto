@@ -1,37 +1,28 @@
-package org.arkecosystem.crypto
+package org.arkecosystem.crypto.transactions;
 
-import com.google.gson.Gson
-import org.arkecosystem.crypto.transactions.Transaction
+import com.google.gson.Gson;
 
-class FixtureLoader {
-    static File raw(instance, String path) {
-        ClassLoader classLoader = instance.getClassLoader()
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
 
-        URL resource = classLoader.getResource(String.format("%s.json", path))
+public class FixtureLoader{
 
-        return new File(resource.getPath())
+    private static String readFile(String path) throws IOException {
+        ClassLoader classLoader = Transaction.class.getClassLoader();
+        URL resource = classLoader.getResource(String.format("%s.json", path));
+        return new String(Files.readAllBytes(Paths.get(resource.getPath())), StandardCharsets.UTF_8);
     }
 
-    static Object load(instance, String path) {
-        return new Gson().fromJson(raw(instance, path).text, Object.class)
-    }
-
-    static Transaction transaction(Object fixture) {
-        def transaction = new Transaction()
-        transaction.type = fixture.data.type
-        transaction.amount = fixture.data.amount
-        transaction.fee = fixture.data.fee
-        transaction.recipientId = fixture.data.recipientId
-        transaction.timestamp = fixture.data.timestamp
-        transaction.vendorField = fixture.data.vendorField
-        transaction.vendorFieldHex = fixture.data.vendorFieldHex
-        transaction.senderPublicKey = fixture.data.senderPublicKey
-        transaction.signature = fixture.data.signature
-        transaction.signSignature = fixture.data.signSignature
-        transaction.signatures = fixture.data.signatures
-        transaction.asset = fixture.data.asset
-        transaction.id = fixture.data.id
-
-        return transaction
+    public static HashMap<String, Object> load(String path) {
+        try {
+            return new Gson().fromJson(readFile(path), new HashMap<String, Object>().getClass());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

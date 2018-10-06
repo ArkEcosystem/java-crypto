@@ -2,7 +2,7 @@ package org.arkecosystem.crypto.transactions
 
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import org.arkecosystem.crypto.enums.Types
+
 import org.arkecosystem.crypto.identities.Address
 import org.arkecosystem.crypto.transactions.deserializers.DelegateRegistration
 import org.arkecosystem.crypto.transactions.deserializers.MultiSignatureRegistration

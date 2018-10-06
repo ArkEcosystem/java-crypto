@@ -1,7 +1,8 @@
 package org.arkecosystem.crypto.transactions.deserializers
 
-import org.arkecosystem.crypto.transactions.Transaction
-import org.arkecosystem.crypto.encoding.*
+
+import org.arkecosystem.crypto.encoding.Base58
+
 import java.nio.ByteBuffer
 
 class Transfer extends AbstractDeserializer {

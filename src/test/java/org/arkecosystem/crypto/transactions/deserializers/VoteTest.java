@@ -1,11 +1,8 @@
 package org.arkecosystem.crypto.transactions.deserializers
 
-import org.arkecosystem.crypto.FixtureLoader
+
 import spock.lang.Specification
 import org.arkecosystem.crypto.transactions.*
-
-import java.util.List
-import com.google.gson.Gson
 
 class VoteTest extends Specification {
     def "passphrase"() {

@@ -1,7 +1,7 @@
 package org.arkecosystem.crypto.transactions
 
 import org.arkecosystem.crypto.configuration.Network
-import org.arkecosystem.crypto.enums.Types
+
 import org.arkecosystem.crypto.transactions.serializers.DelegateRegistration
 import org.arkecosystem.crypto.transactions.serializers.MultiSignatureRegistration
 import org.arkecosystem.crypto.transactions.serializers.SecondSignatureRegistration

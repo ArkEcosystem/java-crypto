@@ -1,20 +1,26 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.enums.*;
+import org.arkecosystem.crypto.enums.Types;
 
 import java.util.List;
 
 
 public class MultiSignatureRegistration extends AbstractTransaction {
 
-    public MultiSignatureRegistration min(int min) { return this.min((byte)min); }
+    public MultiSignatureRegistration min(int min) {
+        return this.min((byte) min);
+    }
+
     public MultiSignatureRegistration min(byte min) {
         this.transaction.asset.multisignature.min = min;
 
         return this;
     }
 
-    public MultiSignatureRegistration lifetime(int lifetime) { return this.lifetime((byte)lifetime); }
+    public MultiSignatureRegistration lifetime(int lifetime) {
+        return this.lifetime((byte) lifetime);
+    }
+
     public MultiSignatureRegistration lifetime(byte lifetime) {
         this.transaction.asset.multisignature.lifetime = lifetime;
 

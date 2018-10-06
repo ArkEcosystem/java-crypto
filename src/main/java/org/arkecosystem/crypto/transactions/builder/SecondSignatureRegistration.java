@@ -1,8 +1,7 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.enums.*;
-
 import org.arkecosystem.crypto.encoding.Hex;
+import org.arkecosystem.crypto.enums.Types;
 import org.arkecosystem.crypto.identities.PublicKey;
 
 public class SecondSignatureRegistration extends AbstractTransaction {

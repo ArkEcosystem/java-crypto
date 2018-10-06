@@ -13,7 +13,7 @@ public class Vote extends AbstractDeserializer {
         this.buffer.position(assetOffset / 2);
         int voteLength = this.buffer.get() & 0xff;
 
-        for (int i = 0; i < voteLength; i++){
+        for (int i = 0; i < voteLength; i++) {
             String vote = this.serialized.substring(assetOffset + 2 + i * 2 * 34, assetOffset + 2 + (i + 1) * 2 * 34);
             vote = (vote.startsWith("01") ? '+' : '-') + vote.substring(2);
             transaction.asset.votes.add(vote);

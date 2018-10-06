@@ -1,6 +1,6 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.enums.*;
+import org.arkecosystem.crypto.enums.Types;
 
 public class DelegateRegistration extends AbstractTransaction {
     public DelegateRegistration username(String username) {

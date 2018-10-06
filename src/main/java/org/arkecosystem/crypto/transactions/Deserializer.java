@@ -84,7 +84,7 @@ public class Deserializer {
 
         if (transaction.type == Types.MULTI_SIGNATURE_REGISTRATION) {
             for (int i = 0; i < transaction.asset.multisignature.keysgroup.size(); i++) {
-              transaction.asset.multisignature.keysgroup.set(i, "+" + transaction.asset.multisignature.keysgroup.get(i));
+                transaction.asset.multisignature.keysgroup.set(i, "+" + transaction.asset.multisignature.keysgroup.get(i));
             }
         }
 

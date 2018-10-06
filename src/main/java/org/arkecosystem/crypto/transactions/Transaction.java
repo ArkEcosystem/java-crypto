@@ -3,15 +3,16 @@ package org.arkecosystem.crypto.transactions;
 import com.google.gson.*;
 import org.arkecosystem.crypto.encoding.Base58;
 import org.arkecosystem.crypto.encoding.Hex;
-import org.arkecosystem.crypto.identities.PrivateKey;
 import org.arkecosystem.crypto.enums.Types;
+import org.arkecosystem.crypto.identities.PrivateKey;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
 
 import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Transaction {
     public int expiration;
@@ -31,6 +32,10 @@ public class Transaction {
     public String signSignature;
     public String vendorField;
     public String vendorFieldHex;
+
+    public static Transaction deserialize(String serialized) {
+        return new Deserializer().deserialize(serialized);
+    }
 
     public String computeId() {
         return Hex.encode(Sha256Hash.hash(toBytes(false, false)));
@@ -137,7 +142,7 @@ public class Transaction {
         ByteBuffer buffer = ByteBuffer.allocate(1000);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
-        buffer.put((byte)type.getValue());
+        buffer.put((byte) type.getValue());
         buffer.putInt(timestamp);
         buffer.put(Hex.decode(this.senderPublicKey));
 
@@ -177,7 +182,7 @@ public class Transaction {
         if (this.type == Types.MULTI_SIGNATURE_REGISTRATION) {
             buffer.put(this.asset.multisignature.min);
             buffer.put(this.asset.multisignature.lifetime);
-            buffer.put(String.join("",this.asset.multisignature.keysgroup).getBytes());
+            buffer.put(String.join("", this.asset.multisignature.keysgroup).getBytes());
         }
 
         if (!skipSignature && signature != null) {
@@ -206,20 +211,15 @@ public class Transaction {
         return Hex.encode(new Serializer().serialize(this));
     }
 
-    public static Transaction deserialize(String serialized) {
-        return new Deserializer().deserialize(serialized);
-    }
-
     public String toJson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Types.class, new TransactionTypeDeserializer() );
-        gsonBuilder.registerTypeAdapter(Types.class, new TransactionTypeSerializer() );
+        gsonBuilder.registerTypeAdapter(Types.class, new TransactionTypeDeserializer());
+        gsonBuilder.registerTypeAdapter(Types.class, new TransactionTypeSerializer());
         return gsonBuilder.create().toJson(this);
     }
 
     private static class TransactionTypeDeserializer implements
-        JsonDeserializer<Types>
-    {
+        JsonDeserializer<Types> {
         @Override
         public Types deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             return Types.values()[json.getAsInt()];
@@ -227,8 +227,7 @@ public class Transaction {
     }
 
     private static class TransactionTypeSerializer implements
-        JsonSerializer<Types>
-    {
+        JsonSerializer<Types> {
         @Override
         public JsonElement serialize(Types src, Type typeOfSrc, JsonSerializationContext context) {
             return new JsonPrimitive(src.getValue());

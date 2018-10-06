@@ -31,21 +31,21 @@ public class Serializer {
     }
 
     private void serializeHeader() {
-        this.buffer.put((byte)0xff);
+        this.buffer.put((byte) 0xff);
 
         if (this.transaction.version > 0) {
-            this.buffer.put((byte)this.transaction.version);
+            this.buffer.put((byte) this.transaction.version);
         } else {
-            this.buffer.put((byte)0x01);
+            this.buffer.put((byte) 0x01);
         }
 
         if (this.transaction.network > 0) {
-            this.buffer.put((byte)this.transaction.network);
+            this.buffer.put((byte) this.transaction.network);
         } else {
-            this.buffer.put((byte)Network.get().version());
+            this.buffer.put((byte) Network.get().version());
         }
 
-        this.buffer.put((byte)this.transaction.type.getValue());
+        this.buffer.put((byte) this.transaction.type.getValue());
         this.buffer.putInt(this.transaction.timestamp);
         this.buffer.put(Hex.decode(this.transaction.senderPublicKey));
         this.buffer.putLong(this.transaction.fee);
@@ -53,15 +53,15 @@ public class Serializer {
         if (this.transaction.vendorField != null) {
             int vendorFieldLength = this.transaction.vendorField.length();
 
-            this.buffer.put((byte)vendorFieldLength);
+            this.buffer.put((byte) vendorFieldLength);
             this.buffer.put(this.transaction.vendorField.getBytes());
         } else if (this.transaction.vendorFieldHex != null) {
             int vendorFieldHexLength = this.transaction.vendorFieldHex.length();
 
-            this.buffer.put((byte)(vendorFieldHexLength / 2));
+            this.buffer.put((byte) (vendorFieldHexLength / 2));
             this.buffer.put(Hex.decode(this.transaction.vendorFieldHex));
         } else {
-            this.buffer.put((byte)0x00);
+            this.buffer.put((byte) 0x00);
         }
 
     }
@@ -100,7 +100,7 @@ public class Serializer {
         }
 
         if (this.transaction.signatures != null) {
-            this.buffer.put((byte)0xff);
+            this.buffer.put((byte) 0xff);
             buffer.put(Hex.decode(String.join("", this.transaction.signatures)));
         }
     }

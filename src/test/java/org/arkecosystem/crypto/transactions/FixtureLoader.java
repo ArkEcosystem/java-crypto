@@ -8,9 +8,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
 
-public class FixtureLoader{
+public class FixtureLoader {
 
     private static String readFile(String path) throws IOException {
         ClassLoader classLoader = Transaction.class.getClassLoader();

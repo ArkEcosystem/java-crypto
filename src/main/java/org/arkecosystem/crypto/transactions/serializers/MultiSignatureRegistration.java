@@ -27,7 +27,7 @@ public class MultiSignatureRegistration extends AbstractSerializer {
         }
 
         this.buffer.put(multiSignature.min);
-        this.buffer.put((byte)multiSignature.keysgroup.size());
+        this.buffer.put((byte) multiSignature.keysgroup.size());
         this.buffer.put(multiSignature.lifetime);
         this.buffer.put(Hex.decode(String.join("", multiSignature.keysgroup)));
     }

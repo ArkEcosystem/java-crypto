@@ -3,8 +3,6 @@ package org.arkecosystem.crypto.transactions.builder;
 import org.arkecosystem.crypto.transactions.Transaction;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TransferTest {

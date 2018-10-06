@@ -12,7 +12,7 @@ public class DelegateRegistration extends AbstractSerializer {
     public void serialize() {
         byte[] delegateBytes = this.transaction.asset.delegate.username.getBytes();
 
-        this.buffer.put((byte)delegateBytes.length);
+        this.buffer.put((byte) delegateBytes.length);
         this.buffer.put(delegateBytes);
     }
 

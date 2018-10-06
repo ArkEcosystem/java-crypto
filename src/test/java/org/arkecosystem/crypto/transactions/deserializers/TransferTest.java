@@ -7,7 +7,6 @@ import org.arkecosystem.crypto.transactions.Transaction;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 class TransferTest {
 
@@ -17,11 +16,11 @@ class TransferTest {
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
-        assertEquals(((Double)data.get("type")).intValue(), actual.type.getValue());
-        assertEquals(((Double)data.get("amount")).longValue(), actual.amount);
-        assertEquals(((Double)data.get("fee")).longValue(), actual.fee);
+        assertEquals(((Double) data.get("type")).intValue(), actual.type.getValue());
+        assertEquals(((Double) data.get("amount")).longValue(), actual.amount);
+        assertEquals(((Double) data.get("fee")).longValue(), actual.fee);
         assertEquals(data.get("recipientId").toString(), actual.recipientId);
-        assertEquals(((Double)data.get("timestamp")).intValue(), actual.timestamp);
+        assertEquals(((Double) data.get("timestamp")).intValue(), actual.timestamp);
         assertEquals(data.get("senderPublicKey").toString(), actual.senderPublicKey);
         assertEquals(data.get("signature").toString(), actual.signature);
         assertEquals(data.get("id").toString(), actual.id);
@@ -33,11 +32,11 @@ class TransferTest {
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
-        assertEquals(((Double)data.get("type")).intValue(), actual.type.getValue());
-        assertEquals(((Double)data.get("amount")).longValue(), actual.amount);
-        assertEquals(((Double)data.get("fee")).longValue(), actual.fee);
+        assertEquals(((Double) data.get("type")).intValue(), actual.type.getValue());
+        assertEquals(((Double) data.get("amount")).longValue(), actual.amount);
+        assertEquals(((Double) data.get("fee")).longValue(), actual.fee);
         assertEquals(data.get("recipientId").toString(), actual.recipientId);
-        assertEquals(((Double)data.get("timestamp")).intValue(), actual.timestamp);
+        assertEquals(((Double) data.get("timestamp")).intValue(), actual.timestamp);
         assertEquals(data.get("senderPublicKey").toString(), actual.senderPublicKey);
         assertEquals(data.get("vendorField").toString(), actual.vendorField);
         assertEquals(data.get("signature").toString(), actual.signature);
@@ -50,11 +49,11 @@ class TransferTest {
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
-        assertEquals(((Double)data.get("type")).intValue(), actual.type.getValue());
-        assertEquals(((Double)data.get("amount")).longValue(), actual.amount);
-        assertEquals(((Double)data.get("fee")).longValue(), actual.fee);
+        assertEquals(((Double) data.get("type")).intValue(), actual.type.getValue());
+        assertEquals(((Double) data.get("amount")).longValue(), actual.amount);
+        assertEquals(((Double) data.get("fee")).longValue(), actual.fee);
         assertEquals(data.get("recipientId").toString(), actual.recipientId);
-        assertEquals(((Double)data.get("timestamp")).intValue(), actual.timestamp);
+        assertEquals(((Double) data.get("timestamp")).intValue(), actual.timestamp);
         assertEquals(data.get("senderPublicKey").toString(), actual.senderPublicKey);
         assertEquals(data.get("vendorFieldHex").toString(), actual.vendorFieldHex);
         assertEquals(data.get("signature").toString(), actual.signature);
@@ -67,11 +66,11 @@ class TransferTest {
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
-        assertEquals(((Double)data.get("type")).intValue(), actual.type.getValue());
-        assertEquals(((Double)data.get("amount")).longValue(), actual.amount);
-        assertEquals(((Double)data.get("fee")).longValue(), actual.fee);
+        assertEquals(((Double) data.get("type")).intValue(), actual.type.getValue());
+        assertEquals(((Double) data.get("amount")).longValue(), actual.amount);
+        assertEquals(((Double) data.get("fee")).longValue(), actual.fee);
         assertEquals(data.get("recipientId").toString(), actual.recipientId);
-        assertEquals(((Double)data.get("timestamp")).intValue(), actual.timestamp);
+        assertEquals(((Double) data.get("timestamp")).intValue(), actual.timestamp);
         assertEquals(data.get("senderPublicKey").toString(), actual.senderPublicKey);
         assertEquals(data.get("signature").toString(), actual.signature);
         assertEquals(data.get("signSignature").toString(), actual.signSignature);
@@ -84,11 +83,11 @@ class TransferTest {
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
-        assertEquals(((Double)data.get("type")).intValue(), actual.type.getValue());
-        assertEquals(((Double)data.get("amount")).longValue(), actual.amount);
-        assertEquals(((Double)data.get("fee")).longValue(), actual.fee);
+        assertEquals(((Double) data.get("type")).intValue(), actual.type.getValue());
+        assertEquals(((Double) data.get("amount")).longValue(), actual.amount);
+        assertEquals(((Double) data.get("fee")).longValue(), actual.fee);
         assertEquals(data.get("recipientId").toString(), actual.recipientId);
-        assertEquals(((Double)data.get("timestamp")).intValue(), actual.timestamp);
+        assertEquals(((Double) data.get("timestamp")).intValue(), actual.timestamp);
         assertEquals(data.get("senderPublicKey").toString(), actual.senderPublicKey);
         assertEquals(data.get("vendorField").toString(), actual.vendorField);
         assertEquals(data.get("signature").toString(), actual.signature);
@@ -102,11 +101,11 @@ class TransferTest {
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
-        assertEquals(((Double)data.get("type")).intValue(), actual.type.getValue());
-        assertEquals(((Double)data.get("amount")).longValue(), actual.amount);
-        assertEquals(((Double)data.get("fee")).longValue(), actual.fee);
+        assertEquals(((Double) data.get("type")).intValue(), actual.type.getValue());
+        assertEquals(((Double) data.get("amount")).longValue(), actual.amount);
+        assertEquals(((Double) data.get("fee")).longValue(), actual.fee);
         assertEquals(data.get("recipientId").toString(), actual.recipientId);
-        assertEquals(((Double)data.get("timestamp")).intValue(), actual.timestamp);
+        assertEquals(((Double) data.get("timestamp")).intValue(), actual.timestamp);
         assertEquals(data.get("senderPublicKey").toString(), actual.senderPublicKey);
         assertEquals(data.get("vendorFieldHex").toString(), actual.vendorFieldHex);
         assertEquals(data.get("signature").toString(), actual.signature);

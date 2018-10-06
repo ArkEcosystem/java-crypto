@@ -3,13 +3,13 @@ package org.arkecosystem.crypto.networks;
 import org.arkecosystem.crypto.configuration.Network;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DevnetTest {
 
     @Test
     void version() {
-        assertEquals(0x1e, Network.get().version());
+        assertEquals(0x17, Network.get().version());
     }
 
     @Test

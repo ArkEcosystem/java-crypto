@@ -3,7 +3,7 @@ package org.arkecosystem.crypto.configuration;
 import org.arkecosystem.crypto.enums.Types;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FeeTest {
 

@@ -1,7 +1,7 @@
 package org.arkecosystem.crypto.transactions.builder;
 
+import org.arkecosystem.crypto.enums.Types;
 import org.arkecosystem.crypto.identities.Address;
-import org.arkecosystem.crypto.enums.*;
 
 import java.util.List;
 

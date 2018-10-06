@@ -14,11 +14,11 @@ public class Vote extends AbstractSerializer {
     public void serialize() {
         List<String> votes = transaction.asset.votes;
 
-        for (int i = 0; i < votes.size(); i++){
+        for (int i = 0; i < votes.size(); i++) {
             votes.set(i, (votes.get(i).startsWith("+") ? "01" : "00") + votes.get(i).substring(1));
         }
 
-        this.buffer.put((byte)votes.size());
+        this.buffer.put((byte) votes.size());
         this.buffer.put(Hex.decode(String.join("", votes)));
     }
 

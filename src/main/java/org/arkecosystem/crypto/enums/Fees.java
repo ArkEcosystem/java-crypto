@@ -11,6 +11,8 @@ public enum Fees {
     MULTI_PAYMENT(0L),
     DELEGATE_RESIGNATION(0L);
 
+    private final Long value;
+
     Fees(Long value) {
         this.value = value;
     }
@@ -18,6 +20,4 @@ public enum Fees {
     public Long getValue() {
         return value;
     }
-
-    private final Long value;
 }

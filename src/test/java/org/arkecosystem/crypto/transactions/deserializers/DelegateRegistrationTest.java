@@ -16,10 +16,10 @@ class DelegateRegistrationTest {
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
-        assertEquals(((Double)data.get("type")).intValue(), actual.type.getValue());
-        assertEquals(((Double)data.get("amount")).longValue(), actual.amount);
-        assertEquals(((Double)data.get("fee")).longValue(), actual.fee);
-        assertEquals(((Double)data.get("timestamp")).intValue(), actual.timestamp);
+        assertEquals(((Double) data.get("type")).intValue(), actual.type.getValue());
+        assertEquals(((Double) data.get("amount")).longValue(), actual.amount);
+        assertEquals(((Double) data.get("fee")).longValue(), actual.fee);
+        assertEquals(((Double) data.get("timestamp")).intValue(), actual.timestamp);
         assertEquals(data.get("senderPublicKey").toString(), actual.senderPublicKey);
         assertEquals(data.get("signature").toString(), actual.signature);
 
@@ -35,10 +35,10 @@ class DelegateRegistrationTest {
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
-        assertEquals(((Double)data.get("type")).intValue(), actual.type.getValue());
-        assertEquals(((Double)data.get("amount")).longValue(), actual.amount);
-        assertEquals(((Double)data.get("fee")).longValue(), actual.fee);
-        assertEquals(((Double)data.get("timestamp")).intValue(), actual.timestamp);
+        assertEquals(((Double) data.get("type")).intValue(), actual.type.getValue());
+        assertEquals(((Double) data.get("amount")).longValue(), actual.amount);
+        assertEquals(((Double) data.get("fee")).longValue(), actual.fee);
+        assertEquals(((Double) data.get("timestamp")).intValue(), actual.timestamp);
         assertEquals(data.get("senderPublicKey").toString(), actual.senderPublicKey);
         assertEquals(data.get("signature").toString(), actual.signature);
         assertEquals(data.get("signSignature").toString(), actual.signSignature);

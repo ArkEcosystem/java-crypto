@@ -5,7 +5,6 @@ import org.arkecosystem.crypto.configuration.Network;
 import org.arkecosystem.crypto.encoding.Base58;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.bitcoinj.core.ECKey;
-import org.bitcoinj.core.VersionedChecksummedBytes;
 import org.spongycastle.crypto.digests.RIPEMD160Digest;
 
 public class Address {
@@ -29,7 +28,7 @@ public class Address {
             networkVersion = Network.get().version();
         }
 
-        byte[] bytes = Bytes.concat(new byte[] { networkVersion.byteValue() },out);
+        byte[] bytes = Bytes.concat(new byte[]{networkVersion.byteValue()}, out);
         return Base58.encodeChecked(bytes);
     }
 

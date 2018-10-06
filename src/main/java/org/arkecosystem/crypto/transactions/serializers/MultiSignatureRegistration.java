@@ -1,34 +1,35 @@
-package org.arkecosystem.crypto.transactions.serializers
+package org.arkecosystem.crypto.transactions.serializers;
 
+import org.arkecosystem.crypto.encoding.Hex;
+import org.arkecosystem.crypto.transactions.Transaction;
+import org.arkecosystem.crypto.transactions.TransactionAsset;
 
-import java.nio.ByteBuffer
-import org.arkecosystem.crypto.encoding.*
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
-class MultiSignatureRegistration extends AbstractSerializer {
-    MultiSignatureRegistration(ByteBuffer buffer, Transaction transaction) {
-        super(buffer, transaction)
+public class MultiSignatureRegistration extends AbstractSerializer {
+    public MultiSignatureRegistration(ByteBuffer buffer, Transaction transaction) {
+        super(buffer, transaction);
     }
 
-    void serialize() {
-        List keysgroup = []
+    public void serialize() {
+        List keysgroup = new ArrayList();
 
-        if (!this.transaction.version) {
-            for (int i = 0; i < this.transaction.asset.multisignature.keysgroup.size(); i++) {
-                def element = this.transaction.asset.multisignature.keysgroup[i]
+        TransactionAsset.MultiSignature multiSignature = this.transaction.asset.multisignature;
 
-                if ('+' == element.substring(0, 1)) {
-                    keysgroup[i] = element.substring(1)
-                } else {
-                    keysgroup[i] = element
-                }
+        for (int i = 0; i < multiSignature.keysgroup.size(); i++) {
+            String key = multiSignature.keysgroup.get(i);
+
+            if (key.startsWith("+")) {
+                multiSignature.keysgroup.set(i, key.substring(1));
             }
-        } else {
-            keysgroup = this.transaction.asset.multisignature.keysgroup
         }
 
-        this.buffer.put this.transaction.asset.multisignature.min.byteValue()
-        this.buffer.put this.transaction.asset.multisignature.keysgroup.size().byteValue()
-        this.buffer.put this.transaction.asset.multisignature.lifetime.byteValue()
-        this.buffer.put Hex.decode(keysgroup.join(""))
+        this.buffer.put(multiSignature.min);
+        this.buffer.put((byte)multiSignature.keysgroup.size());
+        this.buffer.put(multiSignature.lifetime);
+        this.buffer.put(Hex.decode(String.join("", multiSignature.keysgroup)));
     }
+
 }

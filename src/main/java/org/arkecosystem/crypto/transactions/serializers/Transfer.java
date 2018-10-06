@@ -1,23 +1,19 @@
-package org.arkecosystem.crypto.transactions.serializers
+package org.arkecosystem.crypto.transactions.serializers;
 
+import org.arkecosystem.crypto.transactions.Transaction;
+import org.bitcoinj.core.Base58;
 
-import java.nio.ByteBuffer
-import org.bitcoinj.core.Base58
+import java.nio.ByteBuffer;
 
-class Transfer extends AbstractSerializer {
-    Transfer(ByteBuffer buffer, Transaction transaction) {
-        super(buffer, transaction)
+public class Transfer extends AbstractSerializer {
+    public Transfer(ByteBuffer buffer, Transaction transaction) {
+        super(buffer, transaction);
     }
 
-    void serialize() {
-        this.buffer.putLong this.transaction.amount
-
-        if (this.transaction.expiration) {
-            this.buffer.putInt this.transaction.expiration
-        } else {
-            this.buffer.putInt 0
-        }
-
-        this.buffer.put Base58.decodeChecked(this.transaction.recipientId)
+    public void serialize() {
+        this.buffer.putLong(this.transaction.amount);
+        this.buffer.putInt(this.transaction.expiration);
+        this.buffer.put(Base58.decodeChecked(this.transaction.recipientId));
     }
+
 }

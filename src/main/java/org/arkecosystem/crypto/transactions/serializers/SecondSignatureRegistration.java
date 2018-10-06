@@ -1,15 +1,17 @@
-package org.arkecosystem.crypto.transactions.serializers
+package org.arkecosystem.crypto.transactions.serializers;
 
+import org.arkecosystem.crypto.encoding.Hex;
+import org.arkecosystem.crypto.transactions.Transaction;
 
-import java.nio.ByteBuffer
-import org.arkecosystem.crypto.encoding.*
+import java.nio.ByteBuffer;
 
-class SecondSignatureRegistration extends AbstractSerializer {
-    SecondSignatureRegistration(ByteBuffer buffer, Transaction transaction) {
-        super(buffer, transaction)
+public class SecondSignatureRegistration extends AbstractSerializer {
+    public SecondSignatureRegistration(ByteBuffer buffer, Transaction transaction) {
+        super(buffer, transaction);
     }
 
-    void serialize() {
-        buffer.put Hex.decode(this.transaction.asset.signature.publicKey)
+    public void serialize() {
+        this.buffer.put(Hex.decode(this.transaction.asset.signature.publicKey));
     }
+
 }

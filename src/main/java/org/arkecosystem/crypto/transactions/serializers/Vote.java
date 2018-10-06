@@ -1,22 +1,25 @@
-package org.arkecosystem.crypto.transactions.serializers
+package org.arkecosystem.crypto.transactions.serializers;
 
+import org.arkecosystem.crypto.encoding.Hex;
+import org.arkecosystem.crypto.transactions.Transaction;
 
-import java.nio.ByteBuffer
-import org.arkecosystem.crypto.encoding.*
+import java.nio.ByteBuffer;
+import java.util.List;
 
-class Vote extends AbstractSerializer {
-    Vote(ByteBuffer buffer, Transaction transaction) {
-        super(buffer, transaction)
+public class Vote extends AbstractSerializer {
+    public Vote(ByteBuffer buffer, Transaction transaction) {
+        super(buffer, transaction);
     }
 
-    void serialize() {
-        List<String> votes = transaction.asset.votes
+    public void serialize() {
+        List<String> votes = transaction.asset.votes;
 
-        for (int i = 0; i < votes.size(); i++) {
-            votes[i] = (votes[i][0] == '+' ? '01' : '00') + votes[i].substring(1)
+        for (int i = 0; i < votes.size(); i++){
+            votes.set(i, (votes.get(i).startsWith("+") ? "01" : "00") + votes.get(i).substring(1));
         }
 
-        this.buffer.put transaction.asset.votes.size().byteValue()
-        this.buffer.put Hex.decode(votes.join(""))
+        this.buffer.put((byte)votes.size());
+        this.buffer.put(Hex.decode(String.join("", votes)));
     }
+
 }

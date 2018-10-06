@@ -45,8 +45,8 @@ public class Serializer {
             this.buffer.put((byte)Network.get().version());
         }
 
-        this.buffer.putInt((byte)this.transaction.type.getValue());
-        this.buffer.putLong(this.transaction.timestamp);
+        this.buffer.put((byte)this.transaction.type.getValue());
+        this.buffer.putInt(this.transaction.timestamp);
         this.buffer.put(Hex.decode(this.transaction.senderPublicKey));
         this.buffer.putLong(this.transaction.fee);
 
@@ -61,7 +61,7 @@ public class Serializer {
             this.buffer.put((byte)(vendorFieldHexLength / 2));
             this.buffer.put(Hex.decode(this.transaction.vendorFieldHex));
         } else {
-            this.buffer.put(new byte[21]);
+            this.buffer.put((byte)0x00);
         }
 
     }

@@ -5,13 +5,16 @@ import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Message {
+    private String publickey;
+    private String signature;
+    private String message;
+
+
     public Message(String publickey, String signature, String message) {
         this.publickey = publickey;
         this.signature = signature;
@@ -35,38 +38,27 @@ public class Message {
     }
 
     public Map toMap() {
-        return DefaultGroovyMethods.subMap(DefaultGroovyMethods.getProperties(this), new ArrayList<>(Arrays.asList("publickey", "signature", "message")));
+        HashMap<String, Object> map = new HashMap();
+        map.put("message", this.message);
+        map.put("publickey", this.publickey);
+        map.put("signature", this.signature);
+        return map;
     }
 
     public String toJson() {
         return new Gson().toJson(toMap());
     }
 
-    public String getPublickey() {
-        return publickey;
+    public String getMessage() {
+        return message;
     }
 
-    public void setPublickey(String publickey) {
-        this.publickey = publickey;
+    public String getPublickey() {
+        return publickey;
     }
 
     public String getSignature() {
         return signature;
     }
 
-    public void setSignature(String signature) {
-        this.signature = signature;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    private String publickey;
-    private String signature;
-    private String message;
 }

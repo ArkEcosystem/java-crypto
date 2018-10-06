@@ -141,7 +141,8 @@ public class Transaction {
         buffer.putInt(timestamp);
         buffer.put(Hex.decode(this.senderPublicKey));
 
-        if (recipientId != null && !recipientId.isEmpty()) {
+        boolean skipRecipientId = this.type == Types.SECOND_SIGNATURE_REGISTRATION || this.type == Types.MULTI_SIGNATURE_REGISTRATION;
+        if (recipientId != null && !recipientId.isEmpty() && !skipRecipientId) {
             buffer.put(Base58.decodeChecked(this.recipientId));
         } else {
             buffer.put(new byte[21]);

@@ -7,7 +7,7 @@ import org.arkecosystem.crypto.identities.PublicKey;
 
 public class SecondSignatureRegistration extends AbstractTransaction {
 
-    public AbstractTransaction signature(String signature) {
+    public SecondSignatureRegistration signature(String signature) {
         this.transaction.asset.signature.publicKey = Hex.encode(PublicKey.fromPassphrase(signature).getBytes());
 
         return this;

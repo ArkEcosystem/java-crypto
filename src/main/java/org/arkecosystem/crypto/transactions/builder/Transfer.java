@@ -4,19 +4,20 @@ import org.arkecosystem.crypto.enums.*;
 
 public class Transfer extends AbstractTransaction {
 
-    public AbstractTransaction recipient(String recipientId) {
+    public Transfer recipient(String recipientId) {
         this.transaction.recipientId = recipientId;
 
         return this;
     }
 
-    public AbstractTransaction amount(long amount) {
+    public Transfer amount(int amount) { return this.amount((long)amount); }
+    public Transfer amount(long amount) {
         this.transaction.amount = amount;
 
         return this;
     }
 
-    public AbstractTransaction vendorField(String vendorField) {
+    public Transfer vendorField(String vendorField) {
         this.transaction.vendorField = vendorField;
 
         return this;

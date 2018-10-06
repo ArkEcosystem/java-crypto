@@ -6,13 +6,13 @@ import org.arkecosystem.crypto.enums.*;
 import java.util.List;
 
 public class Vote extends AbstractTransaction {
-    public AbstractTransaction votes(List votes) {
+    public Vote votes(List votes) {
         this.transaction.asset.votes = votes;
 
         return this;
     }
 
-    public AbstractTransaction sign(String passphrase) {
+    public Vote sign(String passphrase) {
         this.transaction.recipientId = Address.fromPassphrase(passphrase);
 
         super.sign(passphrase);

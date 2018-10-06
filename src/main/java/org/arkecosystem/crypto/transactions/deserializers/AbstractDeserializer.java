@@ -1,16 +1,19 @@
-package org.arkecosystem.crypto.transactions.deserializers
+package org.arkecosystem.crypto.transactions.deserializers;
 
+import org.arkecosystem.crypto.transactions.Transaction;
 
-import java.nio.ByteBuffer
+import java.nio.ByteBuffer;
 
-abstract class AbstractDeserializer {
-    String serialized
-    ByteBuffer buffer
-    Transaction transaction
+public abstract class AbstractDeserializer {
 
-    AbstractDeserializer(String serialized, ByteBuffer buffer, Transaction transaction) {
-        this.serialized = serialized
-        this.buffer = buffer
-        this.transaction = transaction
+    protected String serialized;
+    protected ByteBuffer buffer;
+    protected Transaction transaction;
+
+    public AbstractDeserializer(String serialized, ByteBuffer buffer, Transaction transaction) {
+        this.serialized = serialized;
+        this.buffer = buffer;
+        this.transaction = transaction;
     }
+
 }

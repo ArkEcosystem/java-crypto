@@ -1,6 +1,7 @@
 package org.arkecosystem.crypto.transactions;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,9 +18,9 @@ public class FixtureLoader{
         return new String(Files.readAllBytes(Paths.get(resource.getPath())), StandardCharsets.UTF_8);
     }
 
-    public static HashMap<String, Object> load(String path) {
+    public static LinkedTreeMap<String, Object> load(String path) {
         try {
-            return new Gson().fromJson(readFile(path), new HashMap<String, Object>().getClass());
+            return new Gson().fromJson(readFile(path), new LinkedTreeMap<String, Object>().getClass());
         } catch (IOException e) {
             e.printStackTrace();
             return null;

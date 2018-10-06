@@ -160,7 +160,7 @@ public class Transaction {
         buffer.putLong(amount);
         buffer.putLong(fee);
 
-        if (this.type == Types.TRANSFER) {
+        if (this.type == Types.SECOND_SIGNATURE_REGISTRATION) {
             buffer.put(Hex.decode(this.asset.signature.publicKey));
         }
 

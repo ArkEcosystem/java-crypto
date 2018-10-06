@@ -1,6 +1,6 @@
 package org.arkecosystem.crypto.transactions;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import org.arkecosystem.crypto.encoding.Base58;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
@@ -8,6 +8,7 @@ import org.arkecosystem.crypto.enums.Types;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
 
+import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.*;
@@ -208,13 +209,30 @@ public class Transaction {
         return new Deserializer().deserialize(serialized);
     }
 
-    private String toObject() {
-     //   return DefaultGroovyMethods.subMap(DefaultGroovyMethods.getProperties(this), new ArrayList<String>(Arrays.asList("id", "timestamp", "recipientId", "amount", "fee", "type", "asset", "vendorField", "signature", "signSignature", "senderPublicKey")));
-    return new String();
-    }
-
     public String toJson() {
-        return new Gson().toJson(toObject());
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Types.class, new TransactionTypeDeserializer() );
+        gsonBuilder.registerTypeAdapter(Types.class, new TransactionTypeSerializer() );
+        return gsonBuilder.create().toJson(this);
     }
 
+    private static class TransactionTypeDeserializer implements
+        JsonDeserializer<Types>
+    {
+        @Override
+        public Types deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            return Types.values()[json.getAsInt()];
+        }
+    }
+
+    private static class TransactionTypeSerializer implements
+        JsonSerializer<Types>
+    {
+        @Override
+        public JsonElement serialize(Types src, Type typeOfSrc, JsonSerializationContext context) {
+            return new JsonPrimitive(src.getValue());
+        }
+    }
 }
+
+

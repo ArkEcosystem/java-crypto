@@ -1,125 +1,108 @@
-package org.arkecosystem.crypto.transactions
+package org.arkecosystem.crypto.transactions;
 
-import org.arkecosystem.crypto.configuration.Network
+import org.arkecosystem.crypto.configuration.Network;
+import org.arkecosystem.crypto.encoding.Hex;
+import org.arkecosystem.crypto.transactions.serializers.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import org.arkecosystem.crypto.transactions.serializers.DelegateRegistration
-import org.arkecosystem.crypto.transactions.serializers.MultiSignatureRegistration
-import org.arkecosystem.crypto.transactions.serializers.SecondSignatureRegistration
-import org.arkecosystem.crypto.transactions.serializers.Transfer
-import org.arkecosystem.crypto.transactions.serializers.Vote
-import org.arkecosystem.crypto.encoding.*
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
-class Serializer {
-    ByteBuffer buffer
-    Transaction transaction
+public class Serializer {
 
-    byte[] serialize(Transaction transaction) {
-        this.transaction = transaction
+    private ByteBuffer buffer;
+    private Transaction transaction;
 
-        this.buffer = ByteBuffer.allocate(512)
-        this.buffer.order(ByteOrder.LITTLE_ENDIAN)
+    public byte[] serialize(Transaction transaction) {
+        this.transaction = transaction;
 
-        serializeHeader()
-        serializeTypeSpecific()
-        serializeSignatures()
+        this.buffer = ByteBuffer.allocate(512);
+        this.buffer.order(ByteOrder.LITTLE_ENDIAN);
 
-        def result = new byte[this.buffer.position()]
-        this.buffer.rewind()
-        this.buffer.get(result)
-        return result
+        serializeHeader();
+        serializeTypeSpecific();
+        serializeSignatures();
+
+        byte[] result = new byte[this.buffer.position()];
+        this.buffer.rewind();
+        this.buffer.get(result);
+
+        return result;
     }
 
-    void serializeHeader() {
-        this.buffer.put 0xff.byteValue()
+    private void serializeHeader() {
+        this.buffer.put((byte)0xff);
 
-        if (this.transaction.version) {
-            this.buffer.put this.transaction.version.byteValue()
+        if (this.transaction.version > 0) {
+            this.buffer.put((byte)this.transaction.version);
         } else {
-            this.buffer.put 0x01.byteValue()
+            this.buffer.put((byte)0x01);
         }
 
-        if (this.transaction.network) {
-            this.buffer.put this.transaction.network.byteValue()
+        if (this.transaction.network > 0) {
+            this.buffer.put((byte)this.transaction.network);
         } else {
-            this.buffer.put Network.get().version().byteValue()
+            this.buffer.put((byte)Network.get().version());
         }
 
-        this.buffer.put this.transaction.type.byteValue()
-        this.buffer.putInt this.transaction.timestamp
-        this.buffer.put Hex.decode(this.transaction.senderPublicKey)
-        this.buffer.putLong this.transaction.fee
+        this.buffer.putInt((byte)this.transaction.type.getValue());
+        this.buffer.putLong(this.transaction.timestamp);
+        this.buffer.put(Hex.decode(this.transaction.senderPublicKey));
+        this.buffer.putLong(this.transaction.fee);
 
-        if (this.transaction.vendorField) {
-            int vendorFieldLength = this.transaction.vendorField.length()
+        if (this.transaction.vendorField != null) {
+            int vendorFieldLength = this.transaction.vendorField.length();
 
-            this.buffer.put vendorFieldLength.byteValue()
-            this.buffer.put this.transaction.vendorField.bytes
-        } else if (this.transaction.vendorFieldHex) {
-            int vendorFieldHexLength = this.transaction.vendorFieldHex.length()
+            this.buffer.put((byte)vendorFieldLength);
+            this.buffer.put(this.transaction.vendorField.getBytes());
+        } else if (this.transaction.vendorFieldHex != null) {
+            int vendorFieldHexLength = this.transaction.vendorFieldHex.length();
 
-            this.buffer.put vendorFieldHexLength / 2 as byte
-            this.buffer.put Hex.decode(this.transaction.vendorFieldHex)
+            this.buffer.put((byte)(vendorFieldHexLength / 2));
+            this.buffer.put(Hex.decode(this.transaction.vendorFieldHex));
         } else {
-            this.buffer.put 0x00.byteValue()
+            this.buffer.put(new byte[21]);
         }
+
     }
 
-    void serializeTypeSpecific() {
+    private void serializeTypeSpecific() {
         switch (transaction.type) {
-            case Types.TRANSFER.getValue():
-                new Transfer(this.buffer, this.transaction).serialize()
-                break
-
-            case Types.SECOND_SIGNATURE_REGISTRATION.getValue():
-                new SecondSignatureRegistration(this.buffer, this.transaction).serialize()
-                break
-
-            case Types.DELEGATE_REGISTRATION.getValue():
-                new DelegateRegistration(this.buffer, this.transaction).serialize()
-                break
-
-            case Types.VOTE.getValue():
-                new Vote(this.buffer, this.transaction).serialize()
-                break
-
-            case Types.MULTI_SIGNATURE_REGISTRATION.getValue():
-                new MultiSignatureRegistration(this.buffer, this.transaction).serialize()
-                break
-
-            // case Types.IPFS.getValue():
-            //     new Ipfs(this.buffer, this.transaction).serialize()
-            // break
-
-            // case Types.TIMELOCK_TRANSFER.getValue():
-            //     new TimelockTransfer(this.buffer, this.transaction).serialize()
-            // break
-
-            // case Types.MULTI_PAYMENT.getValue():
-            //     new MultiPayment(this.buffer, this.transaction).serialize()
-            // break
-
-            // case Types.DELEGATE_RESIGNATION.getValue():
-            //     new DelegateResignation(this.buffer, this.transaction).serialize()
-            // break
+            case TRANSFER:
+                new Transfer(this.buffer, this.transaction).serialize();
+                break;
+            case SECOND_SIGNATURE_REGISTRATION:
+                new SecondSignatureRegistration(this.buffer, this.transaction).serialize();
+                break;
+            case DELEGATE_REGISTRATION:
+                new DelegateRegistration(this.buffer, this.transaction).serialize();
+                break;
+            case VOTE:
+                new Vote(this.buffer, this.transaction).serialize();
+                break;
+            case MULTI_SIGNATURE_REGISTRATION:
+                new MultiSignatureRegistration(this.buffer, this.transaction).serialize();
+                break;
+            default:
+                throw new NotImplementedException();
         }
     }
 
-    void serializeSignatures() {
-        if (this.transaction.signature) {
-            buffer.put Hex.decode(this.transaction.signature)
+    private void serializeSignatures() {
+        if (this.transaction.signature != null) {
+            buffer.put(Hex.decode(this.transaction.signature));
         }
 
-        if (this.transaction.secondSignature) {
-            buffer.put Hex.decode(this.transaction.secondSignature)
-        } else if (this.transaction.signSignature) {
-            buffer.put Hex.decode(this.transaction.signSignature)
+        if (this.transaction.secondSignature != null) {
+            buffer.put(Hex.decode(this.transaction.secondSignature));
+        } else if (this.transaction.signSignature != null) {
+            buffer.put(Hex.decode(this.transaction.signSignature));
         }
 
-        if (this.transaction.signatures) {
-            this.buffer.put 0xff.byteValue()
-            buffer.put Hex.decode(this.transaction.signatures.join(""))
+        if (this.transaction.signatures != null) {
+            this.buffer.put((byte)0xff);
+            buffer.put(Hex.decode(String.join("", this.transaction.signatures)));
         }
     }
+
 }

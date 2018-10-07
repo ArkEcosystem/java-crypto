@@ -38,6 +38,9 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.1'
+    
+    // Build blows up without this?
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
 }
 
 test {

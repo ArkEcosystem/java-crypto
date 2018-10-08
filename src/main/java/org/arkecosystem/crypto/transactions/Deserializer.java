@@ -5,7 +5,6 @@ import org.arkecosystem.crypto.enums.Types;
 import org.arkecosystem.crypto.identities.Address;
 import org.arkecosystem.crypto.transactions.deserializers.*;
 
-import javax.xml.bind.DatatypeConverter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -18,7 +17,7 @@ public class Deserializer {
     public Transaction deserialize(String serialized) {
         this.serialized = serialized;
 
-        this.buffer = ByteBuffer.wrap(DatatypeConverter.parseHexBinary(serialized)).slice();
+        this.buffer = ByteBuffer.wrap(Hex.decode(serialized)).slice();
         this.buffer.order(ByteOrder.LITTLE_ENDIAN);
         this.buffer.get();
 

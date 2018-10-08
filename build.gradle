@@ -1,34 +1,89 @@
 plugins {
+    id 'java'
     id 'maven'
+    id 'maven-publish'
+    id 'signing'
     id 'jacoco'
 }
 
 apply plugin:'java'
-
-group 'org.arkecosystem.crypto'
-version '0.1.0'
+apply plugin:'maven'
+apply plugin:'maven-publish'
+apply plugin:'signing'
 
 repositories {
     jcenter()
     mavenCentral()
 }
 
-task createPom {
-    doLast {
-        pom {
-            project {
-                groupId 'org.arkecosystem.crypto'
-                version '0.1.0'
-                artifactId 'arkecosystem-crypto'
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier "sources"
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+publishing {
+    publications {
+        arkEcosystem(MavenPublication) {
+            from components.java
+            artifact sourceJar
+            artifact javadocJar
+
+            pom {
+                groupId = 'org.arkecosystem.crypto'
+                version = '0.1.0'
+                artifactId = 'arkecosystem-crypto'
+
+                name = 'java-crypto'
+                description = 'A simple Cryptography Implementation in Java for the ARK Blockchain.'
+                url = 'https://github.com/ArkEcosystem/java-crypto'
+                inceptionYear = '2018'
+
                 licenses {
                     license {
-                        name 'MIT'
-                        distribution 'repo'
+                        name = 'MIT'
+                        distribution = 'repo'
                     }
                 }
+
+                developers {
+                    developer {
+                        name = 'Brian Faust'
+                        email = 'brian@ark.io'
+                        organization = 'Ark Ecosystem'
+                        organizationUrl = 'https://ark.io'
+                    }
+                    developer {
+                        name = 'Joshua Noack'
+                        email = 'joshua@ark.io'
+                        organization = 'Ark Ecosystem'
+                        organizationUrl = 'https://ark.io'
+                    }
+                }
+
+                scm {
+                    connection = 'scm:git:git://github.com/ArkEcosystem/java-crypto.git'
+                    developerConnection = 'scm:git:ssh://github.com:ArkEcosystem/java-crypto.git'
+                    url = 'https://github.com/ArkEcosystem/java-crypto/tree/master'
+                }
             }
-        }.writeTo("$buildDir/libs/arkecosystem-crypto-0.1.0.pom")
+        }
     }
+
+    repositories {
+        maven {
+            name = 'myRepo'
+            url = "file://${buildDir}/repo"
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.arkEcosystem
 }
 
 dependencies {

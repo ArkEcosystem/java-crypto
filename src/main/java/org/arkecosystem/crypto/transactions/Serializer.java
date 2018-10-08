@@ -3,7 +3,6 @@ package org.arkecosystem.crypto.transactions;
 import org.arkecosystem.crypto.configuration.Network;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.transactions.serializers.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -84,7 +83,7 @@ public class Serializer {
                 new MultiSignatureRegistration(this.buffer, this.transaction).serialize();
                 break;
             default:
-                throw new NotImplementedException();
+                throw new UnsupportedOperationException();
         }
     }
 

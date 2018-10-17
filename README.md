@@ -6,7 +6,7 @@
 
 > A simple Cryptography Implementation in Java for the ARK Blockchain.
 
-[![Build Status](https://badgen.now.sh/travis/ArkEcosystem/java-crypto)](https://travis-ci.org/ArkEcosystem/java-crypto)
+[![Build Status](https://badgen.now.sh/circleci/github/ArkEcosystem/java-crypto)](https://circleci.com/gh/ArkEcosystem/java-crypto)
 [![Codecov](https://badgen.now.sh/codecov/c/github/arkecosystem/java-crypto)](https://codecov.io/gh/arkecosystem/java-crypto)
 [![Latest Version](https://badgen.now.sh/github/release/ArkEcosystem/java-crypto)](https://github.com/ArkEcosystem/java-crypto/releases)
 [![License: MIT](https://badgen.now.sh/badge/license/MIT/green)](https://opensource.org/licenses/MIT)

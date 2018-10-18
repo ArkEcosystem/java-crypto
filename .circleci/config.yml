@@ -18,4 +18,12 @@ jobs:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
-      - run: gradle test
+      - run:
+          name: Tests
+          command: |
+            gradle test
+            gradle jacocoTestReport
+      - run:
+          name: Codecov
+          when: on_success
+          command: bash <(curl -s https://codecov.io/bash)

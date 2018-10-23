@@ -1,10 +1,10 @@
-# ARK Java - Crypto
+# Ark Java - Crypto
 
 <p align="center">
-    <img src="https://github.com/ArkEcosystem/java-crypto/blob/master/banner.png" />
+    <img src="./banner.png" />
 </p>
 
-> A simple Cryptography Implementation in Java for the ARK Blockchain.
+> A simple Cryptography Implementation in Java for the Ark Blockchain.
 
 [![Build Status](https://badgen.now.sh/circleci/github/ArkEcosystem/java-crypto)](https://circleci.com/gh/ArkEcosystem/java-crypto)
 [![Codecov](https://badgen.now.sh/codecov/c/github/arkecosystem/java-crypto)](https://codecov.io/gh/arkecosystem/java-crypto)

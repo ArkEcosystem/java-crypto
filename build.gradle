@@ -51,7 +51,7 @@ uploadArchives {
                 artifactId = 'arkecosystem-crypto'
 
                 name = 'java-crypto'
-                description = 'A simple Cryptography Implementation in Java for the ARK Blockchain.'
+                description = 'A simple Cryptography Implementation in Java for the Ark Blockchain.'
                 url = 'https://github.com/ArkEcosystem/java-crypto'
                 inceptionYear = '2018'
 

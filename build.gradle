@@ -88,7 +88,6 @@ uploadArchives {
 }
 
 if (project.hasProperty("signing.keyId")) {
-    apply plugin: 'signing'
     signing {
         sign configurations.archives
     }

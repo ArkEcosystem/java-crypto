@@ -13,6 +13,7 @@ public abstract class AbstractTransaction {
         this.transaction.type = this.getType();
         this.transaction.fee = Fee.get(this.getType());
         this.transaction.timestamp = Slot.time();
+        this.transaction.version = 1;
     }
 
     public AbstractTransaction sign(String passphrase) {

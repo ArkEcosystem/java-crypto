@@ -116,7 +116,3 @@ jacocoTestReport {
         html.enabled false
     }
 }
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.9'
-}

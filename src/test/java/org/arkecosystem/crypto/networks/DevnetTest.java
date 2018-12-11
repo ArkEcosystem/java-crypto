@@ -9,7 +9,7 @@ class DevnetTest {
 
     @Test
     void version() {
-        assertEquals(0x17, Network.get().version());
+        assertEquals(0x1E, Network.get().version());
     }
 
     @Test

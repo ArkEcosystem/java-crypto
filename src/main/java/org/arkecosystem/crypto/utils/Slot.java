@@ -9,7 +9,7 @@ import java.util.TimeZone;
 
 public class Slot {
     public static int time() {
-        return (int) (new Date().getTime() - epoch()) / 1000;
+        return (int)((new Date().getTime() - epoch()) / 1000);
     }
 
     public static long epoch() {

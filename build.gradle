@@ -116,3 +116,7 @@ jacocoTestReport {
         html.enabled false
     }
 }
+
+wrapper {
+    gradleVersion = '4.9'
+}

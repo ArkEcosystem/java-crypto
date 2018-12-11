@@ -9,7 +9,6 @@ plugins {
 apply plugin:'java'
 apply plugin:'maven'
 apply plugin:'maven-publish'
-apply plugin:'signing'
 
 repositories {
     jcenter()
@@ -88,6 +87,7 @@ uploadArchives {
 }
 
 if (project.hasProperty("signing.keyId")) {
+    apply plugin: 'signing'
     signing {
         sign configurations.archives
     }

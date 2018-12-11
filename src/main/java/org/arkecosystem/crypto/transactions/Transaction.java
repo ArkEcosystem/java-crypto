@@ -12,6 +12,7 @@ import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Transaction {
@@ -31,6 +32,7 @@ public class Transaction {
     public String signature;
     public String signSignature;
     public String vendorField;
+
     public String vendorFieldHex;
 
     public static Transaction deserialize(String serialized) {
@@ -212,10 +214,52 @@ public class Transaction {
     }
 
     public String toJson() {
+
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("network", this.network);
+        map.put("id", this.id);
+        map.put("timestamp", this.timestamp);
+        map.put("expiration", this.expiration);
+        map.put("type", this.type);
+        map.put("amount", this.amount);
+        map.put("fee", this.fee);
+        map.put("recipientId", this.recipientId);
+        map.put("signature", this.signature);
+        map.put("senderPublicKey", this.senderPublicKey);
+
+        if (this.vendorField != null && !this.vendorField.isEmpty()) {
+            map.put("vendorField", this.vendorField);
+        }
+
+        if (this.signSignature!= null && !this.signSignature.isEmpty()) {
+            map.put("signSignature", this.signSignature);
+        }
+
+        HashMap<String, Object> asset = new HashMap();
+        if (this.type == Types.SECOND_SIGNATURE_REGISTRATION) {
+            HashMap<String, String> publicKey = new HashMap();
+            publicKey.put("publicKey", this.asset.signature.publicKey);
+            asset.put("signature", publicKey);
+        } else if (this.type == Types.VOTE) {
+            asset.put("votes", this.asset.votes);
+        } else if (this.type == Types.DELEGATE_REGISTRATION) {
+            HashMap<String, String> delegate = new HashMap();
+            delegate.put("username", this.asset.delegate.username);
+            asset.put("delegate", delegate);
+        } else if (this.type == Types.MULTI_SIGNATURE_REGISTRATION) {
+            HashMap<String, Object> multisignature = new HashMap();
+            multisignature.put("min", this.asset.multisignature.min);
+            multisignature.put("lifetime", this.asset.multisignature.lifetime);
+            multisignature.put("keysgroup", this.asset.multisignature.keysgroup);
+            asset.put("multisignature", multisignature);
+        }
+
+        if (!asset.isEmpty()) {
+            map.put("asset", asset);
+        }
+
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Types.class, new TransactionTypeDeserializer());
-        gsonBuilder.registerTypeAdapter(Types.class, new TransactionTypeSerializer());
-        return gsonBuilder.create().toJson(this);
+        return gsonBuilder.create().toJson(map);
     }
 
     private static class TransactionTypeDeserializer implements

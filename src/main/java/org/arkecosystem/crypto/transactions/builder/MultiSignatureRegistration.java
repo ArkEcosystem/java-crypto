@@ -36,7 +36,7 @@ public class MultiSignatureRegistration extends AbstractTransaction {
     }
 
     public Types getType() {
-        return Types.TRANSFER;
+        return Types.MULTI_SIGNATURE_REGISTRATION;
     }
 
 }

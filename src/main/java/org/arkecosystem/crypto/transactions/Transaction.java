@@ -220,7 +220,7 @@ public class Transaction {
         map.put("id", this.id);
         map.put("timestamp", this.timestamp);
         map.put("expiration", this.expiration);
-        map.put("type", this.type);
+        map.put("type", this.type.getValue());
         map.put("amount", this.amount);
         map.put("fee", this.fee);
         map.put("recipientId", this.recipientId);

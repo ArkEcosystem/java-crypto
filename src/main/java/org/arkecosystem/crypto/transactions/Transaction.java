@@ -214,7 +214,11 @@ public class Transaction {
     }
 
     public String toJson() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        return gsonBuilder.create().toJson(this.toHashMap());
+    }
 
+    public HashMap toHashMap() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("network", this.network);
         map.put("id", this.id);
@@ -257,9 +261,7 @@ public class Transaction {
         if (!asset.isEmpty()) {
             map.put("asset", asset);
         }
-
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        return gsonBuilder.create().toJson(map);
+        return map;
     }
 
     private static class TransactionTypeDeserializer implements
@@ -278,5 +280,3 @@ public class Transaction {
         }
     }
 }
-
-

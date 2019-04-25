@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## 0.1.3 - 2019-25-04
+
+### Fixed
+- Adjusted the JSON to Java Object conversion to support stricter incoming validation on the core.
+
 ## 0.1.2 - 2018-12-11
 
 ### Changed

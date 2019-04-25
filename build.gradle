@@ -46,7 +46,7 @@ uploadArchives {
 
             pom.project {
                 groupId = 'org.arkecosystem'
-                version = '0.1.2'
+                version = '0.1.3'
                 artifactId = 'crypto'
 
                 name = 'java-crypto'

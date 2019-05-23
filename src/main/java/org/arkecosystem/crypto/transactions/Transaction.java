@@ -157,11 +157,12 @@ public class Transaction {
 
         if (vendorField != null && !recipientId.isEmpty()) {
             byte[] vbytes = vendorField.getBytes();
-            if (vbytes.length < 65) {
+            if (vbytes.length <= 255) {
                 buffer.put(vbytes);
-                buffer.put(new byte[64 - vbytes.length]);
+                if (vbytes.length < 64) {
+                    buffer.put(new byte[64 - vbytes.length]);
+                }
             }
-
         } else {
             buffer.put(new byte[64]);
         }

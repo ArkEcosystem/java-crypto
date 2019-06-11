@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## 0.1.4 - 2019-11-06
+
+### Fixed
+- Support 255 bytes vendor fields
+
 ## 0.1.3 - 2019-25-04
 
 ### Fixed

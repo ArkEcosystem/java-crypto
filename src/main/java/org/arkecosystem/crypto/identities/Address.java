@@ -5,7 +5,7 @@ import org.arkecosystem.crypto.configuration.Network;
 import org.arkecosystem.crypto.encoding.Base58;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.bitcoinj.core.ECKey;
-import org.spongycastle.crypto.digests.RIPEMD160Digest;
+import org.bouncycastle.crypto.digests.RIPEMD160Digest;
 
 public class Address {
     public static String fromPassphrase(String passphrase, Integer networkVersion) {

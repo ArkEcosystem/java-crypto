@@ -19,7 +19,10 @@ public class Serializer {
         this.buffer.order(ByteOrder.LITTLE_ENDIAN);
 
         serializeHeader();
+        serializeVendorField();
+
         serializeTypeSpecific();
+
         serializeSignatures();
 
         byte[] result = new byte[this.buffer.position()];
@@ -44,11 +47,21 @@ public class Serializer {
             this.buffer.put((byte) Network.get().version());
         }
 
-        this.buffer.put((byte) this.transaction.type.getValue());
-        this.buffer.putInt(this.transaction.timestamp);
+        if (transaction.version == 1){
+            this.buffer.put((byte) this.transaction.type.getValue());
+            this.buffer.putInt(this.transaction.timestamp);
+        }else {
+            this.buffer.putInt(this.transaction.typeGroup.getValue());
+            this.buffer.putShort((short) this.transaction.type.getValue());
+            this.buffer.putLong(this.transaction.nonce);
+        }
+
         this.buffer.put(Hex.decode(this.transaction.senderPublicKey));
         this.buffer.putLong(this.transaction.fee);
 
+    }
+
+    private void serializeVendorField(){
         if (this.transaction.vendorField != null) {
             int vendorFieldLength = this.transaction.vendorField.length();
 
@@ -62,7 +75,6 @@ public class Serializer {
         } else {
             this.buffer.put((byte) 0x00);
         }
-
     }
 
     private void serializeTypeSpecific() {

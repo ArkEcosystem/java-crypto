@@ -1,7 +1,8 @@
 package org.arkecosystem.crypto.transactions;
 
 import org.arkecosystem.crypto.encoding.Hex;
-import org.arkecosystem.crypto.enums.Types;
+import org.arkecosystem.crypto.enums.TransactionType;
+import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 import org.arkecosystem.crypto.identities.Address;
 import org.arkecosystem.crypto.transactions.deserializers.*;
 
@@ -16,7 +17,6 @@ public class Deserializer {
 
     public Transaction deserialize(String serialized) {
         this.serialized = serialized;
-
         this.buffer = ByteBuffer.wrap(Hex.decode(serialized)).slice();
         this.buffer.order(ByteOrder.LITTLE_ENDIAN);
         this.buffer.get();
@@ -25,17 +25,23 @@ public class Deserializer {
 
         int assetOffset = deserializeHeader();
         deserializeTypeSpecific(assetOffset);
+
         deserializeVersionOne();
 
         return this.transaction;
     }
 
-    public int deserializeHeader() {
+    private int deserializeHeader() {
         transaction.version = this.buffer.get();
         transaction.network = this.buffer.get();
-        transaction.type = Types.values()[this.buffer.get()];
-        transaction.timestamp = this.buffer.getInt();
-
+        if (transaction.version == 1) {
+            transaction.type = TransactionType.values()[this.buffer.get()];
+            transaction.timestamp = this.buffer.getInt();
+        }else {
+            transaction.typeGroup = TransactionTypeGroup.values()[this.buffer.getInt()];
+            transaction.type = TransactionType.values()[this.buffer.getShort()];
+            transaction.nonce = this.buffer.getLong();
+        }
         byte[] senderPublicKey = new byte[33];
         this.buffer.get(senderPublicKey);
         transaction.senderPublicKey = Hex.encode(senderPublicKey);
@@ -49,10 +55,15 @@ public class Deserializer {
             transaction.vendorFieldHex = Hex.encode(vendorFieldHex);
         }
 
-        return (41 + 8 + 1) * 2 + vendorFieldLength * 2;
+        if (transaction.version == 1){
+            return (41 + 8 + 1) * 2 + vendorFieldLength * 2;
+        }else {
+            return (60 + 8 + 1) * 2 + vendorFieldLength * 2;
+        }
+
     }
 
-    public void deserializeTypeSpecific(int assetOffset) {
+    private void deserializeTypeSpecific(int assetOffset) {
         switch (transaction.type) {
             case TRANSFER:
                 new Transfer(this.serialized, this.buffer, this.transaction).deserialize(assetOffset);
@@ -72,16 +83,16 @@ public class Deserializer {
         }
     }
 
-    public void deserializeVersionOne() {
+    private void deserializeVersionOne() {
         if (transaction.secondSignature != null) {
             transaction.signSignature = transaction.secondSignature;
         }
 
-        if (transaction.type == Types.VOTE) {
+        if (transaction.type == TransactionType.VOTE) {
             transaction.recipientId = Address.fromPublicKey(transaction.senderPublicKey, transaction.network);
         }
 
-        if (transaction.type == Types.MULTI_SIGNATURE_REGISTRATION) {
+        if (transaction.type == TransactionType.MULTI_SIGNATURE_REGISTRATION) {
             for (int i = 0; i < transaction.asset.multisignature.keysgroup.size(); i++) {
                 transaction.asset.multisignature.keysgroup.set(i, "+" + transaction.asset.multisignature.keysgroup.get(i));
             }
@@ -95,7 +106,7 @@ public class Deserializer {
             transaction.id = transaction.computeId();
         }
 
-        if (transaction.type == Types.SECOND_SIGNATURE_REGISTRATION || transaction.type == Types.MULTI_SIGNATURE_REGISTRATION) {
+        if (transaction.type == TransactionType.SECOND_SIGNATURE_REGISTRATION || transaction.type == TransactionType.MULTI_SIGNATURE_REGISTRATION) {
             transaction.recipientId = Address.fromPublicKey(transaction.senderPublicKey, transaction.network);
         }
 

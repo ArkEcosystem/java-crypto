@@ -1,6 +1,6 @@
 package org.arkecosystem.crypto.enums;
 
-public enum Types {
+public enum TransactionType {
     TRANSFER(0),
     SECOND_SIGNATURE_REGISTRATION(1),
     DELEGATE_REGISTRATION(2),
@@ -13,7 +13,7 @@ public enum Types {
 
     private final int value;
 
-    Types(int value) {
+    TransactionType(int value) {
         this.value = value;
     }
 

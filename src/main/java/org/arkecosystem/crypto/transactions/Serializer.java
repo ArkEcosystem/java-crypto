@@ -94,6 +94,9 @@ public class Serializer {
             case MULTI_SIGNATURE_REGISTRATION:
                 new MultiSignatureRegistration(this.buffer, this.transaction).serialize();
                 break;
+            case MULTI_PAYMENT:
+                new MultiPayment(this.buffer,this.transaction).serialize();
+                break;
             default:
                 throw new UnsupportedOperationException();
         }

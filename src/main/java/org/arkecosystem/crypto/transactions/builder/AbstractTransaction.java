@@ -15,7 +15,7 @@ public abstract class AbstractTransaction {
         this.transaction.type = this.getType();
         this.transaction.fee = Fee.get(this.getType());
         this.transaction.timestamp = Slot.time();
-        this.transaction.version = 1;
+        this.transaction.version = 2;
         this.transaction.network = Network.get().version();
         this.transaction.typeGroup = TransactionTypeGroup.CORE;
         this.transaction.nonce = 0;

@@ -100,20 +100,20 @@ public class Serializer {
     }
 
     private void serializeSignatures() {
-        if (this.transaction.signature != null) {
+        if (this.transaction.secondSignature != null) {
             buffer.put(Hex.decode(this.transaction.signature));
         }
-
-        if (this.transaction.secondSignature != null) {
-            buffer.put(Hex.decode(this.transaction.secondSignature));
-        } else if (this.transaction.signSignature != null) {
-            buffer.put(Hex.decode(this.transaction.signSignature));
-        }
-
-        if (this.transaction.signatures != null) {
-            this.buffer.put((byte) 0xff);
-            buffer.put(Hex.decode(String.join("", this.transaction.signatures)));
-        }
+//
+//        if (this.transaction.secondSignature != null) {
+//            buffer.put(Hex.decode(this.transaction.secondSignature));
+//        } else if (this.transaction.signSignature != null) {
+//            buffer.put(Hex.decode(this.transaction.signSignature));
+//        }
+//
+//        if (this.transaction.signatures != null) {
+//            this.buffer.put((byte) 0xff);
+//            buffer.put(Hex.decode(String.join("", this.transaction.signatures)));
+//        }
     }
 
 }

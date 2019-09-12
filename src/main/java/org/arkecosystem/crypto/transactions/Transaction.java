@@ -43,7 +43,12 @@ public class Transaction {
     }
 
     public String computeId() {
-        return Hex.encode(Sha256Hash.hash(toBytesV1(false, false)));
+        if (this.version == 1){
+            return Hex.encode(Sha256Hash.hash(toBytesV1(false, false)));
+        }else{
+            return Hex.encode(Sha256Hash.hash(toBytes()));
+        }
+
     }
 
     public Transaction sign(String passphrase) {

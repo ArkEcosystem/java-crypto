@@ -28,6 +28,7 @@ public class Deserializer {
 
         deserializeVersionOne();
 
+
         return this.transaction;
     }
 
@@ -80,6 +81,8 @@ public class Deserializer {
             case MULTI_SIGNATURE_REGISTRATION:
                 new MultiSignatureRegistration(this.serialized, this.buffer, this.transaction).deserialize(assetOffset);
                 break;
+            case MULTI_PAYMENT:
+                new MultiPayment(this.serialized,this.buffer,this.transaction).deserialize(assetOffset);
         }
     }
 

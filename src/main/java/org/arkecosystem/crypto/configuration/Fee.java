@@ -16,7 +16,6 @@ public class Fee {
         fees.put(TransactionType.VOTE, Fees.VOTE.getValue());
         fees.put(TransactionType.MULTI_SIGNATURE_REGISTRATION, Fees.MULTI_SIGNATURE_REGISTRATION.getValue());
         fees.put(TransactionType.IPFS, Fees.IPFS.getValue());
-        fees.put(TransactionType.TIMELOCK_TRANSFER, Fees.TIMELOCK_TRANSFER.getValue());
         fees.put(TransactionType.MULTI_PAYMENT, Fees.MULTI_PAYMENT.getValue());
         fees.put(TransactionType.DELEGATE_RESIGNATION, Fees.DELEGATE_RESIGNATION.getValue());
     }

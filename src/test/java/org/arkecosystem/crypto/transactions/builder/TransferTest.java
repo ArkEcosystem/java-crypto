@@ -23,7 +23,7 @@ public class TransferTest {
             .recipient("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25")
             .amount(133380000000L)
             .vendorField("This is a transaction from Java")
-            .version(1)
+            .version(2)
             .nonce(3)
             .sign("this is a top secret passphrase")
             .transaction;

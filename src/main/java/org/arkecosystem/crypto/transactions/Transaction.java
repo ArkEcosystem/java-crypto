@@ -43,19 +43,14 @@ public class Transaction {
     }
 
     public String computeId() {
-        if (this.version == 1){
-            return Hex.encode(Sha256Hash.hash(toBytesV1(false, false)));
-        }else{
-            return Hex.encode(Sha256Hash.hash(toBytes()));
-        }
-
+        return Hex.encode(Sha256Hash.hash(toBytes(false,false)));
     }
 
     public Transaction sign(String passphrase) {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
 
         this.senderPublicKey = privateKey.getPublicKeyAsHex();
-        this.signature = Hex.encode(privateKey.sign(Sha256Hash.of(toBytes())).encodeToDER());
+        this.signature = Hex.encode(privateKey.sign(Sha256Hash.of(toBytes(true,true))).encodeToDER());
 
         return this;
     }
@@ -63,7 +58,7 @@ public class Transaction {
     public Transaction secondSign(String passphrase) {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
 
-        this.signSignature = Hex.encode(privateKey.sign(Sha256Hash.of(toBytesV1(false))).encodeToDER());
+        this.signSignature = Hex.encode(privateKey.sign(Sha256Hash.of(toBytes(false,true))).encodeToDER());
 
         return this;
     }
@@ -72,7 +67,7 @@ public class Transaction {
         ECKey keys = ECKey.fromPublicOnly(Hex.decode(this.senderPublicKey));
 
         byte[] signature = Hex.decode(this.signature);
-        byte[] bytes = this.toBytes();
+        byte[] bytes = this.toBytes(true,true);
 
         return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey());
     }
@@ -81,9 +76,18 @@ public class Transaction {
         ECKey keys = ECKey.fromPublicOnly(Hex.decode(secondPublicKey));
 
         byte[] signature = Hex.decode(this.signSignature);
-        byte[] bytes = toBytesV1(false);
+        byte[] bytes = toBytes(false,true);
 
         return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey());
+    }
+
+
+    private byte[] toBytes(boolean skipSignature, boolean skipSecondSignature) {
+        if (this.version == 1){
+            return this.toBytesV1(skipSignature,skipSecondSignature);
+        }else {
+            return new Serializer().serialize(this,skipSignature,skipSecondSignature);
+        }
     }
 
     public Transaction parseSignatures(String serialized, int startOffset) {
@@ -211,22 +215,6 @@ public class Transaction {
         return result;
     }
 
-    private byte[] toBytesV1(boolean skipSignature) {
-        return toBytesV1(skipSignature, true);
-    }
-
-
-    private byte[] toBytes() {
-        if (this.version == 1){
-            return this.toBytesV1();
-        }else {
-            return new Serializer().serialize(this);
-        }
-    }
-
-    private byte[] toBytesV1() {
-        return toBytesV1(true, true);
-    }
 
     public String serialize() {
         return Hex.encode(new Serializer().serialize(this));

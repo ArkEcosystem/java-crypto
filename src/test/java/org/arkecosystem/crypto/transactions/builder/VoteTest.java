@@ -27,7 +27,6 @@ public class VoteTest {
             .sign("this is a top secret passphrase")
             .transaction;
 
-        System.out.println(actualV2.toHashMap());
         assertTrue(actualV2.verify());
     }
 

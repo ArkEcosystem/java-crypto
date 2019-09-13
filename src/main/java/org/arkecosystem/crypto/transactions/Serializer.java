@@ -12,7 +12,8 @@ public class Serializer {
     private ByteBuffer buffer;
     private Transaction transaction;
 
-    public byte[] serialize(Transaction transaction) {
+
+    public byte[] serialize(Transaction transaction, boolean skipSignature, boolean skipSecondSignature){
         this.transaction = transaction;
 
         this.buffer = ByteBuffer.allocate(512);
@@ -23,7 +24,8 @@ public class Serializer {
 
         serializeTypeSpecific();
 
-        serializeSignatures();
+
+        serializeSignatures(skipSignature, skipSecondSignature);
 
         byte[] result = new byte[this.buffer.position()];
         this.buffer.rewind();
@@ -31,6 +33,12 @@ public class Serializer {
 
         return result;
     }
+
+
+    public byte[] serialize(Transaction transaction) {
+        return this.serialize(transaction,false,false);
+    }
+
 
     private void serializeHeader() {
         this.buffer.put((byte) 0xff);
@@ -102,21 +110,19 @@ public class Serializer {
         }
     }
 
-    private void serializeSignatures() {
-        if (this.transaction.secondSignature != null) {
+    private void serializeSignatures(boolean skipSignature, boolean skipSecondSignature) {
+        if (!skipSignature){
             buffer.put(Hex.decode(this.transaction.signature));
         }
-//
-//        if (this.transaction.secondSignature != null) {
-//            buffer.put(Hex.decode(this.transaction.secondSignature));
-//        } else if (this.transaction.signSignature != null) {
-//            buffer.put(Hex.decode(this.transaction.signSignature));
-//        }
-//
-//        if (this.transaction.signatures != null) {
-//            this.buffer.put((byte) 0xff);
-//            buffer.put(Hex.decode(String.join("", this.transaction.signatures)));
-//        }
+
+        if (!skipSecondSignature && this.transaction.secondSignature!= null) {
+            buffer.put(Hex.decode(this.transaction.secondSignature));
+        }
+
+        if (this.transaction.signatures != null) {
+            this.buffer.put((byte) 0xff);
+            buffer.put(Hex.decode(String.join("", this.transaction.signatures)));
+        }
     }
 
 }

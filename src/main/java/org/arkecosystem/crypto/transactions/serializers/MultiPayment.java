@@ -1,9 +1,12 @@
 package org.arkecosystem.crypto.transactions.serializers;
 
 import org.arkecosystem.crypto.transactions.Transaction;
+import org.arkecosystem.crypto.transactions.TransactionAsset;
 import org.bitcoinj.core.Base58;
+import org.bouncycastle.jcajce.provider.symmetric.ARC4;
 
 import java.nio.ByteBuffer;
+import java.util.ListIterator;
 
 public class MultiPayment extends AbstractSerializer {
     public MultiPayment(ByteBuffer buffer, Transaction transaction) {
@@ -11,10 +14,12 @@ public class MultiPayment extends AbstractSerializer {
     }
 
     public void serialize(){
+        System.out.println("[MultiPayment] Serialize: ");
         this.buffer.putInt(this.transaction.asset.multiPayment.payments.size());
-        this.transaction.asset.multiPayment.payments.forEach((recipientId, amount) -> {
-            this.buffer.putLong(amount);
-            this.buffer.put(Base58.decodeChecked(recipientId));
-        });
+        System.out.println("Size: "+ this.transaction.asset.multiPayment.payments.size());
+        for (TransactionAsset.Payment current : this.transaction.asset.multiPayment.payments) {
+            this.buffer.putLong(current.amount);
+            this.buffer.put(Base58.decodeChecked(current.recipientId));
+        }
     }
 }

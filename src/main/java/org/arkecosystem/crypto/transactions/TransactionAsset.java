@@ -1,8 +1,8 @@
 package org.arkecosystem.crypto.transactions;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import org.bitcoin.protocols.payments.Protos;
+
+import java.util.*;
 
 public class TransactionAsset {
     public Signature signature = new Signature();
@@ -25,7 +25,18 @@ public class TransactionAsset {
         public List<String> keysgroup = new ArrayList<>();
     }
 
-    public class MultiPayment{
-        public HashMap <String, Long> payments = new HashMap<>();
+    public  class MultiPayment{
+        public List <Payment> payments = new ArrayList<>();
     }
+
+    public static class Payment {
+        public long amount;
+        public String recipientId;
+        public Payment(long amount, String recipientId){
+            this.amount = amount;
+            this.recipientId = recipientId;
+        }
+    }
+
+
 }

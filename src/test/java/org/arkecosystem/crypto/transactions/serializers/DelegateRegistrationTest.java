@@ -14,7 +14,7 @@ class DelegateRegistrationTest {
 
     @Test
     void passphrase() {
-        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/delegate_registration/passphrase");
+        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/V1/delegate_registration/passphrase");
 
         Transaction transaction = new Deserializer().deserialize(fixture.get("serialized").toString());
         String actual = Hex.encode(new Serializer().serialize(transaction));
@@ -24,7 +24,7 @@ class DelegateRegistrationTest {
 
     @Test
     void secondPassphrase() {
-        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/delegate_registration/second-passphrase");
+        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/V1/delegate_registration/second-passphrase");
 
         Transaction transaction = new Deserializer().deserialize(fixture.get("serialized").toString());
         String actual = Hex.encode(new Serializer().serialize(transaction));

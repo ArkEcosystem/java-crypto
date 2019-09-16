@@ -102,8 +102,13 @@ public class Serializer {
             case MULTI_SIGNATURE_REGISTRATION:
                 new MultiSignatureRegistration(this.buffer, this.transaction).serialize();
                 break;
+            case IPFS:
+                new Ipfs(this.buffer, this.transaction).serialize();
             case MULTI_PAYMENT:
-                new MultiPayment(this.buffer,this.transaction).serialize();
+                new MultiPayment(this.buffer, this.transaction).serialize();
+                break;
+            case DELEGATE_RESIGNATION:
+                new DelegateResignation(this.buffer,this.transaction).serialize();
                 break;
             default:
                 throw new UnsupportedOperationException();

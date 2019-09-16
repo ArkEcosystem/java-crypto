@@ -12,7 +12,7 @@ class VoteTest {
 
     @Test
     void passphrase() {
-        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/vote/passphrase");
+        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/V1/vote/passphrase");
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
@@ -32,7 +32,7 @@ class VoteTest {
 
     @Test
     void secondPassphrase() {
-        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/vote/second-passphrase");
+        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/V1/vote/second-passphrase");
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());

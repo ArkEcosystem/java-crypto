@@ -92,7 +92,7 @@ public class Transaction {
 
     public Transaction parseSignatures(String serialized, int startOffset) {
         this.signature = serialized.substring(startOffset);
-
+        System.out.println(this.signature);
         int multiSignatureOffset = 0;
 
         if (this.signature.length() == 0) {

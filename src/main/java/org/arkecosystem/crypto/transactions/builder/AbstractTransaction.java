@@ -22,6 +22,9 @@ public abstract class AbstractTransaction {
     }
 
     public AbstractTransaction sign(String passphrase) {
+        if (this.transaction.type == TransactionType.MULTI_SIGNATURE_REGISTRATION && this.transaction.version == 2){
+             throw new UnsupportedOperationException("Version 2 MultiSignatureRegistration is not supported in java sdk");
+        }
         this.transaction.sign(passphrase);
         this.transaction.id = this.transaction.computeId();
 
@@ -47,3 +50,4 @@ public abstract class AbstractTransaction {
         return this;
     };
 }
+

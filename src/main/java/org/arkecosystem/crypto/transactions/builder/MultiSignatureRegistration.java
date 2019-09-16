@@ -6,6 +6,10 @@ import java.util.List;
 
 
 public class MultiSignatureRegistration extends AbstractTransaction {
+    public MultiSignatureRegistration(){
+        super();
+        this.transaction.version = 1;
+    }
 
     public MultiSignatureRegistration min(int min) {
         return this.min((byte) min);

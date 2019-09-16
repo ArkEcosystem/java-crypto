@@ -9,5 +9,7 @@ public class DelegateResignation extends AbstractDeserializer{
         super(serialized, buffer, transaction);
     }
 
-    public void deserialize(int assetOffset) {}
+    public void deserialize(int assetOffset) {
+        this.transaction.parseSignatures(this.serialized, assetOffset);
+    }
 }

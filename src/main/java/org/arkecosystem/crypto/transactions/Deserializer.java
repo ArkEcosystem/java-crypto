@@ -34,30 +34,22 @@ public class Deserializer {
 
     private int deserializeHeader() {
         transaction.version = this.buffer.get();
-        System.out.println("Version: " + this.transaction.version);
         transaction.network = this.buffer.get();
-        System.out.println("Network: " + this.transaction.network);
         if (transaction.version == 1) {
             transaction.type = TransactionType.values()[this.buffer.get()];
             transaction.timestamp = this.buffer.getInt();
         }else {
             transaction.typeGroup = TransactionTypeGroup.values()[this.buffer.getInt()];
-            System.out.println(this.transaction.typeGroup);
             transaction.type = TransactionType.values()[this.buffer.getShort()];
-            System.out.println(this.transaction.type);
             transaction.nonce = this.buffer.getLong();
-            System.out.println(this.transaction.nonce);
         }
         byte[] senderPublicKey = new byte[33];
         this.buffer.get(senderPublicKey);
         transaction.senderPublicKey = Hex.encode(senderPublicKey);
-        System.out.println(this.transaction.senderPublicKey);
 
         transaction.fee = this.buffer.getLong();
-        System.out.println(this.transaction.fee);
 
         int vendorFieldLength = this.buffer.get();
-        System.out.println(vendorFieldLength);
         if (vendorFieldLength > 0) {
             byte[] vendorFieldHex = new byte[vendorFieldLength];
             this.buffer.get(vendorFieldHex);
@@ -73,7 +65,6 @@ public class Deserializer {
     }
 
     private void deserializeTypeSpecific(int assetOffset) {
-        System.out.println(assetOffset);
         switch (transaction.type) {
             case TRANSFER:
                 new Transfer(this.serialized, this.buffer, this.transaction).deserialize(assetOffset);
@@ -98,15 +89,14 @@ public class Deserializer {
                 break;
             case DELEGATE_RESIGNATION:
                 new DelegateResignation(this.serialized,this.buffer,this.transaction).deserialize(assetOffset);
+                break;
             default:
                 throw new UnsupportedOperationException();
         }
     }
 
     private void deserializeVersionOne() {
-
         if (transaction.secondSignature != null) {
-            System.out.println("Second signature: "+ transaction.secondSignature);
             transaction.signSignature = transaction.secondSignature;
         }
 
@@ -125,9 +115,7 @@ public class Deserializer {
         }
 
         if (transaction.id == null) {
-            System.out.println(transaction.id);
             transaction.id = transaction.computeId();
-            System.out.println("Transaction id: " + transaction.id);
         }
 
         if (transaction.type == TransactionType.SECOND_SIGNATURE_REGISTRATION || transaction.type == TransactionType.MULTI_SIGNATURE_REGISTRATION) {

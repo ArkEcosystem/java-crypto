@@ -104,6 +104,7 @@ public class Serializer {
                 break;
             case IPFS:
                 new Ipfs(this.buffer, this.transaction).serialize();
+                break;
             case MULTI_PAYMENT:
                 new MultiPayment(this.buffer, this.transaction).serialize();
                 break;

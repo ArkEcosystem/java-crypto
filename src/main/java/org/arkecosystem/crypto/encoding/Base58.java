@@ -14,4 +14,13 @@ public class Base58 {
         return org.bitcoinj.core.Base58.decodeChecked(value);
     }
 
+    public static byte[] decode(String value) {
+        return org.bitcoinj.core.Base58.decode(value);
+    }
+
+    public static String encode(byte[] value) {
+        return org.bitcoinj.core.Base58.encode(value);
+    }
+
+
 }

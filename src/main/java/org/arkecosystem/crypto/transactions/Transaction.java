@@ -92,7 +92,6 @@ public class Transaction {
 
     public Transaction parseSignatures(String serialized, int startOffset) {
         this.signature = serialized.substring(startOffset);
-        System.out.println(this.signature);
         int multiSignatureOffset = 0;
 
         if (this.signature.length() == 0) {
@@ -252,23 +251,34 @@ public class Transaction {
             map.put("signSignature", this.signSignature);
         }
 
-        HashMap<String, Object> asset = new HashMap();
+        HashMap<String, Object> asset = new HashMap<>();
         if (this.type == TransactionType.SECOND_SIGNATURE_REGISTRATION) {
-            HashMap<String, String> publicKey = new HashMap();
+            HashMap<String, String> publicKey = new HashMap<>();
             publicKey.put("publicKey", this.asset.signature.publicKey);
             asset.put("signature", publicKey);
         } else if (this.type == TransactionType.VOTE) {
             asset.put("votes", this.asset.votes);
         } else if (this.type == TransactionType.DELEGATE_REGISTRATION) {
-            HashMap<String, String> delegate = new HashMap();
+            HashMap<String, String> delegate = new HashMap<>();
             delegate.put("username", this.asset.delegate.username);
             asset.put("delegate", delegate);
         } else if (this.type == TransactionType.MULTI_SIGNATURE_REGISTRATION) {
-            HashMap<String, Object> multisignature = new HashMap();
+            HashMap<String, Object> multisignature = new HashMap<>();
             multisignature.put("min", this.asset.multisignature.min);
             multisignature.put("lifetime", this.asset.multisignature.lifetime);
             multisignature.put("keysgroup", this.asset.multisignature.keysgroup);
             asset.put("multisignature", multisignature);
+        }else if (this.type == TransactionType.IPFS){
+            asset.put("ipfs",this.asset.ipfs);
+        }else if (this.type == TransactionType.MULTI_PAYMENT){
+            ArrayList <HashMap<String,String>> payments= new ArrayList<>();
+            for (TransactionAsset.Payment current : this.asset.multiPayment.payments) {
+                HashMap<String,String> payment= new HashMap<>();
+                payment.put("amount", String.valueOf(current.amount));
+                payment.put("recipientId",current.recipientId);
+                payments.add(payment);
+            }
+            asset.put("payments",payments);
         }
 
         if (!asset.isEmpty()) {

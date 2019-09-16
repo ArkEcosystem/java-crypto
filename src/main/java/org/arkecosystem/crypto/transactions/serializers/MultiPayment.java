@@ -14,9 +14,7 @@ public class MultiPayment extends AbstractSerializer {
     }
 
     public void serialize(){
-        System.out.println("[MultiPayment] Serialize: ");
         this.buffer.putInt(this.transaction.asset.multiPayment.payments.size());
-        System.out.println("Size: "+ this.transaction.asset.multiPayment.payments.size());
         for (TransactionAsset.Payment current : this.transaction.asset.multiPayment.payments) {
             this.buffer.putLong(current.amount);
             this.buffer.put(Base58.decodeChecked(current.recipientId));

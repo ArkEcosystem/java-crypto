@@ -10,6 +10,7 @@ public class IpfsTest {
     @Test
     void build() {
         Transaction actualV2 = new Ipfs()
+            .ipfsAsset("QmR45FmbVVrixReBwJkhEKde2qwHYaQzGxu4ZoDeswuF9w")
             .version(2)
             .nonce(3)
             .sign("this is a top secret passphrase")
@@ -21,6 +22,7 @@ public class IpfsTest {
     @Test
     void buildSecondSignature() {
         Transaction actualV2 = new Ipfs()
+            .ipfsAsset("QmR45FmbVVrixReBwJkhEKde2qwHYaQzGxu4ZoDeswuF9w")
             .version(2)
             .nonce(3)
             .sign("this is a top secret passphrase")

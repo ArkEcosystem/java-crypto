@@ -1,7 +1,5 @@
 package org.arkecosystem.crypto.transactions;
 
-import org.bitcoin.protocols.payments.Protos;
-
 import java.util.*;
 
 public class TransactionAsset {
@@ -10,6 +8,7 @@ public class TransactionAsset {
     public Delegate delegate = new Delegate();
     public MultiSignature multisignature = new MultiSignature();
     public MultiPayment multiPayment = new MultiPayment();
+    public String ipfs;
 
     public class Signature {
         public String publicKey;

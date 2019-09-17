@@ -5,12 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class DelegateResignationTest {
-
+public class HtlcClaimTest {
     @Test
     void build() {
-        Transaction actual = new DelegateResignation()
-            .version(2)
+        Transaction actual = new HtlcClaim()
             .nonce(3)
             .sign("this is a top secret passphrase")
             .transaction;
@@ -20,8 +18,7 @@ public class DelegateResignationTest {
 
     @Test
     void buildSecondSignature() {
-        Transaction actual = new DelegateResignation()
-            .version(2)
+        Transaction actual = new HtlcClaim()
             .nonce(3)
             .sign("this is a top secret passphrase")
             .secondSign("this is a top secret second passphrase")

@@ -5,12 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class DelegateResignationTest {
-
+public class HtlcRefundTest {
     @Test
     void build() {
-        Transaction actual = new DelegateResignation()
-            .version(2)
+        Transaction actual = new HtlcRefund()
             .nonce(3)
             .sign("this is a top secret passphrase")
             .transaction;
@@ -20,8 +18,7 @@ public class DelegateResignationTest {
 
     @Test
     void buildSecondSignature() {
-        Transaction actual = new DelegateResignation()
-            .version(2)
+        Transaction actual = new HtlcRefund()
             .nonce(3)
             .sign("this is a top secret passphrase")
             .secondSign("this is a top secret second passphrase")
@@ -30,4 +27,5 @@ public class DelegateResignationTest {
         assertTrue(actual.verify());
         assertTrue(actual.secondVerify("03699e966b2525f9088a6941d8d94f7869964a000efe65783d78ac82e1199fe609"));
     }
+
 }

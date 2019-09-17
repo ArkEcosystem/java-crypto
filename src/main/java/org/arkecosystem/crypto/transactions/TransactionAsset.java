@@ -1,5 +1,7 @@
 package org.arkecosystem.crypto.transactions;
 
+import org.arkecosystem.crypto.enums.HtlcLockExpirationType;
+
 import java.util.*;
 
 public class TransactionAsset {
@@ -9,6 +11,10 @@ public class TransactionAsset {
     public MultiSignature multisignature = new MultiSignature();
     public MultiPayment multiPayment = new MultiPayment();
     public String ipfs;
+    public HtlcLockAsset htlcLockAsset = new HtlcLockAsset();
+    public HtlcClaimAsset htlcClaimAsset = new HtlcClaimAsset();
+    public HtlcRefundAsset htlcRefundAsset = new HtlcRefundAsset();
+
 
     public class Signature {
         public String publicKey;
@@ -37,5 +43,28 @@ public class TransactionAsset {
         }
     }
 
+    public class HtlcLockAsset {
+        public String secretHash;
+        public Expiration expiration;
+    }
+
+    public static class Expiration{
+        public HtlcLockExpirationType type;
+        public long value;
+
+        public Expiration(HtlcLockExpirationType type, long value){
+            this.type = type;
+            this.value = value;
+        }
+    }
+
+    public class HtlcClaimAsset{
+        public String lockTransactionId;
+        public String unlockSecret;
+    }
+
+    public class HtlcRefundAsset{
+        public String lockTransactionId;
+    }
 
 }

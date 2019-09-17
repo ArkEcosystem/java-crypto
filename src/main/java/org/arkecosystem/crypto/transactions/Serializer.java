@@ -111,6 +111,15 @@ public class Serializer {
             case DELEGATE_RESIGNATION:
                 new DelegateResignation(this.buffer,this.transaction).serialize();
                 break;
+            case HTLC_LOCK:
+                new HtlcLock(this.buffer,this.transaction).serialize();
+                break;
+            case HTLC_CLAIM:
+                new HtlcClaim(this.buffer,this.transaction).serialize();
+                break;
+            case HTLC_REFUND:
+                new HtlcRefund(this.buffer,this.transaction).serialize();
+                break;
             default:
                 throw new UnsupportedOperationException();
         }

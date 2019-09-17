@@ -8,7 +8,10 @@ public enum TransactionType {
     MULTI_SIGNATURE_REGISTRATION(4),
     IPFS(5),
     MULTI_PAYMENT(6),
-    DELEGATE_RESIGNATION(7);
+    DELEGATE_RESIGNATION(7),
+    HTLC_LOCK(8),
+    HTLC_CLAIM(9),
+    HTLC_REFUND(10);
 
     private final int value;
 

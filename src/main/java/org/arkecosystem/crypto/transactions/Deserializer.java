@@ -90,6 +90,15 @@ public class Deserializer {
             case DELEGATE_RESIGNATION:
                 new DelegateResignation(this.serialized,this.buffer,this.transaction).deserialize(assetOffset);
                 break;
+            case HTLC_LOCK:
+                new HtlcLock(this.serialized,this.buffer,this.transaction).deserialize(assetOffset);
+                break;
+            case HTLC_CLAIM:
+                new HtlcClaim(this.serialized,this.buffer,this.transaction).deserialize(assetOffset);
+                break;
+            case HTLC_REFUND:
+                new HtlcRefund(this.serialized,this.buffer,this.transaction).deserialize(assetOffset);
+                break;
             default:
                 throw new UnsupportedOperationException();
         }

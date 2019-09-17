@@ -18,6 +18,9 @@ public class Fee {
         fees.put(TransactionType.IPFS, Fees.IPFS.getValue());
         fees.put(TransactionType.MULTI_PAYMENT, Fees.MULTI_PAYMENT.getValue());
         fees.put(TransactionType.DELEGATE_RESIGNATION, Fees.DELEGATE_RESIGNATION.getValue());
+        fees.put(TransactionType.HTLC_LOCK, Fees.HTLC_LOCK.getValue());
+        fees.put(TransactionType.HTLC_CLAIM, Fees.HTLC_CLAIM.getValue());
+        fees.put(TransactionType.HTLC_REFUND, Fees.HTLC_REFUND.getValue());
     }
 
     public static long get(TransactionType type) {

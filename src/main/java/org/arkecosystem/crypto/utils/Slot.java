@@ -4,6 +4,7 @@ import org.arkecosystem.crypto.configuration.Network;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -22,5 +23,9 @@ public class Slot {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    public static long unixTimeStamp(){
+        return Instant.now().getEpochSecond();
     }
 }

@@ -13,10 +13,10 @@ public class HtlcLock extends AbstractSerializer {
 
     public void serialize() {
         byte[] byteBuffer = ByteBuffer
-            .allocate(8 + 32 + 4 + 8 + 21)
+            .allocate(8 + 32 + 1 + 8 + 21)
             .putLong(this.transaction.amount)
             .put(Hex.decode(this.transaction.asset.htlcLockAsset.secretHash))
-            .put((byte)this.transaction.asset.htlcLockAsset.expiration.type.getValue())
+            .put((byte) this.transaction.asset.htlcLockAsset.expiration.type.getValue())
             .putLong(this.transaction.asset.htlcLockAsset.expiration.value)
             .put(Base58.decodeChecked(this.transaction.recipientId))
             .array();

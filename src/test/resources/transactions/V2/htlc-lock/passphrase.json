@@ -1,5 +1,25 @@
 {
-    "data": {},
-    "serialized": ""
+    "data": {
+        "version": 2,
+        "network": 23,
+        "type": 8,
+        "nonce": "1",
+        "senderPublicKey": "03287bfebba4c7881a0509717e71b34b63f31e40021c321f89ae04f84be6d6ac37",
+        "fee": "10000000",
+        "amount": "200000000",
+        "recipientId": "ANBkoGqWeTSiaEVgVzSKZd3jS7UWzv9PSo",
+        "asset": {
+            "lock": {
+                "secretHash": "0f128d401958b1b30ad0d10406f47f9489321017b4614e6cb993fc63913c5454",
+                "expiration": {
+                    "type": 1,
+                    "value": 1568800198
+                }
+            }
+        },
+        "signature": "3045022100bbc2ec53fbeb8c34c33514ba2cfb6e3e36973f922c32946fc473f698c2382583022029121319bad35fcfe33864bf92c221390e790e682a517790e55b6e0f0b39b760",
+        "id": "458c497f72a47fdcbee86bc64e5c2d4411e1ceb82b6cc8dfa93920e15188ca3a"
+    },
+    "serialized": "ff0217010000000800010000000000000003287bfebba4c7881a0509717e71b34b63f31e40021c321f89ae04f84be6d6ac3780969800000000000000c2eb0b000000000f128d401958b1b30ad0d10406f47f9489321017b4614e6cb993fc63913c545401c6fd815d000000001746550551e12d2531ea9d2968696b75f68ae7f2953045022100bbc2ec53fbeb8c34c33514ba2cfb6e3e36973f922c32946fc473f698c2382583022029121319bad35fcfe33864bf92c221390e790e682a517790e55b6e0f0b39b760"
 }
 

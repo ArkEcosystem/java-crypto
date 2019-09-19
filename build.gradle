@@ -74,6 +74,12 @@ uploadArchives {
                         organization = 'Ark Ecosystem'
                         organizationUrl = 'https://ark.io'
                     }
+                    developer {
+                        name = 'Žan Kovač'
+                        email = 'zan@ark.io'
+                        organization = 'Ark Ecosystem'
+                        organizationUrl = 'https://ark.io'
+                    }
                 }
 
                 scm {

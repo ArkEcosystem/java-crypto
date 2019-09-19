@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HtlcLockTest {
 
-
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/V2/htlc-lock/passphrase");
@@ -24,11 +23,12 @@ public class HtlcLockTest {
 
     @Test
     void secondPassphrase() {
-//        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/V2/htlc-lock/second-passphrase");
-//
-//        Transaction transaction = new Deserializer().deserialize(fixture.get("serialized").toString());
-//        String actual = Hex.encode(new Serializer().serialize(transaction));
-//
-//        assertEquals(fixture.get("serialized").toString(), actual);
+        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/V2/htlc-lock/second-passphrase");
+
+        Transaction transaction = new Deserializer().deserialize(fixture.get("serialized").toString());
+        String actual = Hex.encode(new Serializer().serialize(transaction));
+
+        assertEquals(fixture.get("serialized").toString(), actual);
     }
+
 }

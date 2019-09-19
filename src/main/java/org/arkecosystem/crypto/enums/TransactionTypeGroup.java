@@ -2,7 +2,9 @@ package org.arkecosystem.crypto.enums;
 
 public enum TransactionTypeGroup {
     TEST(0),
-    CORE(1);
+    CORE(1),
+
+    RESERVED(1000);
 
     private final int value;
 

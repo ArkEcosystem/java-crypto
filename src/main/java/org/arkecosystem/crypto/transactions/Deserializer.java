@@ -28,7 +28,6 @@ public class Deserializer {
 
         deserializeVersionOne();
 
-
         return this.transaction;
     }
 

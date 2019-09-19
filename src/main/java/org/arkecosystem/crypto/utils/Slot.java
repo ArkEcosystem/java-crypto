@@ -24,8 +24,4 @@ public class Slot {
             return 0;
         }
     }
-
-    public static long unixTimeStamp(){
-        return Instant.now().getEpochSecond();
-    }
 }

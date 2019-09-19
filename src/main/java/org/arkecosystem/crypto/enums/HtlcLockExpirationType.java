@@ -1,7 +1,7 @@
 package org.arkecosystem.crypto.enums;
 
 public enum HtlcLockExpirationType {
-    UNIX_TIMESTAMP(1),
+    EPOCH_TIMESTAMP(1),
     BLOCK_HEIGHT(2);
 
     private final int value;

@@ -20,7 +20,7 @@ public class HtlcLock extends  AbstractTransaction {
         return this;
     }
 
-    public HtlcLock expirationType(HtlcLockExpirationType expirationType, long expirationValue){
+    public HtlcLock expirationType(HtlcLockExpirationType expirationType, int expirationValue){
         this.transaction.asset.htlcLockAsset.expiration = new TransactionAsset.Expiration(expirationType,expirationValue);
         return this;
     }

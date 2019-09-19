@@ -13,7 +13,7 @@ public abstract class AbstractTransaction {
     public AbstractTransaction() {
         this.transaction = new Transaction();
         this.transaction.type = this.getType();
-        this.transaction.fee = Fee.get(this.getType());
+        this.transaction.fee = Fee.getCoreFee(this.getType());
         this.transaction.timestamp = Slot.time();
         this.transaction.version = 2;
         this.transaction.network = Network.get().version();

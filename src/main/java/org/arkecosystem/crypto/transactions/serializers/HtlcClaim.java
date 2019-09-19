@@ -11,11 +11,7 @@ public class HtlcClaim extends AbstractSerializer {
     }
 
     public void serialize() {
-        byte[] buff = ByteBuffer.allocate(64)
-            .put(Hex.decode(this.transaction.asset.htlcClaimAsset.lockTransactionId))
-            .put(this.transaction.asset.htlcClaimAsset.unlockSecret.getBytes())
-            .array();
-
-        this.buffer.put(buff);
+        this.buffer.put(Hex.decode(this.transaction.asset.htlcClaimAsset.lockTransactionId));
+        this.buffer.put(this.transaction.asset.htlcClaimAsset.unlockSecret.getBytes());
     }
 }

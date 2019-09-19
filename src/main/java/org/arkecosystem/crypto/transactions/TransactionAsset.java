@@ -50,9 +50,9 @@ public class TransactionAsset {
 
     public static class Expiration{
         public HtlcLockExpirationType type;
-        public long value;
+        public int value;
 
-        public Expiration(HtlcLockExpirationType type, long value){
+        public Expiration(HtlcLockExpirationType type, int value){
             this.type = type;
             this.value = value;
         }

@@ -25,6 +25,11 @@ public class HtlcLock extends  AbstractTransaction {
         return this;
     }
 
+    public HtlcLock vendorField(String vendorField) {
+        this.transaction.vendorField = vendorField;
+        return this;
+    }
+
     public TransactionType getType() {
         return TransactionType.HTLC_LOCK;
     }

@@ -65,9 +65,9 @@ public abstract class AbstractTransaction<TBuilder extends AbstractTransaction<T
 
     public TBuilder sign(String passphrase) {
         if (this.transaction.type == TransactionType.MULTI_SIGNATURE_REGISTRATION
-            && this.transaction.version == 2) {
+                && this.transaction.version == 2) {
             throw new UnsupportedOperationException(
-                "Version 2 MultiSignatureRegistration is not supported in java sdk");
+                    "Version 2 MultiSignatureRegistration is not supported in java sdk");
         }
         this.transaction.sign(passphrase);
         this.transaction.id = this.transaction.computeId();

@@ -8,6 +8,7 @@ public class Vote extends AbstractDeserializer {
         super(serialized, buffer, transaction);
     }
 
+    @Override
     public void deserialize(int assetOffset) {
         this.buffer.position(assetOffset / 2);
         int voteLength = this.buffer.get() & 0xff;

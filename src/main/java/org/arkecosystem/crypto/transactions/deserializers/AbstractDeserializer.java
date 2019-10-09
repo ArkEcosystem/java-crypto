@@ -14,4 +14,6 @@ public abstract class AbstractDeserializer {
         this.buffer = buffer;
         this.transaction = transaction;
     }
+
+    public abstract void deserialize(int assetOffset);
 }

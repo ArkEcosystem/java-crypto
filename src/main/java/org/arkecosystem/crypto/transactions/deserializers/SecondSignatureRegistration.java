@@ -9,6 +9,7 @@ public class SecondSignatureRegistration extends AbstractDeserializer {
         super(serialized, buffer, transaction);
     }
 
+    @Override
     public void deserialize(int assetOffset) {
         this.transaction.asset.signature.publicKey =
                 this.serialized.substring(assetOffset, assetOffset + 66);

@@ -9,6 +9,7 @@ public class Ipfs extends AbstractSerializer {
         super(buffer, transaction);
     }
 
+    @Override
     public void serialize() {
         this.buffer.put(Base58.decode(this.transaction.asset.ipfs));
     }

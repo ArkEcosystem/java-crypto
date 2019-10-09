@@ -11,6 +11,7 @@ public class Vote extends AbstractSerializer {
         super(buffer, transaction);
     }
 
+    @Override
     public void serialize() {
         List<String> votes = new ArrayList<>(transaction.asset.votes);
 

@@ -9,6 +9,7 @@ public class Transfer extends AbstractSerializer {
         super(buffer, transaction);
     }
 
+    @Override
     public void serialize() {
         this.buffer.putLong(this.transaction.amount);
         this.buffer.putInt(this.transaction.expiration);

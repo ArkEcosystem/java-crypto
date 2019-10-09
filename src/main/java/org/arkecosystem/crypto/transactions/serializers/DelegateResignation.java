@@ -8,5 +8,6 @@ public class DelegateResignation extends AbstractSerializer {
         super(buffer, transaction);
     }
 
+    @Override
     public void serialize() {}
 }

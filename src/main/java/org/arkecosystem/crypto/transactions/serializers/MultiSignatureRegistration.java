@@ -10,6 +10,7 @@ public class MultiSignatureRegistration extends AbstractSerializer {
         super(buffer, transaction);
     }
 
+    @Override
     public void serialize() {
         TransactionAsset.MultiSignature multiSignature = this.transaction.asset.multisignature;
 

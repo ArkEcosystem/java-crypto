@@ -8,6 +8,7 @@ public class DelegateResignation extends AbstractDeserializer {
         super(serialized, buffer, transaction);
     }
 
+    @Override
     public void deserialize(int assetOffset) {
         this.transaction.parseSignatures(this.serialized, assetOffset);
     }

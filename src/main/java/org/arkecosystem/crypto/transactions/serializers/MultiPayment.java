@@ -10,6 +10,7 @@ public class MultiPayment extends AbstractSerializer {
         super(buffer, transaction);
     }
 
+    @Override
     public void serialize() {
         this.buffer.putInt(this.transaction.asset.multiPayment.payments.size());
         for (TransactionAsset.Payment current : this.transaction.asset.multiPayment.payments) {

@@ -10,6 +10,7 @@ public class MultiPayment extends AbstractDeserializer {
         super(serialized, buffer, transaction);
     }
 
+    @Override
     public void deserialize(int assetOffset) {
         this.buffer.position(assetOffset / 2);
 

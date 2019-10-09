@@ -9,6 +9,7 @@ public class SecondSignatureRegistration extends AbstractSerializer {
         super(buffer, transaction);
     }
 
+    @Override
     public void serialize() {
         this.buffer.put(Hex.decode(this.transaction.asset.signature.publicKey));
     }

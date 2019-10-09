@@ -11,4 +11,6 @@ public abstract class AbstractSerializer {
         this.buffer = buffer;
         this.transaction = transaction;
     }
+
+    abstract void serialize();
 }

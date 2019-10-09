@@ -10,6 +10,7 @@ public class HtlcLock extends AbstractSerializer {
         super(buffer, transaction);
     }
 
+    @Override
     public void serialize() {
         this.buffer.putLong(this.transaction.amount);
         this.buffer.put(Hex.decode(this.transaction.asset.htlcLockAsset.secretHash));

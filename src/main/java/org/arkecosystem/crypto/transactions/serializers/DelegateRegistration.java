@@ -8,6 +8,7 @@ public class DelegateRegistration extends AbstractSerializer {
         super(buffer, transaction);
     }
 
+    @Override
     public void serialize() {
         byte[] delegateBytes = this.transaction.asset.delegate.username.getBytes();
 

@@ -7,7 +7,7 @@ import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 import org.arkecosystem.crypto.transactions.Transaction;
 import org.arkecosystem.crypto.utils.Slot;
 
-public abstract class AbstractTransaction {
+public abstract class AbstractTransaction<TBuilder extends AbstractTransaction<TBuilder>> {
     public Transaction transaction;
 
     public AbstractTransaction() {
@@ -21,34 +21,61 @@ public abstract class AbstractTransaction {
         this.transaction.nonce = 0;
     }
 
-    public AbstractTransaction sign(String passphrase) {
+    public TBuilder version(int version) {
+        this.transaction.version = version;
+        return this.instance();
+    };
+
+    public TBuilder typeGroup(int typeGroup) {
+        if (typeGroup > Short.MAX_VALUE) {
+            throw new IllegalArgumentException(
+                    "Type group should not be bigger then 2 bytes (bigger then 32767)");
+        }
+        // TODO
+        //        this.transaction.typeGroup = typeGroup;
+        return this.instance();
+    }
+
+    public TBuilder nonce(long nonce) {
+        this.transaction.nonce = nonce;
+        return this.instance();
+    };
+
+    public TBuilder secondSign(String passphrase) {
+        this.transaction.secondSign(passphrase);
+        this.transaction.id = this.transaction.computeId();
+
+        return this.instance();
+    }
+
+    public TBuilder network(int network) {
+        this.transaction.network = network;
+        return this.instance();
+    }
+
+    public TBuilder fee(long fee) {
+        this.transaction.fee = fee;
+        return this.instance();
+    }
+
+    public TBuilder amount(long amount) {
+        this.transaction.amount = amount;
+        return this.instance();
+    }
+
+    public TBuilder sign(String passphrase) {
         if (this.transaction.type == TransactionType.MULTI_SIGNATURE_REGISTRATION
-                && this.transaction.version == 2) {
+            && this.transaction.version == 2) {
             throw new UnsupportedOperationException(
-                    "Version 2 MultiSignatureRegistration is not supported in java sdk");
+                "Version 2 MultiSignatureRegistration is not supported in java sdk");
         }
         this.transaction.sign(passphrase);
         this.transaction.id = this.transaction.computeId();
 
-        return this;
-    }
-
-    public AbstractTransaction secondSign(String passphrase) {
-        this.transaction.secondSign(passphrase);
-        this.transaction.id = this.transaction.computeId();
-
-        return this;
+        return this.instance();
     }
 
     abstract TransactionType getType();
 
-    public AbstractTransaction version(int version) {
-        this.transaction.version = version;
-        return this;
-    };
-
-    public AbstractTransaction nonce(long nonce) {
-        this.transaction.nonce = nonce;
-        return this;
-    };
+    abstract TBuilder instance();
 }

@@ -4,7 +4,7 @@ import java.util.List;
 import org.arkecosystem.crypto.enums.TransactionType;
 import org.arkecosystem.crypto.identities.Address;
 
-public class Vote extends AbstractTransaction {
+public class Vote extends AbstractTransaction<Vote> {
     public Vote votes(List votes) {
         this.transaction.asset.votes = votes;
 
@@ -19,7 +19,13 @@ public class Vote extends AbstractTransaction {
         return this;
     }
 
+    @Override
     public TransactionType getType() {
         return TransactionType.VOTE;
+    }
+
+    @Override
+    public Vote instance() {
+        return this;
     }
 }

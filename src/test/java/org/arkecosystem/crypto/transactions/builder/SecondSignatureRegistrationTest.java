@@ -9,12 +9,22 @@ public class SecondSignatureRegistrationTest {
 
     @Test
     void build() {
-        Transaction actual = new SecondSignatureRegistration()
+        Transaction actualV1 = new SecondSignatureRegistration()
             .signature("this is a top secret second passphrase'")
+            .version(1)
             .sign("this is a top secret passphrase")
             .transaction;
 
-        assertTrue(actual.verify());
+        assertTrue(actualV1.verify());
+
+        Transaction actualV2 = new SecondSignatureRegistration()
+            .signature("this is a top secret second passphrase'")
+            .version(2)
+            .nonce(3)
+            .sign("this is a top secret passphrase")
+            .transaction;
+
+        assertTrue(actualV2.verify());
     }
 
 }

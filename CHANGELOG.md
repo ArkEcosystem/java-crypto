@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## 0.1.6 - 2019-10-15
+
+### Changed
+- Downgrade bitcoinj-core to 0.14.7
+
+## 0.1.5 - 2019-10-07
+
+### Changed
+- Updated dependencies
+
+## 0.1.4 - 2019-11-06
+
+### Fixed
+- Support 255 bytes vendor fields
+
 ## 0.1.3 - 2019-25-04
 
 ### Fixed

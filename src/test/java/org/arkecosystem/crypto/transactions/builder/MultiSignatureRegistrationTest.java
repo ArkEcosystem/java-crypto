@@ -11,7 +11,7 @@ public class MultiSignatureRegistrationTest {
 
     @Test
     void build() {
-        Transaction actual = new MultiSignatureRegistration()
+        Transaction actualV1 = new MultiSignatureRegistration()
             .min(2)
             .lifetime(255)
             .keysgroup(Arrays.asList(
@@ -21,7 +21,8 @@ public class MultiSignatureRegistrationTest {
             .sign("this is a top secret passphrase")
             .transaction;
 
-        assertTrue(actual.verify());
+        assertTrue(actualV1.verify());
+
     }
 
     @Test
@@ -39,6 +40,7 @@ public class MultiSignatureRegistrationTest {
 
         assertTrue(actual.verify());
         assertTrue(actual.secondVerify("03699e966b2525f9088a6941d8d94f7869964a000efe65783d78ac82e1199fe609"));
+
     }
 
 }

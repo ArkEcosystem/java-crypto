@@ -1,9 +1,8 @@
 package org.arkecosystem.crypto.transactions.deserializers;
 
+import java.nio.ByteBuffer;
 import org.arkecosystem.crypto.encoding.Base58;
 import org.arkecosystem.crypto.transactions.Transaction;
-
-import java.nio.ByteBuffer;
 
 public class Transfer extends AbstractDeserializer {
     public Transfer(String serialized, ByteBuffer buffer, Transaction transaction) {
@@ -22,5 +21,4 @@ public class Transfer extends AbstractDeserializer {
 
         this.transaction.parseSignatures(this.serialized, assetOffset + (8 + 4 + 21) * 2);
     }
-
 }

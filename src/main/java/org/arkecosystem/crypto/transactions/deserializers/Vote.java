@@ -1,8 +1,7 @@
 package org.arkecosystem.crypto.transactions.deserializers;
 
-import org.arkecosystem.crypto.transactions.Transaction;
-
 import java.nio.ByteBuffer;
+import org.arkecosystem.crypto.transactions.Transaction;
 
 public class Vote extends AbstractDeserializer {
     public Vote(String serialized, ByteBuffer buffer, Transaction transaction) {
@@ -14,12 +13,13 @@ public class Vote extends AbstractDeserializer {
         int voteLength = this.buffer.get() & 0xff;
 
         for (int i = 0; i < voteLength; i++) {
-            String vote = this.serialized.substring(assetOffset + 2 + i * 2 * 34, assetOffset + 2 + (i + 1) * 2 * 34);
+            String vote =
+                    this.serialized.substring(
+                            assetOffset + 2 + i * 2 * 34, assetOffset + 2 + (i + 1) * 2 * 34);
             vote = (vote.startsWith("01") ? '+' : '-') + vote.substring(2);
             transaction.asset.votes.add(vote);
         }
 
         this.transaction.parseSignatures(this.serialized, assetOffset + 2 + voteLength * 34 * 2);
     }
-
 }

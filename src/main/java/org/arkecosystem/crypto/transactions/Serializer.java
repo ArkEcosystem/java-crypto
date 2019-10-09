@@ -1,19 +1,18 @@
 package org.arkecosystem.crypto.transactions;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import org.arkecosystem.crypto.configuration.Network;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.transactions.serializers.*;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 public class Serializer {
 
     private ByteBuffer buffer;
     private Transaction transaction;
 
-
-    public byte[] serialize(Transaction transaction, boolean skipSignature, boolean skipSecondSignature){
+    public byte[] serialize(
+            Transaction transaction, boolean skipSignature, boolean skipSecondSignature) {
         this.transaction = transaction;
 
         this.buffer = ByteBuffer.allocate(512);
@@ -24,7 +23,6 @@ public class Serializer {
 
         serializeTypeSpecific();
 
-
         serializeSignatures(skipSignature, skipSecondSignature);
 
         byte[] result = new byte[this.buffer.position()];
@@ -34,11 +32,9 @@ public class Serializer {
         return result;
     }
 
-
     public byte[] serialize(Transaction transaction) {
-        return this.serialize(transaction,false,false);
+        return this.serialize(transaction, false, false);
     }
-
 
     private void serializeHeader() {
         this.buffer.put((byte) 0xff);
@@ -55,10 +51,10 @@ public class Serializer {
             this.buffer.put((byte) Network.get().version());
         }
 
-        if (transaction.version == 1){
+        if (transaction.version == 1) {
             this.buffer.put((byte) this.transaction.type.getValue());
             this.buffer.putInt(this.transaction.timestamp);
-        }else {
+        } else {
             this.buffer.putInt(this.transaction.typeGroup.getValue());
             this.buffer.putShort((short) this.transaction.type.getValue());
             this.buffer.putLong(this.transaction.nonce);
@@ -66,10 +62,9 @@ public class Serializer {
 
         this.buffer.put(Hex.decode(this.transaction.senderPublicKey));
         this.buffer.putLong(this.transaction.fee);
-
     }
 
-    private void serializeVendorField(){
+    private void serializeVendorField() {
         if (this.transaction.vendorField != null) {
             int vendorFieldLength = this.transaction.vendorField.length();
 
@@ -109,16 +104,16 @@ public class Serializer {
                 new MultiPayment(this.buffer, this.transaction).serialize();
                 break;
             case DELEGATE_RESIGNATION:
-                new DelegateResignation(this.buffer,this.transaction).serialize();
+                new DelegateResignation(this.buffer, this.transaction).serialize();
                 break;
             case HTLC_LOCK:
-                new HtlcLock(this.buffer,this.transaction).serialize();
+                new HtlcLock(this.buffer, this.transaction).serialize();
                 break;
             case HTLC_CLAIM:
-                new HtlcClaim(this.buffer,this.transaction).serialize();
+                new HtlcClaim(this.buffer, this.transaction).serialize();
                 break;
             case HTLC_REFUND:
-                new HtlcRefund(this.buffer,this.transaction).serialize();
+                new HtlcRefund(this.buffer, this.transaction).serialize();
                 break;
             default:
                 throw new UnsupportedOperationException();
@@ -126,11 +121,11 @@ public class Serializer {
     }
 
     private void serializeSignatures(boolean skipSignature, boolean skipSecondSignature) {
-        if (!skipSignature){
+        if (!skipSignature) {
             buffer.put(Hex.decode(this.transaction.signature));
         }
 
-        if (!skipSecondSignature && this.transaction.secondSignature!= null) {
+        if (!skipSecondSignature && this.transaction.secondSignature != null) {
             buffer.put(Hex.decode(this.transaction.secondSignature));
         }
 
@@ -139,5 +134,4 @@ public class Serializer {
             buffer.put(Hex.decode(String.join("", this.transaction.signatures)));
         }
     }
-
 }

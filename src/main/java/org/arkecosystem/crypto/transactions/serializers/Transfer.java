@@ -1,9 +1,8 @@
 package org.arkecosystem.crypto.transactions.serializers;
 
+import java.nio.ByteBuffer;
 import org.arkecosystem.crypto.transactions.Transaction;
 import org.bitcoinj.core.Base58;
-
-import java.nio.ByteBuffer;
 
 public class Transfer extends AbstractSerializer {
     public Transfer(ByteBuffer buffer, Transaction transaction) {
@@ -15,5 +14,4 @@ public class Transfer extends AbstractSerializer {
         this.buffer.putInt(this.transaction.expiration);
         this.buffer.put(Base58.decodeChecked(this.transaction.recipientId));
     }
-
 }

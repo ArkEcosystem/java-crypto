@@ -22,8 +22,10 @@ public abstract class AbstractTransaction {
     }
 
     public AbstractTransaction sign(String passphrase) {
-        if (this.transaction.type == TransactionType.MULTI_SIGNATURE_REGISTRATION && this.transaction.version == 2){
-             throw new UnsupportedOperationException("Version 2 MultiSignatureRegistration is not supported in java sdk");
+        if (this.transaction.type == TransactionType.MULTI_SIGNATURE_REGISTRATION
+                && this.transaction.version == 2) {
+            throw new UnsupportedOperationException(
+                    "Version 2 MultiSignatureRegistration is not supported in java sdk");
         }
         this.transaction.sign(passphrase);
         this.transaction.id = this.transaction.computeId();
@@ -40,14 +42,13 @@ public abstract class AbstractTransaction {
 
     abstract TransactionType getType();
 
-    public AbstractTransaction version(int version){
+    public AbstractTransaction version(int version) {
         this.transaction.version = version;
         return this;
     };
 
-    public AbstractTransaction nonce(long nonce){
+    public AbstractTransaction nonce(long nonce) {
         this.transaction.nonce = nonce;
         return this;
     };
 }
-

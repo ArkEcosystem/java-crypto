@@ -12,5 +12,4 @@ public class DelegateRegistration extends AbstractTransaction {
     public TransactionType getType() {
         return TransactionType.DELEGATE_REGISTRATION;
     }
-
 }

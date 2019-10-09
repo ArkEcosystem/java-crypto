@@ -1,12 +1,9 @@
 package org.arkecosystem.crypto.transactions.serializers;
 
+import java.nio.ByteBuffer;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.transactions.Transaction;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
-
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MultiSignatureRegistration extends AbstractSerializer {
     public MultiSignatureRegistration(ByteBuffer buffer, Transaction transaction) {
@@ -29,5 +26,4 @@ public class MultiSignatureRegistration extends AbstractSerializer {
         this.buffer.put(multiSignature.lifetime);
         this.buffer.put(Hex.decode(String.join("", multiSignature.keysgroup)));
     }
-
 }

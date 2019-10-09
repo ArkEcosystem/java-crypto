@@ -4,7 +4,7 @@ import org.arkecosystem.crypto.enums.TransactionType;
 
 public class HtlcClaim extends AbstractTransaction {
 
-    public HtlcClaim htlcClaimAsset(String lockTransactionId, String unlockSecret){
+    public HtlcClaim htlcClaimAsset(String lockTransactionId, String unlockSecret) {
         this.transaction.asset.htlcClaimAsset.lockTransactionId = lockTransactionId;
         this.transaction.asset.htlcClaimAsset.unlockSecret = unlockSecret;
         return this;

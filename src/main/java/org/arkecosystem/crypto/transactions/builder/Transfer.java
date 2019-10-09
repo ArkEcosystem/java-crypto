@@ -29,5 +29,4 @@ public class Transfer extends AbstractTransaction {
     public TransactionType getType() {
         return TransactionType.TRANSFER;
     }
-
 }

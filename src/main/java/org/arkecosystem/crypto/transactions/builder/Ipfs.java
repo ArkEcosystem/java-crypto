@@ -1,6 +1,6 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.enums.TransactionType;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 
 public class Ipfs extends AbstractTransaction<Ipfs> {
 
@@ -10,8 +10,8 @@ public class Ipfs extends AbstractTransaction<Ipfs> {
     }
 
     @Override
-    public TransactionType getType() {
-        return TransactionType.IPFS;
+    public CoreTransactionTypes getType() {
+        return CoreTransactionTypes.IPFS;
     }
 
     @Override

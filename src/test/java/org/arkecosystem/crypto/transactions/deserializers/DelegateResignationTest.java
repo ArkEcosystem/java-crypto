@@ -18,8 +18,8 @@ public class DelegateResignationTest {
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
-        assertEquals(((Double) data.get("type")).intValue(), actual.type.getValue());
-        assertEquals(TransactionTypeGroup.CORE, actual.typeGroup);
+        assertEquals(((Double) data.get("type")).intValue(), actual.type);
+        assertEquals(TransactionTypeGroup.CORE.getValue(), actual.typeGroup);
         assertEquals((Long.valueOf((String) data.get("fee"))), actual.fee);
         assertEquals((Long.valueOf((String) data.get("nonce"))), actual.nonce);
         assertEquals(data.get("senderPublicKey").toString(), actual.senderPublicKey);
@@ -36,8 +36,8 @@ public class DelegateResignationTest {
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
-        assertEquals(((Double) data.get("type")).intValue(), actual.type.getValue());
-        assertEquals(TransactionTypeGroup.CORE, actual.typeGroup);
+        assertEquals(((Double) data.get("type")).intValue(), actual.type);
+        assertEquals(TransactionTypeGroup.CORE.getValue(), actual.typeGroup);
         assertEquals((Long.valueOf((String) data.get("fee"))), actual.fee);
         assertEquals((Long.valueOf((String) data.get("nonce"))), actual.nonce);
         assertEquals(data.get("senderPublicKey").toString(), actual.senderPublicKey);

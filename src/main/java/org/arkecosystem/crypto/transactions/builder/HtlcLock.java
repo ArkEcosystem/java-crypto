@@ -1,7 +1,7 @@
 package org.arkecosystem.crypto.transactions.builder;
 
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.HtlcLockExpirationType;
-import org.arkecosystem.crypto.enums.TransactionType;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
 
 public class HtlcLock extends AbstractTransaction<HtlcLock> {
@@ -27,8 +27,8 @@ public class HtlcLock extends AbstractTransaction<HtlcLock> {
     }
 
     @Override
-    public TransactionType getType() {
-        return TransactionType.HTLC_LOCK;
+    public CoreTransactionTypes getType() {
+        return CoreTransactionTypes.HTLC_LOCK;
     }
 
     @Override

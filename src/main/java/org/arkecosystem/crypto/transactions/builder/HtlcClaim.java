@@ -1,6 +1,6 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.enums.TransactionType;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 
 public class HtlcClaim extends AbstractTransaction<HtlcClaim> {
 
@@ -11,8 +11,8 @@ public class HtlcClaim extends AbstractTransaction<HtlcClaim> {
     }
 
     @Override
-    public TransactionType getType() {
-        return TransactionType.HTLC_CLAIM;
+    public CoreTransactionTypes getType() {
+        return CoreTransactionTypes.HTLC_CLAIM;
     }
 
     @Override

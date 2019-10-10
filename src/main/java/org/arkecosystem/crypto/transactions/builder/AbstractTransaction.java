@@ -2,7 +2,7 @@ package org.arkecosystem.crypto.transactions.builder;
 
 import org.arkecosystem.crypto.configuration.Fee;
 import org.arkecosystem.crypto.configuration.Network;
-import org.arkecosystem.crypto.enums.TransactionType;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 import org.arkecosystem.crypto.transactions.Transaction;
 import org.arkecosystem.crypto.utils.Slot;
@@ -12,12 +12,12 @@ public abstract class AbstractTransaction<TBuilder extends AbstractTransaction<T
 
     public AbstractTransaction() {
         this.transaction = new Transaction();
-        this.transaction.type = this.getType();
+        this.transaction.type = this.getType().getValue();
         this.transaction.fee = Fee.getCoreFee(this.getType());
         this.transaction.timestamp = Slot.time();
         this.transaction.version = 2;
         this.transaction.network = Network.get().version();
-        this.transaction.typeGroup = TransactionTypeGroup.CORE;
+        this.transaction.typeGroup = TransactionTypeGroup.CORE.getValue();
         this.transaction.nonce = 0;
     }
 
@@ -64,7 +64,7 @@ public abstract class AbstractTransaction<TBuilder extends AbstractTransaction<T
     }
 
     public TBuilder sign(String passphrase) {
-        if (this.transaction.type == TransactionType.MULTI_SIGNATURE_REGISTRATION
+        if (this.transaction.type == CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue()
                 && this.transaction.version == 2) {
             throw new UnsupportedOperationException(
                     "Version 2 MultiSignatureRegistration is not supported in java sdk");
@@ -75,7 +75,7 @@ public abstract class AbstractTransaction<TBuilder extends AbstractTransaction<T
         return this.instance();
     }
 
-    abstract TransactionType getType();
+    abstract CoreTransactionTypes getType();
 
     abstract TBuilder instance();
 }

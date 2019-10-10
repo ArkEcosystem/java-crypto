@@ -9,8 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import org.arkecosystem.crypto.encoding.Base58;
 import org.arkecosystem.crypto.encoding.Hex;
-import org.arkecosystem.crypto.enums.TransactionType;
-import org.arkecosystem.crypto.enums.TransactionTypeGroup;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
@@ -19,7 +18,7 @@ public class Transaction {
     public int expiration;
     public int network;
     public int timestamp;
-    public TransactionType type;
+    public int type;
     public int version;
     public List<String> signatures;
     public long amount = 0L;
@@ -35,7 +34,7 @@ public class Transaction {
 
     public String vendorFieldHex;
     public long nonce;
-    public TransactionTypeGroup typeGroup;
+    public int typeGroup;
 
     public static Transaction deserialize(String serialized) {
         return new Deserializer().deserialize(serialized);
@@ -153,13 +152,14 @@ public class Transaction {
         ByteBuffer buffer = ByteBuffer.allocate(1000);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
-        buffer.put((byte) type.getValue());
+        buffer.put((byte) type);
         buffer.putInt(timestamp);
         buffer.put(Hex.decode(this.senderPublicKey));
 
         boolean skipRecipientId =
-                this.type == TransactionType.SECOND_SIGNATURE_REGISTRATION
-                        || this.type == TransactionType.MULTI_SIGNATURE_REGISTRATION;
+                this.type == CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue()
+                        || this.type
+                                == CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue();
         if (recipientId != null && !recipientId.isEmpty() && !skipRecipientId) {
             buffer.put(Base58.decodeChecked(this.recipientId));
         } else {
@@ -181,19 +181,19 @@ public class Transaction {
         buffer.putLong(amount);
         buffer.putLong(fee);
 
-        if (this.type == TransactionType.SECOND_SIGNATURE_REGISTRATION) {
+        if (this.type == CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue()) {
             buffer.put(Hex.decode(this.asset.signature.publicKey));
         }
 
-        if (this.type == TransactionType.DELEGATE_REGISTRATION) {
+        if (this.type == CoreTransactionTypes.DELEGATE_REGISTRATION.getValue()) {
             buffer.put(this.asset.delegate.username.getBytes());
         }
 
-        if (this.type == TransactionType.VOTE) {
+        if (this.type == CoreTransactionTypes.VOTE.getValue()) {
             buffer.put(String.join("", this.asset.votes).getBytes());
         }
 
-        if (this.type == TransactionType.MULTI_SIGNATURE_REGISTRATION) {
+        if (this.type == CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue()) {
             buffer.put(this.asset.multisignature.min);
             buffer.put(this.asset.multisignature.lifetime);
             buffer.put(String.join("", this.asset.multisignature.keysgroup).getBytes());
@@ -232,13 +232,13 @@ public class Transaction {
         map.put("recipientId", this.recipientId);
         map.put("signature", this.signature);
         map.put("senderPublicKey", this.senderPublicKey);
-        map.put("type", this.type.getValue());
+        map.put("type", this.type);
         map.put("version", this.version);
         if (this.version == 1) {
             map.put("timestamp", this.timestamp);
         } else {
             map.put("nonce", this.nonce);
-            map.put("typeGroup", this.typeGroup.getValue());
+            map.put("typeGroup", this.typeGroup);
         }
 
         if (this.vendorField != null && !this.vendorField.isEmpty()) {
@@ -250,25 +250,25 @@ public class Transaction {
         }
 
         HashMap<String, Object> asset = new HashMap<>();
-        if (this.type == TransactionType.SECOND_SIGNATURE_REGISTRATION) {
+        if (this.type == CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue()) {
             HashMap<String, String> publicKey = new HashMap<>();
             publicKey.put("publicKey", this.asset.signature.publicKey);
             asset.put("signature", publicKey);
-        } else if (this.type == TransactionType.VOTE) {
+        } else if (this.type == CoreTransactionTypes.VOTE.getValue()) {
             asset.put("votes", this.asset.votes);
-        } else if (this.type == TransactionType.DELEGATE_REGISTRATION) {
+        } else if (this.type == CoreTransactionTypes.DELEGATE_REGISTRATION.getValue()) {
             HashMap<String, String> delegate = new HashMap<>();
             delegate.put("username", this.asset.delegate.username);
             asset.put("delegate", delegate);
-        } else if (this.type == TransactionType.MULTI_SIGNATURE_REGISTRATION) {
+        } else if (this.type == CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue()) {
             HashMap<String, Object> multisignature = new HashMap<>();
             multisignature.put("min", this.asset.multisignature.min);
             multisignature.put("lifetime", this.asset.multisignature.lifetime);
             multisignature.put("keysgroup", this.asset.multisignature.keysgroup);
             asset.put("multisignature", multisignature);
-        } else if (this.type == TransactionType.IPFS) {
+        } else if (this.type == CoreTransactionTypes.IPFS.getValue()) {
             asset.put("ipfs", this.asset.ipfs);
-        } else if (this.type == TransactionType.MULTI_PAYMENT) {
+        } else if (this.type == CoreTransactionTypes.MULTI_PAYMENT.getValue()) {
             ArrayList<HashMap<String, String>> payments = new ArrayList<>();
             for (TransactionAsset.Payment current : this.asset.multiPayment.payments) {
                 HashMap<String, String> payment = new HashMap<>();
@@ -285,19 +285,20 @@ public class Transaction {
         return map;
     }
 
-    private static class TransactionTypeDeserializer implements JsonDeserializer<TransactionType> {
+    private static class TransactionTypeDeserializer
+            implements JsonDeserializer<CoreTransactionTypes> {
         @Override
-        public TransactionType deserialize(
+        public CoreTransactionTypes deserialize(
                 JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
-            return TransactionType.values()[json.getAsInt()];
+            return CoreTransactionTypes.values()[json.getAsInt()];
         }
     }
 
-    private static class TransactionTypeSerializer implements JsonSerializer<TransactionType> {
+    private static class TransactionTypeSerializer implements JsonSerializer<CoreTransactionTypes> {
         @Override
         public JsonElement serialize(
-                TransactionType src, Type typeOfSrc, JsonSerializationContext context) {
+                CoreTransactionTypes src, Type typeOfSrc, JsonSerializationContext context) {
             return new JsonPrimitive(src.getValue());
         }
     }

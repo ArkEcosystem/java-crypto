@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import org.arkecosystem.crypto.configuration.Network;
 import org.arkecosystem.crypto.encoding.Hex;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.transactions.serializers.*;
 
 public class Serializer {
@@ -52,11 +53,11 @@ public class Serializer {
         }
 
         if (transaction.version == 1) {
-            this.buffer.put((byte) this.transaction.type.getValue());
+            this.buffer.put((byte) this.transaction.type);
             this.buffer.putInt(this.transaction.timestamp);
         } else {
-            this.buffer.putInt(this.transaction.typeGroup.getValue());
-            this.buffer.putShort((short) this.transaction.type.getValue());
+            this.buffer.putInt(this.transaction.typeGroup);
+            this.buffer.putShort((short) this.transaction.type);
             this.buffer.putLong(this.transaction.nonce);
         }
 
@@ -81,7 +82,8 @@ public class Serializer {
     }
 
     private void serializeTypeSpecific() {
-        switch (transaction.type) {
+        CoreTransactionTypes transactionType = CoreTransactionTypes.values()[transaction.type];
+        switch (transactionType) {
             case TRANSFER:
                 new Transfer(this.buffer, this.transaction).serialize();
                 break;

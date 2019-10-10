@@ -1,7 +1,6 @@
 package org.arkecosystem.crypto.configuration;
 
-import org.arkecosystem.crypto.enums.TransactionType;
-import org.arkecosystem.crypto.enums.TransactionTypeGroup;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -13,7 +12,7 @@ class FeeTest {
 
     @Test
     void get() {
-        long fee = Fee.getCoreFee(TransactionType.TRANSFER);
+        long fee = Fee.getCoreFee(CoreTransactionTypes.TRANSFER);
         assertEquals(10_000_000, fee);
     }
 

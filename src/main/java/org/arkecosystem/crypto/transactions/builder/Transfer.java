@@ -1,6 +1,6 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.enums.TransactionType;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 
 public class Transfer extends AbstractTransaction<Transfer> {
 
@@ -23,8 +23,8 @@ public class Transfer extends AbstractTransaction<Transfer> {
     }
 
     @Override
-    public TransactionType getType() {
-        return TransactionType.TRANSFER;
+    public CoreTransactionTypes getType() {
+        return CoreTransactionTypes.TRANSFER;
     }
 
     @Override

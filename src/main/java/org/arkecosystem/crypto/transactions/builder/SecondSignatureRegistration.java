@@ -1,6 +1,6 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.enums.TransactionType;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.identities.PublicKey;
 
 public class SecondSignatureRegistration extends AbstractTransaction<SecondSignatureRegistration> {
@@ -12,8 +12,8 @@ public class SecondSignatureRegistration extends AbstractTransaction<SecondSigna
     }
 
     @Override
-    public TransactionType getType() {
-        return TransactionType.SECOND_SIGNATURE_REGISTRATION;
+    public CoreTransactionTypes getType() {
+        return CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION;
     }
 
     @Override

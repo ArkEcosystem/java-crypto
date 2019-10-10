@@ -1,6 +1,6 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.enums.TransactionType;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 
 public class HtlcRefund extends AbstractTransaction<HtlcRefund> {
 
@@ -10,8 +10,8 @@ public class HtlcRefund extends AbstractTransaction<HtlcRefund> {
     }
 
     @Override
-    public TransactionType getType() {
-        return TransactionType.HTLC_REFUND;
+    public CoreTransactionTypes getType() {
+        return CoreTransactionTypes.HTLC_REFUND;
     }
 
     @Override

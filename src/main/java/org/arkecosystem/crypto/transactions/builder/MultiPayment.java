@@ -1,6 +1,6 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.enums.TransactionType;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
 
 public class MultiPayment extends AbstractTransaction<MultiPayment> {
@@ -15,8 +15,8 @@ public class MultiPayment extends AbstractTransaction<MultiPayment> {
     }
 
     @Override
-    public TransactionType getType() {
-        return TransactionType.MULTI_PAYMENT;
+    public CoreTransactionTypes getType() {
+        return CoreTransactionTypes.MULTI_PAYMENT;
     }
 
     @Override

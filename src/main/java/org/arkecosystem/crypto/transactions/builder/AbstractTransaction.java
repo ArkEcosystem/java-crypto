@@ -31,8 +31,7 @@ public abstract class AbstractTransaction<TBuilder extends AbstractTransaction<T
             throw new IllegalArgumentException(
                     "Type group should not be bigger then 2 bytes (bigger then 32767)");
         }
-        // TODO
-        //        this.transaction.typeGroup = typeGroup;
+        this.transaction.typeGroup = typeGroup;
         return this.instance();
     }
 

@@ -14,8 +14,6 @@ public class MultiSignatureRegistration extends AbstractSerializer {
     }
 
     public void serialize() {
-        List keysgroup = new ArrayList();
-
         TransactionAsset.MultiSignature multiSignature = this.transaction.asset.multisignature;
 
         for (int i = 0; i < multiSignature.keysgroup.size(); i++) {

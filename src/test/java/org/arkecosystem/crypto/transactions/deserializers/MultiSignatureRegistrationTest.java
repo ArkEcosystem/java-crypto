@@ -12,7 +12,7 @@ class MultiSignatureRegistrationTest {
 
     @Test
     void passphrase() {
-        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/multi_signature_registration/passphrase");
+        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/V1/multi_signature_registration/passphrase");
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());

@@ -18,7 +18,7 @@ class VoteTest {
         LinkedTreeMap<String, Object> dataV1 = (LinkedTreeMap<String, Object>) fixtureV1.get("data");
 
         Transaction actualV1 = new Deserializer().deserialize(fixtureV1.get("serialized").toString());
-        assertEquals(((Double) dataV1.get("type")).intValue(), actualV1.type.getValue());
+        assertEquals(((Double) dataV1.get("type")).intValue(), actualV1.type);
         assertEquals(((Double) dataV1.get("amount")).longValue(), actualV1.amount);
         assertEquals(((Double) dataV1.get("fee")).longValue(), actualV1.fee);
         assertEquals(dataV1.get("recipientId").toString(), actualV1.recipientId);
@@ -37,8 +37,8 @@ class VoteTest {
         LinkedTreeMap<String, Object> dataV2 = (LinkedTreeMap<String, Object>) fixtureV2.get("data");
 
         Transaction actualV2 = new Deserializer().deserialize(fixtureV2.get("serialized").toString());
-        assertEquals(((Double) dataV2.get("type")).intValue(), actualV2.type.getValue());
-        assertEquals(TransactionTypeGroup.CORE, actualV2.typeGroup);
+        assertEquals(((Double) dataV2.get("type")).intValue(), actualV2.type);
+        assertEquals(TransactionTypeGroup.CORE.getValue(), actualV2.typeGroup);
         assertEquals((Long.valueOf((String) dataV2.get("fee"))), actualV2.fee);
         assertEquals((Long.valueOf((String) dataV2.get("nonce"))), actualV2.nonce);
         assertEquals(dataV2.get("senderPublicKey").toString(), actualV2.senderPublicKey);
@@ -58,7 +58,7 @@ class VoteTest {
         LinkedTreeMap<String, Object> dataV1 = (LinkedTreeMap<String, Object>) fixtureV1.get("data");
 
         Transaction actualV1 = new Deserializer().deserialize(fixtureV1.get("serialized").toString());
-        assertEquals(((Double) dataV1.get("type")).intValue(), actualV1.type.getValue());
+        assertEquals(((Double) dataV1.get("type")).intValue(), actualV1.type);
         assertEquals(((Double) dataV1.get("amount")).longValue(), actualV1.amount);
         assertEquals(((Double) dataV1.get("fee")).longValue(), actualV1.fee);
         assertEquals(dataV1.get("recipientId").toString(), actualV1.recipientId);
@@ -78,8 +78,8 @@ class VoteTest {
         LinkedTreeMap<String, Object> dataV2 = (LinkedTreeMap<String, Object>) fixtureV2.get("data");
 
         Transaction actualV2 = new Deserializer().deserialize(fixtureV2.get("serialized").toString());
-        assertEquals(((Double) dataV2.get("type")).intValue(), actualV2.type.getValue());
-        assertEquals(TransactionTypeGroup.CORE, actualV2.typeGroup);
+        assertEquals(((Double) dataV2.get("type")).intValue(), actualV2.type);
+        assertEquals(TransactionTypeGroup.CORE.getValue(), actualV2.typeGroup);
         assertEquals((Long.valueOf((String) dataV2.get("fee"))), actualV2.fee);
         assertEquals((Long.valueOf((String) dataV2.get("nonce"))), actualV2.nonce);
         assertEquals(dataV2.get("senderPublicKey").toString(), actualV2.senderPublicKey);

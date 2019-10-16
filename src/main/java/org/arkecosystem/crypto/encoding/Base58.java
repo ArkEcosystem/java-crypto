@@ -21,6 +21,4 @@ public class Base58 {
     public static String encode(byte[] value) {
         return org.bitcoinj.core.Base58.encode(value);
     }
-
-
 }

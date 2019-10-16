@@ -1,18 +1,18 @@
 package org.arkecosystem.crypto.transactions.deserializers;
 
+import java.nio.ByteBuffer;
 import org.arkecosystem.crypto.encoding.Base58;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.HtlcLockExpirationType;
 import org.arkecosystem.crypto.transactions.Transaction;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
 
-import java.nio.ByteBuffer;
-
 public class HtlcLock extends AbstractDeserializer {
     public HtlcLock(String serialized, ByteBuffer buffer, Transaction transaction) {
         super(serialized, buffer, transaction);
     }
 
+    @Override
     public void deserialize(int assetOffset) {
         this.buffer.position(assetOffset / 2);
 
@@ -20,8 +20,10 @@ public class HtlcLock extends AbstractDeserializer {
         byte[] secretHash = new byte[32];
         this.buffer.get(secretHash);
         this.transaction.asset.htlcLockAsset.secretHash = Hex.encode(secretHash);
-        this.transaction.asset.htlcLockAsset.expiration = new TransactionAsset
-            .Expiration(HtlcLockExpirationType.values()[this.buffer.get() - 1], this.buffer.getInt());
+        this.transaction.asset.htlcLockAsset.expiration =
+                new TransactionAsset.Expiration(
+                        HtlcLockExpirationType.values()[this.buffer.get() - 1],
+                        this.buffer.getInt());
         byte[] recipientId = new byte[21];
         this.buffer.get(recipientId);
         this.transaction.recipientId = Base58.encodeChecked(recipientId);

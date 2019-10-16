@@ -1,14 +1,14 @@
 package org.arkecosystem.crypto.transactions.deserializers;
 
-import org.arkecosystem.crypto.transactions.Transaction;
-
 import java.nio.ByteBuffer;
+import org.arkecosystem.crypto.transactions.Transaction;
 
 public class DelegateRegistration extends AbstractDeserializer {
     public DelegateRegistration(String serialized, ByteBuffer buffer, Transaction transaction) {
         super(serialized, buffer, transaction);
     }
 
+    @Override
     public void deserialize(int assetOffset) {
         this.buffer.position(assetOffset / 2);
 
@@ -21,5 +21,4 @@ public class DelegateRegistration extends AbstractDeserializer {
 
         this.transaction.parseSignatures(this.serialized, assetOffset + (usernameLength + 1) * 2);
     }
-
 }

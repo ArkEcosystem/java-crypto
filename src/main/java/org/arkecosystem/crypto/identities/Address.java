@@ -28,7 +28,7 @@ public class Address {
             networkVersion = Network.get().version();
         }
 
-        byte[] bytes = Bytes.concat(new byte[]{networkVersion.byteValue()}, out);
+        byte[] bytes = Bytes.concat(new byte[] {networkVersion.byteValue()}, out);
         return Base58.encodeChecked(bytes);
     }
 
@@ -49,12 +49,10 @@ public class Address {
             networkVersion = Network.get().version();
         }
 
-
         return Base58.decodeChecked(address)[0] == networkVersion;
     }
 
     public static Boolean validate(String address) {
         return Address.validate(address, null);
     }
-
 }

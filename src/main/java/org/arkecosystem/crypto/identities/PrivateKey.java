@@ -14,5 +14,4 @@ public class PrivateKey {
     public static ECKey fromHex(String privateKey) {
         return ECKey.fromPrivate(Hex.decode(privateKey), true);
     }
-
 }

@@ -1,11 +1,10 @@
 package org.arkecosystem.crypto.identities;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.arkecosystem.crypto.configuration.Network;
 import org.arkecosystem.crypto.encoding.Base58;
 import org.bitcoinj.core.Sha256Hash;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 public class WIF {
     public static String fromPassphrase(String passphrase) throws IOException {
@@ -18,5 +17,4 @@ public class WIF {
 
         return Base58.encodeChecked(outputStream.toByteArray());
     }
-
 }

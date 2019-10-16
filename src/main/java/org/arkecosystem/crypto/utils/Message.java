@@ -1,19 +1,17 @@
 package org.arkecosystem.crypto.utils;
 
 import com.google.gson.Gson;
+import java.util.HashMap;
+import java.util.Map;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Message {
     private String publickey;
     private String signature;
     private String message;
-
 
     public Message(String publickey, String signature, String message) {
         this.publickey = publickey;
@@ -25,7 +23,10 @@ public class Message {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
         Sha256Hash messageBytes = Sha256Hash.of(message.getBytes());
 
-        return new Message(privateKey.getPublicKeyAsHex(), Hex.encode(privateKey.sign(messageBytes).encodeToDER()), message);
+        return new Message(
+                privateKey.getPublicKeyAsHex(),
+                Hex.encode(privateKey.sign(messageBytes).encodeToDER()),
+                message);
     }
 
     public boolean verify() {
@@ -60,5 +61,4 @@ public class Message {
     public String getSignature() {
         return signature;
     }
-
 }

@@ -13,5 +13,4 @@ public class Testnet implements INetwork {
     public String epoch() {
         return "2017-03-21 13:00:00";
     }
-
 }

@@ -1,16 +1,14 @@
 package org.arkecosystem.crypto.utils;
 
-import org.arkecosystem.crypto.configuration.Network;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Date;
 import java.util.TimeZone;
+import org.arkecosystem.crypto.configuration.Network;
 
 public class Slot {
     public static int time() {
-        return (int)((new Date().getTime() - epoch()) / 1000);
+        return (int) ((new Date().getTime() - epoch()) / 1000);
     }
 
     public static long epoch() {

@@ -16,7 +16,7 @@ class MultiSignatureRegistrationTest {
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
-        assertEquals(((Double) data.get("type")).intValue(), actual.type.getValue());
+        assertEquals(((Double) data.get("type")).intValue(), actual.type);
         assertEquals(((Double) data.get("amount")).longValue(), actual.amount);
         assertEquals(((Double) data.get("fee")).longValue(), actual.fee);
         assertEquals(((Double) data.get("timestamp")).intValue(), actual.timestamp);

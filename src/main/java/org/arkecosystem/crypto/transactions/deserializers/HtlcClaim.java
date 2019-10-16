@@ -1,15 +1,15 @@
 package org.arkecosystem.crypto.transactions.deserializers;
 
+import java.nio.ByteBuffer;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.transactions.Transaction;
 
-import java.nio.ByteBuffer;
-
-public class HtlcClaim extends AbstractDeserializer{
+public class HtlcClaim extends AbstractDeserializer {
     public HtlcClaim(String serialized, ByteBuffer buffer, Transaction transaction) {
         super(serialized, buffer, transaction);
     }
 
+    @Override
     public void deserialize(int assetOffset) {
         this.buffer.position(assetOffset / 2);
 
@@ -24,5 +24,4 @@ public class HtlcClaim extends AbstractDeserializer{
 
         this.transaction.parseSignatures(this.serialized, assetOffset + 64 + 64);
     }
-
 }

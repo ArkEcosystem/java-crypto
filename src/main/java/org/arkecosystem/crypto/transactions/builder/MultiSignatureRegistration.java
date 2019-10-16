@@ -1,12 +1,10 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.enums.TransactionType;
-
 import java.util.List;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 
-
-public class MultiSignatureRegistration extends AbstractTransaction {
-    public MultiSignatureRegistration(){
+public class MultiSignatureRegistration extends AbstractTransaction<MultiSignatureRegistration> {
+    public MultiSignatureRegistration() {
         super();
         this.transaction.version = 1;
     }
@@ -39,8 +37,13 @@ public class MultiSignatureRegistration extends AbstractTransaction {
         return this;
     }
 
-    public TransactionType getType() {
-        return TransactionType.MULTI_SIGNATURE_REGISTRATION;
+    @Override
+    public CoreTransactionTypes getType() {
+        return CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION;
     }
 
+    @Override
+    public MultiSignatureRegistration instance() {
+        return this;
+    }
 }

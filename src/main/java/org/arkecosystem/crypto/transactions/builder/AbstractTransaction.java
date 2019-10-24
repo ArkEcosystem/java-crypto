@@ -12,7 +12,7 @@ public abstract class AbstractTransaction<TBuilder extends AbstractTransaction<T
 
     public AbstractTransaction() {
         this.transaction = new Transaction();
-        this.transaction.type = this.getType().getValue();
+        this.transaction.type = this.getType();
         this.transaction.fee = Fee.getCoreFee(this.getType());
         this.transaction.timestamp = Slot.time();
         this.transaction.version = 2;
@@ -74,7 +74,7 @@ public abstract class AbstractTransaction<TBuilder extends AbstractTransaction<T
         return this.instance();
     }
 
-    abstract CoreTransactionTypes getType();
+    abstract int getType();
 
     abstract TBuilder instance();
 }

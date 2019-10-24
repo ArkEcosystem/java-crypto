@@ -15,8 +15,8 @@ public class MultiPayment extends AbstractTransaction<MultiPayment> {
     }
 
     @Override
-    public CoreTransactionTypes getType() {
-        return CoreTransactionTypes.MULTI_PAYMENT;
+    public int getType() {
+        return CoreTransactionTypes.MULTI_PAYMENT.getValue();
     }
 
     @Override

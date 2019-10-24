@@ -10,8 +10,8 @@ public class HtlcRefund extends AbstractTransaction<HtlcRefund> {
     }
 
     @Override
-    public CoreTransactionTypes getType() {
-        return CoreTransactionTypes.HTLC_REFUND;
+    public int getType() {
+        return CoreTransactionTypes.HTLC_REFUND.getValue();
     }
 
     @Override

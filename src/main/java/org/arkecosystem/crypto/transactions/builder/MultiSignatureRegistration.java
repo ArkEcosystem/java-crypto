@@ -38,8 +38,8 @@ public class MultiSignatureRegistration extends AbstractTransaction<MultiSignatu
     }
 
     @Override
-    public CoreTransactionTypes getType() {
-        return CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION;
+    public int getType() {
+        return CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue();
     }
 
     @Override

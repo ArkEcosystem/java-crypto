@@ -23,8 +23,8 @@ public class Transfer extends AbstractTransaction<Transfer> {
     }
 
     @Override
-    public CoreTransactionTypes getType() {
-        return CoreTransactionTypes.TRANSFER;
+    public int getType() {
+        return CoreTransactionTypes.TRANSFER.getValue();
     }
 
     @Override

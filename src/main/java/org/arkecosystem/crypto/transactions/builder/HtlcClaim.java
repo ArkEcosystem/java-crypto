@@ -11,8 +11,8 @@ public class HtlcClaim extends AbstractTransaction<HtlcClaim> {
     }
 
     @Override
-    public CoreTransactionTypes getType() {
-        return CoreTransactionTypes.HTLC_CLAIM;
+    public int getType() {
+        return CoreTransactionTypes.HTLC_CLAIM.getValue();
     }
 
     @Override

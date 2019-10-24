@@ -27,8 +27,8 @@ public class HtlcLock extends AbstractTransaction<HtlcLock> {
     }
 
     @Override
-    public CoreTransactionTypes getType() {
-        return CoreTransactionTypes.HTLC_LOCK;
+    public int getType() {
+        return CoreTransactionTypes.HTLC_LOCK.getValue();
     }
 
     @Override

@@ -10,8 +10,8 @@ public class Ipfs extends AbstractTransaction<Ipfs> {
     }
 
     @Override
-    public CoreTransactionTypes getType() {
-        return CoreTransactionTypes.IPFS;
+    public int getType() {
+        return CoreTransactionTypes.IPFS.getValue();
     }
 
     @Override

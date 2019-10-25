@@ -5,8 +5,8 @@ import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 public class DelegateResignation extends AbstractTransaction<DelegateResignation> {
 
     @Override
-    public CoreTransactionTypes getType() {
-        return CoreTransactionTypes.DELEGATE_RESIGNATION;
+    public int getType() {
+        return CoreTransactionTypes.DELEGATE_RESIGNATION.getValue();
     }
 
     @Override

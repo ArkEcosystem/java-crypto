@@ -12,7 +12,7 @@ class FeeTest {
 
     @Test
     void get() {
-        long fee = Fee.getCoreFee(CoreTransactionTypes.TRANSFER);
+        long fee = Fee.getCoreFee(CoreTransactionTypes.TRANSFER.getValue());
         assertEquals(10_000_000, fee);
     }
 

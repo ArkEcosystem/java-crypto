@@ -20,8 +20,8 @@ public class Vote extends AbstractTransaction<Vote> {
     }
 
     @Override
-    public CoreTransactionTypes getType() {
-        return CoreTransactionTypes.VOTE;
+    public int getType() {
+        return CoreTransactionTypes.VOTE.getValue();
     }
 
     @Override

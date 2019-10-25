@@ -10,8 +10,8 @@ public class DelegateRegistration extends AbstractTransaction<DelegateRegistrati
     }
 
     @Override
-    public CoreTransactionTypes getType() {
-        return CoreTransactionTypes.DELEGATE_REGISTRATION;
+    public int getType() {
+        return CoreTransactionTypes.DELEGATE_REGISTRATION.getValue();
     }
 
     @Override

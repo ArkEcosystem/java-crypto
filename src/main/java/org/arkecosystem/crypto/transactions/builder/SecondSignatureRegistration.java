@@ -12,8 +12,8 @@ public class SecondSignatureRegistration extends AbstractTransaction<SecondSigna
     }
 
     @Override
-    public CoreTransactionTypes getType() {
-        return CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION;
+    public int getType() {
+        return CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue();
     }
 
     @Override

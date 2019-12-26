@@ -2,9 +2,9 @@ package org.arkecosystem.crypto.transactions.builder;
 
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 
-public class Ipfs extends AbstractTransaction<Ipfs> {
+public class Ipfs extends AbstractBuilder<Ipfs> {
 
-    public AbstractTransaction ipfsAsset(String ipfsId) {
+    public AbstractBuilder ipfsAsset(String ipfsId) {
         this.transaction.asset.ipfs = ipfsId;
         return this;
     }

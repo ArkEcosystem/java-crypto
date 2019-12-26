@@ -2,7 +2,7 @@ package org.arkecosystem.crypto.transactions.builder;
 
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 
-public class HtlcClaim extends AbstractTransaction<HtlcClaim> {
+public class HtlcClaim extends AbstractBuilder<HtlcClaim> {
 
     public HtlcClaim htlcClaimAsset(String lockTransactionId, String unlockSecret) {
         this.transaction.asset.htlcClaimAsset.lockTransactionId = lockTransactionId;

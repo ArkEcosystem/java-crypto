@@ -2,7 +2,7 @@ package org.arkecosystem.crypto.transactions.builder;
 
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 
-public class Transfer extends AbstractBuilder<Transfer> {
+public class Transfer extends AbstractTransactionBuilder<Transfer> {
 
     public Transfer recipient(String recipientId) {
         this.transaction.recipientId = recipientId;

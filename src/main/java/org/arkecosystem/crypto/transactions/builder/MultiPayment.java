@@ -3,7 +3,7 @@ package org.arkecosystem.crypto.transactions.builder;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
 
-public class MultiPayment extends AbstractBuilder<MultiPayment> {
+public class MultiPayment extends AbstractTransactionBuilder<MultiPayment> {
 
     public MultiPayment addPayment(String recipientId, long amount) {
         if (this.transaction.asset.multiPayment.payments.size() >= 2258) {

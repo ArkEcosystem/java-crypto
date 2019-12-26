@@ -4,7 +4,7 @@ import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.HtlcLockExpirationType;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
 
-public class HtlcLock extends AbstractBuilder<HtlcLock> {
+public class HtlcLock extends AbstractTransactionBuilder<HtlcLock> {
     public HtlcLock recipientId(String recipientId) {
         this.transaction.recipientId = recipientId;
         return this;

@@ -7,10 +7,10 @@ import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 import org.arkecosystem.crypto.transactions.Transaction;
 import org.arkecosystem.crypto.utils.Slot;
 
-public abstract class AbstractBuilder<TBuilder extends AbstractBuilder<TBuilder>> {
+public abstract class AbstractTransactionBuilder<TBuilder extends AbstractTransactionBuilder<TBuilder>> {
     public Transaction transaction;
 
-    public AbstractBuilder() {
+    public AbstractTransactionBuilder() {
         this.transaction = new Transaction();
         this.transaction.type = this.getType();
         this.transaction.fee = Fee.getCoreFee(this.getType());

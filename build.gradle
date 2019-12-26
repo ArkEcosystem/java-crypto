@@ -144,8 +144,6 @@ if(JavaVersion.current() == JavaVersion.VERSION_1_8){
             googleJavaFormat('1.1').aosp()
         }
     }
-}else{
-    throw new Exception("Spotless must be run with java 8")
 }
 
 task formatCode(dependsOn: ['licenseFormat','spotlessApply'])

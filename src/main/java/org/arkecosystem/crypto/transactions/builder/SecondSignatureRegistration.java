@@ -3,7 +3,8 @@ package org.arkecosystem.crypto.transactions.builder;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.identities.PublicKey;
 
-public class SecondSignatureRegistration extends AbstractTransactionBuilder<SecondSignatureRegistration> {
+public class SecondSignatureRegistration
+        extends AbstractTransactionBuilder<SecondSignatureRegistration> {
 
     public SecondSignatureRegistration signature(String signature) {
         this.transaction.asset.signature.publicKey = PublicKey.fromPassphrase(signature);

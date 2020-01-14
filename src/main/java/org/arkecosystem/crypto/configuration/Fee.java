@@ -40,9 +40,7 @@ public class Fee {
     }
 
     public static long getCoreFee(int type) {
-        return internalTransactionTypes
-                .get(TransactionTypeGroup.CORE.getValue())
-                .get(type);
+        return internalTransactionTypes.get(TransactionTypeGroup.CORE.getValue()).get(type);
     }
 
     public static void set(int transactionTypeGroup, Map<Integer, Long> transactionTypes) {

@@ -14,6 +14,12 @@ public class MultiPayment extends AbstractTransactionBuilder<MultiPayment> {
         return this;
     }
 
+    public MultiPayment vendorField(String vendorField) {
+        this.transaction.vendorField = vendorField;
+
+        return this;
+    }
+
     @Override
     public int getType() {
         return CoreTransactionTypes.MULTI_PAYMENT.getValue();

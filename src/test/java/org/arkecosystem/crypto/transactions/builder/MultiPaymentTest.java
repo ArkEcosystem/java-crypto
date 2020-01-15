@@ -12,6 +12,7 @@ public class MultiPaymentTest {
             .addPayment("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25",1)
             .addPayment("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25",2)
             .addPayment("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25",3)
+            .vendorField("This is a transaction from Java")
             .sign("this is a top secret passphrase")
             .transaction;
 
@@ -26,6 +27,7 @@ public class MultiPaymentTest {
             .addPayment("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25",1)
             .addPayment("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25",2)
             .addPayment("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25",3)
+            .vendorField("This is a transaction from Java")
             .sign("this is a top secret passphrase")
             .secondSign("this is a top secret second passphrase")
             .transaction;

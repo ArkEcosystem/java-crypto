@@ -143,6 +143,7 @@ wrapper {
         java {
             target fileTree(projectDir) {
                 include 'src/main/**/*.java'
+                include 'src/test/**/*.java'
                 exclude '**/build/**'
             }
             googleJavaFormat('1.1').aosp()
@@ -150,6 +151,6 @@ wrapper {
     }
 
 
-task formatCode(dependsOn: ['licenseFormat','spotlessApply'])
+task formatCode(dependsOn: ['spotlessApply'])
 
 build.dependsOn 'spotlessApply'

@@ -1,5 +1,7 @@
 package org.arkecosystem.crypto.transactions.deserializers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.google.gson.internal.LinkedTreeMap;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 import org.arkecosystem.crypto.transactions.Deserializer;
@@ -7,13 +9,12 @@ import org.arkecosystem.crypto.transactions.FixtureLoader;
 import org.arkecosystem.crypto.transactions.Transaction;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class IpfsTest {
 
     @Test
     void passphrase() {
-        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/V2/ipfs/passphrase");
+        LinkedTreeMap<String, Object> fixture =
+                FixtureLoader.load("transactions/V2/ipfs/passphrase");
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
@@ -31,7 +32,8 @@ public class IpfsTest {
 
     @Test
     void secondPassphrase() {
-        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/V2/ipfs/second-passphrase");
+        LinkedTreeMap<String, Object> fixture =
+                FixtureLoader.load("transactions/V2/ipfs/second-passphrase");
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());

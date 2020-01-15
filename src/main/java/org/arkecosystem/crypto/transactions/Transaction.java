@@ -7,6 +7,7 @@ import org.arkecosystem.crypto.enums.Types;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.core.SignatureDecodeException;
 
 import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
@@ -66,7 +67,11 @@ public class Transaction {
         byte[] signature = Hex.decode(this.signature);
         byte[] bytes = toBytes();
 
-        return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey());
+        try {
+            return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey());
+        } catch (SignatureDecodeException e) {
+            return false;
+        }
     }
 
     public boolean secondVerify(String secondPublicKey) {
@@ -75,7 +80,11 @@ public class Transaction {
         byte[] signature = Hex.decode(this.signSignature);
         byte[] bytes = toBytes(false);
 
-        return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey());
+        try {
+            return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey());
+        } catch (SignatureDecodeException e) {
+            return false;
+        }
     }
 
     public Transaction parseSignatures(String serialized, int startOffset) {

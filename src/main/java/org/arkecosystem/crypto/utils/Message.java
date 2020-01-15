@@ -5,6 +5,7 @@ import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.core.SignatureDecodeException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,11 @@ public class Message {
         byte[] signature = Hex.decode(this.signature);
         byte[] messageBytes = Sha256Hash.hash(this.message.getBytes());
 
-        return ECKey.verify(messageBytes, signature, keys.getPubKey());
+        try {
+            return ECKey.verify(messageBytes, signature, keys.getPubKey());
+        } catch (SignatureDecodeException e) {
+            return false;
+        }
     }
 
     public Map toMap() {

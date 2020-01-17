@@ -1,11 +1,11 @@
 package org.arkecosystem.crypto.configuration;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.arkecosystem.crypto.networks.INetwork;
 import org.arkecosystem.crypto.networks.Mainnet;
 import org.arkecosystem.crypto.networks.Testnet;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class NetworkTest {
 

@@ -87,6 +87,12 @@ uploadArchives {
                         organization = 'Ark Ecosystem'
                         organizationUrl = 'https://ark.io'
                     }
+                    developer {
+                        name = 'Kristjan Košič'
+                        email = 'kristjan@ark.io'
+                        organization = 'Ark Ecosystem'
+                        organizationUrl = 'https://ark.io'
+                    }
                 }
 
                 scm {
@@ -107,13 +113,12 @@ if (project.hasProperty("signing.keyId")) {
 }
 
 dependencies {
-    compile group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.14.7'
-    compile group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.62'
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
-    compile 'com.google.guava:guava:28.0-jre'
+    compile group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.15.6'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
+    compile 'com.google.guava:guava:28.2-jre'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
 }
 
 test {
@@ -138,6 +143,7 @@ wrapper {
         java {
             target fileTree(projectDir) {
                 include 'src/main/**/*.java'
+                include 'src/test/**/*.java'
                 exclude '**/build/**'
             }
             googleJavaFormat('1.1').aosp()
@@ -145,6 +151,6 @@ wrapper {
     }
 
 
-task formatCode(dependsOn: ['licenseFormat','spotlessApply'])
+task formatCode(dependsOn: ['spotlessApply'])
 
 build.dependsOn 'spotlessApply'

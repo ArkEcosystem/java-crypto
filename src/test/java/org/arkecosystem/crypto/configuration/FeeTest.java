@@ -1,12 +1,11 @@
 package org.arkecosystem.crypto.configuration;
 
-import org.arkecosystem.crypto.enums.CoreTransactionTypes;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
+import org.junit.jupiter.api.Test;
 
 class FeeTest {
 
@@ -20,8 +19,8 @@ class FeeTest {
     void set() {
         Map<Integer, Long> fees = new HashMap<>();
         fees.put(500, 1L);
-        Fee.set(1001,fees);
-        long fee = Fee.getFee(1001,500);
+        Fee.set(1001, fees);
+        long fee = Fee.getFee(1001, 500);
         assertEquals(1L, fee);
     }
 }

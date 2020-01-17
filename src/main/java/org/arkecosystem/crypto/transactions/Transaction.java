@@ -13,6 +13,7 @@ import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.core.SignatureDecodeException;
 
 public class Transaction {
     public int expiration;
@@ -69,7 +70,11 @@ public class Transaction {
         byte[] signature = Hex.decode(this.signature);
         byte[] bytes = this.toBytes(true, true);
 
-        return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey());
+        try {
+            return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey());
+        } catch (SignatureDecodeException e) {
+            return false;
+        }
     }
 
     public boolean secondVerify(String secondPublicKey) {
@@ -78,7 +83,11 @@ public class Transaction {
         byte[] signature = Hex.decode(this.signSignature);
         byte[] bytes = toBytes(false, true);
 
-        return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey());
+        try {
+            return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey());
+        } catch (SignatureDecodeException e) {
+            return false;
+        }
     }
 
     private byte[] toBytes(boolean skipSignature, boolean skipSecondSignature) {

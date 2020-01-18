@@ -1,8 +1,7 @@
 package org.arkecosystem.crypto.transactions.serializers;
 
-import org.arkecosystem.crypto.transactions.Transaction;
-
 import java.nio.ByteBuffer;
+import org.arkecosystem.crypto.transactions.Transaction;
 
 public abstract class AbstractSerializer {
     protected ByteBuffer buffer;
@@ -13,4 +12,5 @@ public abstract class AbstractSerializer {
         this.transaction = transaction;
     }
 
+    abstract void serialize();
 }

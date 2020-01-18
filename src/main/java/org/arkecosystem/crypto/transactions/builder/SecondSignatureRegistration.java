@@ -1,19 +1,24 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.encoding.Hex;
-import org.arkecosystem.crypto.enums.Types;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.identities.PublicKey;
 
-public class SecondSignatureRegistration extends AbstractTransaction {
+public class SecondSignatureRegistration
+        extends AbstractTransactionBuilder<SecondSignatureRegistration> {
 
     public SecondSignatureRegistration signature(String signature) {
-        this.transaction.asset.signature.publicKey = Hex.encode(PublicKey.fromPassphrase(signature).getBytes());
+        this.transaction.asset.signature.publicKey = PublicKey.fromPassphrase(signature);
 
         return this;
     }
 
-    public Types getType() {
-        return Types.SECOND_SIGNATURE_REGISTRATION;
+    @Override
+    public int getType() {
+        return CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue();
     }
 
+    @Override
+    public SecondSignatureRegistration instance() {
+        return this;
+    }
 }

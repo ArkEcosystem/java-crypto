@@ -1,3 +1,9 @@
+buildscript {
+    dependencies {
+        classpath "com.diffplug.spotless:spotless-plugin-gradle:3.27.1"
+    }
+}
+
 plugins {
     id 'java'
     id 'maven'
@@ -9,6 +15,7 @@ plugins {
 apply plugin:'java'
 apply plugin:'maven'
 apply plugin:'maven-publish'
+apply plugin: com.diffplug.gradle.spotless.SpotlessPlugin
 
 repositories {
     jcenter()
@@ -34,11 +41,11 @@ uploadArchives {
         mavenDeployer {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-             repository(url: "file://${buildDir}/repo") {}
+            repository(url: "file://${buildDir}/repo") {}
 
             //repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
-             // authentication(userName: '', password: '')
-        // }
+            // authentication(userName: '', password: '')
+            // }
 
             //   snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
             //      authentication(userName: ossrhUsername, password: ossrhPassword)
@@ -75,7 +82,13 @@ uploadArchives {
                         organizationUrl = 'https://ark.io'
                     }
                     developer {
-                        name = 'Kristjan Kosic'
+                        name = 'Žan Kovač'
+                        email = 'zan@ark.io'
+                        organization = 'Ark Ecosystem'
+                        organizationUrl = 'https://ark.io'
+                    }
+                    developer {
+                        name = 'Kristjan Košič'
                         email = 'kristjan@ark.io'
                         organization = 'Ark Ecosystem'
                         organizationUrl = 'https://ark.io'
@@ -124,5 +137,20 @@ jacocoTestReport {
 }
 
 wrapper {
-    gradleVersion = '4.9'
+    gradleVersion = '5.6.2'
 }
+    spotless {
+        java {
+            target fileTree(projectDir) {
+                include 'src/main/**/*.java'
+                include 'src/test/**/*.java'
+                exclude '**/build/**'
+            }
+            googleJavaFormat('1.1').aosp()
+        }
+    }
+
+
+task formatCode(dependsOn: ['spotlessApply'])
+
+build.dependsOn 'spotlessApply'

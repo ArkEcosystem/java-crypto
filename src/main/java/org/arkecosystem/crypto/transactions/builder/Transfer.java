@@ -1,17 +1,13 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.enums.Types;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 
-public class Transfer extends AbstractTransaction {
+public class Transfer extends AbstractTransactionBuilder<Transfer> {
 
     public Transfer recipient(String recipientId) {
         this.transaction.recipientId = recipientId;
 
         return this;
-    }
-
-    public Transfer amount(int amount) {
-        return this.amount((long) amount);
     }
 
     public Transfer amount(long amount) {
@@ -26,8 +22,13 @@ public class Transfer extends AbstractTransaction {
         return this;
     }
 
-    public Types getType() {
-        return Types.TRANSFER;
+    @Override
+    public int getType() {
+        return CoreTransactionTypes.TRANSFER.getValue();
     }
 
+    @Override
+    public Transfer instance() {
+        return this;
+    }
 }

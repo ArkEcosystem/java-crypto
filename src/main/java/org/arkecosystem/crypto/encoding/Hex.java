@@ -10,5 +10,4 @@ public class Hex {
     public static byte[] decode(String value) {
         return BaseEncoding.base16().lowerCase().decode(value);
     }
-
 }

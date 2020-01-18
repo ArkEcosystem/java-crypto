@@ -1,11 +1,10 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.enums.Types;
+import java.util.List;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.identities.Address;
 
-import java.util.List;
-
-public class Vote extends AbstractTransaction {
+public class Vote extends AbstractTransactionBuilder<Vote> {
     public Vote votes(List votes) {
         this.transaction.asset.votes = votes;
 
@@ -20,8 +19,13 @@ public class Vote extends AbstractTransaction {
         return this;
     }
 
-    public Types getType() {
-        return Types.VOTE;
+    @Override
+    public int getType() {
+        return CoreTransactionTypes.VOTE.getValue();
     }
 
+    @Override
+    public Vote instance() {
+        return this;
+    }
 }

@@ -1,16 +1,21 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.enums.Types;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 
-public class DelegateRegistration extends AbstractTransaction {
+public class DelegateRegistration extends AbstractTransactionBuilder<DelegateRegistration> {
     public DelegateRegistration username(String username) {
         this.transaction.asset.delegate.username = username;
 
         return this;
     }
 
-    public Types getType() {
-        return Types.DELEGATE_REGISTRATION;
+    @Override
+    public int getType() {
+        return CoreTransactionTypes.DELEGATE_REGISTRATION.getValue();
     }
 
+    @Override
+    public DelegateRegistration instance() {
+        return this;
+    }
 }

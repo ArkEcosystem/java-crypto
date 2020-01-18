@@ -1,8 +1,7 @@
 package org.arkecosystem.crypto.transactions.deserializers;
 
-import org.arkecosystem.crypto.transactions.Transaction;
-
 import java.nio.ByteBuffer;
+import org.arkecosystem.crypto.transactions.Transaction;
 
 public abstract class AbstractDeserializer {
 
@@ -16,4 +15,5 @@ public abstract class AbstractDeserializer {
         this.transaction = transaction;
     }
 
+    public abstract void deserialize(int assetOffset);
 }

@@ -12,6 +12,6 @@ public class HtlcClaim extends AbstractSerializer {
     @Override
     public void serialize() {
         this.buffer.put(Hex.decode(this.transaction.asset.htlcClaimAsset.lockTransactionId));
-        this.buffer.put(this.transaction.asset.htlcClaimAsset.unlockSecret.getBytes());
+        this.buffer.put(Hex.decode(this.transaction.asset.htlcClaimAsset.unlockSecret));
     }
 }

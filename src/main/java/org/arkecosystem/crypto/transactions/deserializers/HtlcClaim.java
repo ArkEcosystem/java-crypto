@@ -20,7 +20,7 @@ public class HtlcClaim extends AbstractDeserializer {
         this.buffer.get(unlockSecret);
 
         this.transaction.asset.htlcClaimAsset.lockTransactionId = Hex.encode(lockTransactionIdBuf);
-        this.transaction.asset.htlcClaimAsset.unlockSecret = new String(unlockSecret);
+        this.transaction.asset.htlcClaimAsset.unlockSecret = Hex.encode(unlockSecret);
 
         this.transaction.parseSignatures(this.serialized, assetOffset + 64 + 64);
     }

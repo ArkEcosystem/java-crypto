@@ -14,7 +14,7 @@ public class MultiPayment extends AbstractDeserializer {
     public void deserialize(int assetOffset) {
         this.buffer.position(assetOffset / 2);
 
-        int paymentLength = this.buffer.getInt() & 0xff;
+        int paymentLength = this.buffer.getShort() & 0xff;
         for (int i = 0; i < paymentLength; i++) {
             byte[] recipientId = new byte[21];
             long amount = this.buffer.getLong();
@@ -24,6 +24,6 @@ public class MultiPayment extends AbstractDeserializer {
         }
 
         this.transaction.parseSignatures(
-                this.serialized, assetOffset + ((4 + paymentLength * 8 + paymentLength * 21) * 2));
+                this.serialized, assetOffset + ((2 + paymentLength * 8 + paymentLength * 21) * 2));
     }
 }

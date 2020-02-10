@@ -2,5 +2,30 @@
 .gradle
 .idea/
 .tags
-build
+.project
+/build/
 out/
+bin/
+.settings
+.classpath
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+gen/
+idea-gitignore.jar
+resources/templates.list
+resources/gitignore/*
+build/
+build.properties
+junit*.properties
+IgnoreLexer.java~
+.DS_Store
+
+/verification

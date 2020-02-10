@@ -14,7 +14,7 @@ public class HtlcRefundTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/V2/htlc-refund/passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/htlc-refund-sign");
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
@@ -37,7 +37,7 @@ public class HtlcRefundTest {
     @Test
     void secondPassphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/V2/htlc-refund/second-passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/htlc-refund-secondSign");
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());

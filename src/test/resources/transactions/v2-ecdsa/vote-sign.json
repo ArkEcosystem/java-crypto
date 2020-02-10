@@ -1,0 +1,20 @@
+{
+    "data": {
+        "version": 2,
+        "network": 23,
+        "typeGroup": 1,
+        "type": 3,
+        "nonce": "1",
+        "senderPublicKey": "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192",
+        "fee": "100000000",
+        "amount": "0",
+        "asset": {
+            "votes": [
+                "+022cca9529ec97a772156c152a00aad155ee6708243e65c9d211a589cb5d43234d"
+            ]
+        },
+        "signature": "304402206a7a9baa573ab08bb4220450ace0d73ac9c768ef38b07a82ca19b2e2f11d0b550220665938431da66ad0b49e2267d65b220c59a35e1fea50083d45560a544f077eb6",
+        "id": "b8dce941db9d3b04a7afd142fc26e40ecc73f2865fbc84597dca9b907f9791f6"
+    },
+    "serialized": "ff02170100000003000100000000000000034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed19200e1f50500000000000101022cca9529ec97a772156c152a00aad155ee6708243e65c9d211a589cb5d43234d304402206a7a9baa573ab08bb4220450ace0d73ac9c768ef38b07a82ca19b2e2f11d0b550220665938431da66ad0b49e2267d65b220c59a35e1fea50083d45560a544f077eb6"
+}

@@ -13,7 +13,7 @@ public class HtlcLockTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/V2/htlc-lock/passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/htlc-lock-sign");
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
@@ -44,7 +44,7 @@ public class HtlcLockTest {
     @Test
     void secondPassphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/V2/htlc-lock/second-passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/htlc-lock-secondSign");
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());

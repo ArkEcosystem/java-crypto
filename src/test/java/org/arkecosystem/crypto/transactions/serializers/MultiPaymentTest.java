@@ -15,10 +15,11 @@ public class MultiPaymentTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/V2/multi_payment/passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/multi-payment-sign");
 
         Transaction transaction =
                 new Deserializer().deserialize(fixture.get("serialized").toString());
+        System.out.println(transaction.toJson());
         String actual = Hex.encode(new Serializer().serialize(transaction));
 
         assertEquals(fixture.get("serialized").toString(), actual);
@@ -27,7 +28,7 @@ public class MultiPaymentTest {
     @Test
     void secondPassphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/V2/multi_payment/second-passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/multi-payment-secondSign");
 
         Transaction transaction =
                 new Deserializer().deserialize(fixture.get("serialized").toString());

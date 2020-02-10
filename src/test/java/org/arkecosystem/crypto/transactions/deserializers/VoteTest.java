@@ -36,7 +36,7 @@ class VoteTest {
 
         // V2 tests
         LinkedTreeMap<String, Object> fixtureV2 =
-                FixtureLoader.load("transactions/V2/vote/passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/vote-sign");
         LinkedTreeMap<String, Object> dataV2 =
                 (LinkedTreeMap<String, Object>) fixtureV2.get("data");
 
@@ -82,7 +82,7 @@ class VoteTest {
 
         // V2 tests
         LinkedTreeMap<String, Object> fixtureV2 =
-                FixtureLoader.load("transactions/V2/vote/second-passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/vote-secondSign");
         LinkedTreeMap<String, Object> dataV2 =
                 (LinkedTreeMap<String, Object>) fixtureV2.get("data");
 

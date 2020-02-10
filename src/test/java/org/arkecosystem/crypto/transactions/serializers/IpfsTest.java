@@ -15,7 +15,7 @@ public class IpfsTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/V2/ipfs/passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/ipfs-sign");
 
         Transaction transaction =
                 new Deserializer().deserialize(fixture.get("serialized").toString());
@@ -27,7 +27,7 @@ public class IpfsTest {
     @Test
     void secondPassphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/V2/ipfs/second-passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/ipfs-secondSign");
 
         Transaction transaction =
                 new Deserializer().deserialize(fixture.get("serialized").toString());

@@ -26,7 +26,7 @@ class VoteTest {
 
         // V2 tests
         LinkedTreeMap<String, Object> fixtureV2 =
-                FixtureLoader.load("transactions/V2/vote/passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/vote-sign");
 
         Transaction transactionV2 =
                 new Deserializer().deserialize(fixtureV2.get("serialized").toString());
@@ -49,7 +49,7 @@ class VoteTest {
 
         // V2 tests
         LinkedTreeMap<String, Object> fixtureV2 =
-                FixtureLoader.load("transactions/V2/vote/second-passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/vote-secondSign");
 
         Transaction transactionV2 =
                 new Deserializer().deserialize(fixtureV2.get("serialized").toString());

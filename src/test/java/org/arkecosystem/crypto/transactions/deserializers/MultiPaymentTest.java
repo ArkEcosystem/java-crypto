@@ -14,7 +14,7 @@ public class MultiPaymentTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/V2/multi_payment/passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/multi-payment-sign");
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
@@ -41,7 +41,7 @@ public class MultiPaymentTest {
     @Test
     void secondPassphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/V2/multi_payment/second-passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/multi-payment-secondSign");
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
         Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());

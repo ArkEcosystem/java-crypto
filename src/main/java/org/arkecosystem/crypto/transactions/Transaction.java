@@ -98,6 +98,7 @@ public class Transaction {
         }
     }
 
+    @Deprecated
     public Transaction parseSignatures(String serialized, int startOffset) {
         this.signature = serialized.substring(startOffset);
         int multiSignatureOffset = 0;

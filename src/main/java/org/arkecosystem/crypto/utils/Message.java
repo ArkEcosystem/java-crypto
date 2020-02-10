@@ -24,9 +24,7 @@ public class Message {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
         Sha256Hash messageBytes = Sha256Hash.of(message.getBytes());
 
-        return new Message(
-                privateKey.getPublicKeyAsHex(),
-                Hex.encode(privateKey.sign(messageBytes).encodeToDER()),
+        return new Message(privateKey.getPublicKeyAsHex(), Hex.encode(privateKey.sign(messageBytes).encodeToDER()),
                 message);
     }
 

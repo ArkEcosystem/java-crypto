@@ -142,8 +142,7 @@ public class TransferTest {
 
         // V2 tests
         LinkedTreeMap<String, Object> fixtureV2 =
-                FixtureLoader.load(
-                        "transactions/v2-ecdsa/transfer-with-vendor-field-secondSign");
+                FixtureLoader.load("transactions/v2-ecdsa/transfer-with-vendor-field-secondSign");
 
         Transaction transactionV2 =
                 new Deserializer().deserialize(fixtureV2.get("serialized").toString());

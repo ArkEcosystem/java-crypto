@@ -49,7 +49,8 @@ public class Transaction {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
 
         this.senderPublicKey = privateKey.getPublicKeyAsHex();
-        this.signature = Hex.encode(privateKey.sign(Sha256Hash.of(toBytes(true, true))).encodeToDER());
+        this.signature =
+                Hex.encode(privateKey.sign(Sha256Hash.of(toBytes(true, true))).encodeToDER());
 
         return this;
     }
@@ -57,7 +58,8 @@ public class Transaction {
     public Transaction secondSign(String passphrase) {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
 
-        this.signSignature = Hex.encode(privateKey.sign(Sha256Hash.of(toBytes(false, true))).encodeToDER());
+        this.signSignature =
+                Hex.encode(privateKey.sign(Sha256Hash.of(toBytes(false, true))).encodeToDER());
 
         return this;
     }
@@ -114,8 +116,10 @@ public class Transaction {
                 if ("ff".equals(this.secondSignature.substring(0, 2))) {
                     this.secondSignature = null;
                 } else {
-                    int secondSignatureLength = Integer.parseInt(this.secondSignature.substring(2, 4), 16) + 2;
-                    this.secondSignature = this.secondSignature.substring(0, secondSignatureLength * 2);
+                    int secondSignatureLength =
+                            Integer.parseInt(this.secondSignature.substring(2, 4), 16) + 2;
+                    this.secondSignature =
+                            this.secondSignature.substring(0, secondSignatureLength * 2);
                     multiSignatureOffset += secondSignatureLength * 2;
                 }
             }
@@ -161,8 +165,10 @@ public class Transaction {
         buffer.putInt(timestamp);
         buffer.put(Hex.decode(this.senderPublicKey));
 
-        boolean skipRecipientId = this.type == CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue()
-                || this.type == CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue();
+        boolean skipRecipientId =
+                this.type == CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue()
+                        || this.type
+                                == CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue();
         if (recipientId != null && !recipientId.isEmpty() && !skipRecipientId) {
             buffer.put(Base58.decodeChecked(this.recipientId));
         } else {
@@ -291,9 +297,11 @@ public class Transaction {
         return map;
     }
 
-    private static class TransactionTypeDeserializer implements JsonDeserializer<CoreTransactionTypes> {
+    private static class TransactionTypeDeserializer
+            implements JsonDeserializer<CoreTransactionTypes> {
         @Override
-        public CoreTransactionTypes deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+        public CoreTransactionTypes deserialize(
+                JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
             return CoreTransactionTypes.values()[json.getAsInt()];
         }
@@ -301,7 +309,8 @@ public class Transaction {
 
     private static class TransactionTypeSerializer implements JsonSerializer<CoreTransactionTypes> {
         @Override
-        public JsonElement serialize(CoreTransactionTypes src, Type typeOfSrc, JsonSerializationContext context) {
+        public JsonElement serialize(
+                CoreTransactionTypes src, Type typeOfSrc, JsonSerializationContext context) {
             return new JsonPrimitive(src.getValue());
         }
     }

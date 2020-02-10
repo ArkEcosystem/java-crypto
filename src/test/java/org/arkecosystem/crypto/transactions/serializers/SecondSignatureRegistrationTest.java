@@ -14,20 +14,9 @@ class SecondSignatureRegistrationTest {
 
     @Test
     void passphrase() {
-        // V1 tests
-        LinkedTreeMap<String, Object> fixtureV1 =
-                FixtureLoader.load(
-                        "transactions/V1/second_signature_registration/second-passphrase");
-
-        Transaction transactionV1 =
-                new Deserializer().deserialize(fixtureV1.get("serialized").toString());
-        String actualV1 = Hex.encode(new Serializer().serialize(transactionV1));
-
-        assertEquals(fixtureV1.get("serialized").toString(), actualV1);
-
         // V2 tests
         LinkedTreeMap<String, Object> fixtureV2 =
-                FixtureLoader.load("transactions/V2/second_signature_registration/passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/second-signature-registration");
 
         Transaction transactionV2 =
                 new Deserializer().deserialize(fixtureV2.get("serialized").toString());

@@ -176,6 +176,4 @@ class TransferTest {
         assertEquals(dataV2.get("secondSignature").toString(), actualV2.secondSignature);
         assertEquals(dataV2.get("vendorField").toString(), actualV2.vendorField);
     }
-
-
 }

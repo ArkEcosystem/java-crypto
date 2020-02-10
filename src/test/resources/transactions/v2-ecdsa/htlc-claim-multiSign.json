@@ -1,0 +1,21 @@
+{
+    "data": {
+        "version": 2,
+        "network": 23,
+        "typeGroup": 1,
+        "type": 9,
+        "nonce": "1",
+        "senderPublicKey": "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192",
+        "fee": "0",
+        "amount": "0",
+        "asset": {
+            "claim": {
+                "lockTransactionId": "9c1a3815d49e0c9f78b872bfb017e825ea2db708158b70815526a830c85912b4",
+                "unlockSecret": "c27f1ce845d8c29eebc9006be932b604fd06755521b1a8b0be4204c65377151a"
+            }
+        },
+        "signature": "3045022100f4115db125d14edd248b39459ae8a6d112f8d9cdbcf69da03dce597c048d99260220069d4a07229684f91b492979f0050400c323eb4096f586dedc101f0f5a3ac476",
+        "id": "fd6eb162c34dadcd66a5e86ce534a1df946b8fa4291ed17c085b252dafbdf30b"
+    },
+    "serialized": "ff02170100000009000100000000000000034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed1920000000000000000009c1a3815d49e0c9f78b872bfb017e825ea2db708158b70815526a830c85912b4c27f1ce845d8c29eebc9006be932b604fd06755521b1a8b0be4204c65377151a3045022100f4115db125d14edd248b39459ae8a6d112f8d9cdbcf69da03dce597c048d99260220069d4a07229684f91b492979f0050400c323eb4096f586dedc101f0f5a3ac476"
+}

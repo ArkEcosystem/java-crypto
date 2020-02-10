@@ -15,7 +15,7 @@ public class HtlcClaimTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/V2/htlc-claim/passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/htlc-claim-sign");
 
         Transaction transaction =
                 new Deserializer().deserialize(fixture.get("serialized").toString());
@@ -26,7 +26,7 @@ public class HtlcClaimTest {
     @Test
     void secondPassphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/V2/htlc-claim/second-passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/htlc-claim-secondSign");
 
         Transaction transaction =
                 new Deserializer().deserialize(fixture.get("serialized").toString());

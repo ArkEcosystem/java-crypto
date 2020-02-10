@@ -15,7 +15,7 @@ public class DelegateResignationTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/V2/delegate_resignation/passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/delegate-resignation-sign");
 
         Transaction transaction =
                 new Deserializer().deserialize(fixture.get("serialized").toString());
@@ -27,7 +27,7 @@ public class DelegateResignationTest {
     @Test
     void secondPassphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/V2/delegate_resignation/second-passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/delegate-resignation-secondSign");
 
         Transaction transaction =
                 new Deserializer().deserialize(fixture.get("serialized").toString());

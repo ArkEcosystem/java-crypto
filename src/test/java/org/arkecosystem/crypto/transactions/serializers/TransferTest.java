@@ -26,7 +26,7 @@ public class TransferTest {
 
         // V2 tests
         LinkedTreeMap<String, Object> fixtureV2 =
-                FixtureLoader.load("transactions/V2/transfer/passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/transfer-sign");
 
         Transaction transaction2 =
                 new Deserializer().deserialize(fixtureV2.get("serialized").toString());
@@ -49,7 +49,7 @@ public class TransferTest {
 
         // V2 tests
         LinkedTreeMap<String, Object> fixtureV2 =
-                FixtureLoader.load("transactions/V2/transfer/passphrase-with-vendor-field");
+                FixtureLoader.load("transactions/v2-ecdsa/transfer-with-vendor-field-sign");
 
         Transaction transactionV2 =
                 new Deserializer().deserialize(fixtureV2.get("serialized").toString());
@@ -72,7 +72,7 @@ public class TransferTest {
 
         // V2 tests
         LinkedTreeMap<String, Object> fixtureV2 =
-                FixtureLoader.load("transactions/V2/transfer/passphrase-with-vendor-field-hex");
+                FixtureLoader.load("transactions/v2-ecdsa/transfer-with-vendor-field-sign");
 
         Transaction transactionV2 =
                 new Deserializer().deserialize(fixtureV2.get("serialized").toString());
@@ -95,7 +95,7 @@ public class TransferTest {
 
         // V2 tests
         LinkedTreeMap<String, Object> fixtureV2 =
-                FixtureLoader.load("transactions/V2/transfer/second-passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/transfer-with-vendor-field-secondSign");
 
         Transaction transactionV2 =
                 new Deserializer().deserialize(fixtureV2.get("serialized").toString());
@@ -118,7 +118,7 @@ public class TransferTest {
 
         // V2 tests
         LinkedTreeMap<String, Object> fixtureV2 =
-                FixtureLoader.load("transactions/V2/transfer/second-passphrase-with-vendor-field");
+                FixtureLoader.load("transactions/v2-ecdsa/transfer-with-vendor-field-secondSign");
 
         Transaction transactionV2 =
                 new Deserializer().deserialize(fixtureV2.get("serialized").toString());
@@ -143,7 +143,7 @@ public class TransferTest {
         // V2 tests
         LinkedTreeMap<String, Object> fixtureV2 =
                 FixtureLoader.load(
-                        "transactions/V2/transfer/second-passphrase-with-vendor-field-hex");
+                        "transactions/v2-ecdsa/transfer-with-vendor-field-secondSign");
 
         Transaction transactionV2 =
                 new Deserializer().deserialize(fixtureV2.get("serialized").toString());

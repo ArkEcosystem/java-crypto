@@ -36,7 +36,7 @@ class DelegateRegistrationTest {
 
         // V2 tests
         LinkedTreeMap<String, Object> fixtureV2 =
-                FixtureLoader.load("transactions/V2/delegate_registration/passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/delegate-registration-sign");
         LinkedTreeMap<String, Object> dataV2 =
                 (LinkedTreeMap<String, Object>) fixtureV2.get("data");
 
@@ -82,7 +82,7 @@ class DelegateRegistrationTest {
 
         // V2 tests
         LinkedTreeMap<String, Object> fixtureV2 =
-                FixtureLoader.load("transactions/V2/delegate_registration/second-passphrase");
+                FixtureLoader.load("transactions/v2-ecdsa/delegate-registration-secondSign");
         LinkedTreeMap<String, Object> dataV2 =
                 (LinkedTreeMap<String, Object>) fixtureV2.get("data");
 

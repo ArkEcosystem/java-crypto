@@ -33,7 +33,8 @@ public class MultiPaymentTest {
                         .addPayment("D88ZXZ5MaeZFA6xrJPSgJ92qWVWY1462dD", 3)
                         .vendorField("Zan Vendor Field arghhh")
                         .nonce(2)
-                        .sign("nurse organ hub theory mad strike desert add heavy deposit immune inform")
+                        .sign(
+                                "nurse organ hub theory mad strike desert add heavy deposit immune inform")
                         .transaction;
 
         System.out.println(actual.toJson());
@@ -45,12 +46,12 @@ public class MultiPaymentTest {
     void buildTestnet() {
         Network.set(new Testnet());
         Transaction actual =
-            new MultiPayment()
-                .addPayment("AHXtmB84sTZ9Zd35h9Y1vfFvPE2Xzqj8ri", 1)
-                .addPayment("AZFEPTWnn2Sn8wDZgCRF8ohwKkrmk2AZi1", 2)
-                .nonce(1)
-                .sign("this is a top secret passphrase")
-                .transaction;
+                new MultiPayment()
+                        .addPayment("AHXtmB84sTZ9Zd35h9Y1vfFvPE2Xzqj8ri", 1)
+                        .addPayment("AZFEPTWnn2Sn8wDZgCRF8ohwKkrmk2AZi1", 2)
+                        .nonce(1)
+                        .sign("this is a top secret passphrase")
+                        .transaction;
 
         System.out.println(actual.toJson());
         System.out.println(actual.serialize());

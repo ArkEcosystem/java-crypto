@@ -235,7 +235,7 @@ public class Transaction {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("network", this.network);
         map.put("id", this.id);
-         map.put("amount", String.valueOf(this.amount));
+        map.put("amount", String.valueOf(this.amount));
         map.put("fee", String.valueOf(this.fee));
         map.put("recipientId", this.recipientId);
         map.put("signature", this.signature);

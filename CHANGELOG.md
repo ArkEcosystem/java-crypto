@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## 1.0.0 - 2020-02-11
+
+### Changed
+- Upgrade Dependencies
+
+### Added
+- Add Support for new Core v2.6 Transaction Types
+
 ## 0.1.6 - 2019-10-15
 
 ### Changed

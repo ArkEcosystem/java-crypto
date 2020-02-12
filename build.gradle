@@ -66,7 +66,7 @@ uploadArchives {
 
             pom.project {
                 groupId = 'org.arkecosystem'
-                version = '0.1.6'
+                version = '1.0.0'
                 artifactId = 'crypto'
 
                 name = 'java-crypto'
@@ -111,7 +111,7 @@ uploadArchives {
                 scm {
                     connection = 'scm:git:git://github.com/ArkEcosystem/java-crypto.git'
                     developerConnection = 'scm:git:ssh://github.com:ArkEcosystem/java-crypto.git'
-                    url = 'https://github.com/ArkEcosystem/java-crypto/tree/0.1.6'
+                    url = 'https://github.com/ArkEcosystem/java-crypto/tree/1.0.0'
                 }
             }
         }

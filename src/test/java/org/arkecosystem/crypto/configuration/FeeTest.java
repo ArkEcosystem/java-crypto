@@ -1,22 +1,26 @@
 package org.arkecosystem.crypto.configuration;
 
-import org.arkecosystem.crypto.enums.Types;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.HashMap;
+import java.util.Map;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
+import org.junit.jupiter.api.Test;
 
 class FeeTest {
 
     @Test
     void get() {
-        long fee = Fee.get(Types.TRANSFER);
+        long fee = Fee.getCoreFee(CoreTransactionTypes.TRANSFER.getValue());
         assertEquals(10_000_000, fee);
     }
 
     @Test
     void set() {
-        Fee.set(Types.TRANSFER, 20_000_000L);
-        long fee = Fee.get(Types.TRANSFER);
-        assertEquals(20_000_000, fee);
+        Map<Integer, Long> fees = new HashMap<>();
+        fees.put(500, 1L);
+        Fee.set(1001, fees);
+        long fee = Fee.getFee(1001, 500);
+        assertEquals(1L, fee);
     }
 }

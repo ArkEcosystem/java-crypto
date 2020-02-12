@@ -7,5 +7,4 @@ public interface INetwork {
     int wif();
 
     String epoch();
-
 }

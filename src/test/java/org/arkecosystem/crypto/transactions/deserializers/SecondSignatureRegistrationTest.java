@@ -1,32 +1,39 @@
 package org.arkecosystem.crypto.transactions.deserializers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.google.gson.internal.LinkedTreeMap;
+import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 import org.arkecosystem.crypto.transactions.Deserializer;
 import org.arkecosystem.crypto.transactions.FixtureLoader;
 import org.arkecosystem.crypto.transactions.Transaction;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 class SecondSignatureRegistrationTest {
 
     @Test
     void passphrase() {
-        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/second_signature_registration/second-passphrase");
-        LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
+        LinkedTreeMap<String, Object> fixtureV2 =
+                FixtureLoader.load("transactions/v2-ecdsa/second-signature-registration");
+        LinkedTreeMap<String, Object> dataV2 =
+                (LinkedTreeMap<String, Object>) fixtureV2.get("data");
 
-        Transaction actual = new Deserializer().deserialize(fixture.get("serialized").toString());
-        assertEquals(((Double) data.get("type")).intValue(), actual.type.getValue());
-        assertEquals(((Double) data.get("amount")).longValue(), actual.amount);
-        assertEquals(((Double) data.get("fee")).longValue(), actual.fee);
-        assertEquals(((Double) data.get("timestamp")).intValue(), actual.timestamp);
-        assertEquals(data.get("senderPublicKey").toString(), actual.senderPublicKey);
-        assertEquals(data.get("signature").toString(), actual.signature);
+        Transaction actualV2 =
+                new Deserializer().deserialize(fixtureV2.get("serialized").toString());
 
-        LinkedTreeMap<String, Object> asset = (LinkedTreeMap<String, Object>) ((LinkedTreeMap<String, Object>) data.get("asset")).get("signature");
-        assertEquals((asset.get("publicKey")), actual.asset.signature.publicKey);
+        assertEquals(((Double) dataV2.get("type")).intValue(), actualV2.type);
+        assertEquals(TransactionTypeGroup.CORE.getValue(), actualV2.typeGroup);
+        assertEquals((Long.valueOf((String) dataV2.get("fee"))), actualV2.fee);
+        assertEquals((Long.valueOf((String) dataV2.get("nonce"))), actualV2.nonce);
+        assertEquals(dataV2.get("senderPublicKey").toString(), actualV2.senderPublicKey);
+        assertEquals(dataV2.get("signature").toString(), actualV2.signature);
+        assertEquals(dataV2.get("id").toString(), actualV2.id);
 
-        assertEquals(data.get("id").toString(), actual.id);
+        LinkedTreeMap<String, Object> assetV2 =
+                (LinkedTreeMap<String, Object>)
+                        ((LinkedTreeMap<String, Object>) dataV2.get("asset")).get("signature");
+        assertEquals((assetV2.get("publicKey")), actualV2.asset.signature.publicKey);
+
+        assertEquals(dataV2.get("id").toString(), actualV2.id);
     }
-
 }

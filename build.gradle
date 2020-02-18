@@ -1,129 +1,44 @@
-buildscript {
-    dependencies {
-        classpath "com.diffplug.spotless:spotless-plugin-gradle:3.27.1"
-    }
-}
-
 plugins {
     id 'java'
-    id 'maven'
     id 'maven-publish'
-    id 'signing'
     id 'jacoco'
+    id 'com.diffplug.gradle.spotless' version '3.27.1'
 }
-
-apply plugin:'java'
-apply plugin:'maven'
-apply plugin:'maven-publish'
-apply plugin: com.diffplug.gradle.spotless.SpotlessPlugin
 
 repositories {
     jcenter()
     mavenCentral()
 }
 
-task fatJar(type: Jar) {
-    manifest.from jar.manifest
-    classifier = 'standalone'
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    } {
-        exclude "META-INF/*.SF"
-        exclude "META-INF/*.DSA"
-        exclude "META-INF/*.RSA"
-    }
-    with jar
-}
+group = 'org.arkecosystem'
+version = '1.0.1'
 
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives javadocJar, sourcesJar
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            repository(url: "file://${buildDir}/repo") {}
-
-            //repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
-            // authentication(userName: '', password: '')
-            // }
-
-            //   snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-            //      authentication(userName: ossrhUsername, password: ossrhPassword)
-            //  }
-
-            pom.project {
-                groupId = 'org.arkecosystem'
-                version = '1.0.0'
-                artifactId = 'crypto'
-
-                name = 'java-crypto'
-                description = 'A simple Cryptography Implementation in Java for the Ark Blockchain.'
-                url = 'https://github.com/ArkEcosystem/java-crypto'
-                inceptionYear = '2018'
-
-                licenses {
-                    license {
-                        name = 'MIT'
-                        distribution = 'repo'
-                    }
-                }
-
-                developers {
-                    developer {
-                        name = 'Brian Faust'
-                        email = 'brian@ark.io'
-                        organization = 'Ark Ecosystem'
-                        organizationUrl = 'https://ark.io'
-                    }
-                    developer {
-                        name = 'Joshua Noack'
-                        email = 'joshua@ark.io'
-                        organization = 'Ark Ecosystem'
-                        organizationUrl = 'https://ark.io'
-                    }
-                    developer {
-                        name = 'Kristjan Kosic'
-                        email = 'kristjan@ark.io'
-                        organization = 'Ark Ecosystem'
-                        organizationUrl = 'https://ark.io'
-                    }
-                    developer {
-                        name = 'Zan Kovac'
-                        email = 'zan@ark.io'
-                        organization = 'Ark Ecosystem'
-                        organizationUrl = 'https://ark.io'
-                    }
-                }
-
-                scm {
-                    connection = 'scm:git:git://github.com/ArkEcosystem/java-crypto.git'
-                    developerConnection = 'scm:git:ssh://github.com:ArkEcosystem/java-crypto.git'
-                    url = 'https://github.com/ArkEcosystem/java-crypto/tree/1.0.0'
+publishing {
+    publishing {
+        repositories {
+            maven {
+                name = "github"
+                url = uri("https://maven.pkg.github.com/arkecosystem/java-crypto")
+                credentials {
+                    username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                    password = project.findProperty("gpr.key") ?: System.getenv("PASSWORD")
                 }
             }
+        }
+        publications {
+            gpr(MavenPublication) {
+                from(components.java)
+            }
+        }
+    }
+
+    javadoc {
+        if (JavaVersion.current().isJava9Compatible()) {
+            options.addBooleanOption('html5', true)
         }
     }
 }
 
-if (project.hasProperty("signing.keyId")) {
-    apply plugin: 'signing'
-    signing {
-        sign configurations.archives
-    }
-}
 
 dependencies {
     compile group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.15.6'
@@ -150,20 +65,43 @@ jacocoTestReport {
 }
 
 wrapper {
-    gradleVersion = '5.6.2'
+    gradleVersion = '6.2.0'
 }
-    spotless {
-        java {
-            target fileTree(projectDir) {
-                include 'src/main/**/*.java'
-                include 'src/test/**/*.java'
-                exclude '**/build/**'
-            }
-            googleJavaFormat('1.1').aosp()
-        }
-    }
 
+spotless {
+    java {
+        target fileTree(projectDir) {
+            include 'src/main/**/*.java'
+            include 'src/test/**/*.java'
+            exclude '**/build/**'
+        }
+        googleJavaFormat('1.1').aosp()
+    }
+}
 
 task formatCode(dependsOn: ['spotlessApply'])
+
+task fatJar(type: Jar) {
+    manifest.from jar.manifest
+    classifier = 'standalone'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+    with jar
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
 
 build.dependsOn 'spotlessApply'

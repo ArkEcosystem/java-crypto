@@ -2,6 +2,8 @@ package org.arkecosystem.crypto.transactions;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
+import org.arkecosystem.crypto.transactions.types.Transaction;
+
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;

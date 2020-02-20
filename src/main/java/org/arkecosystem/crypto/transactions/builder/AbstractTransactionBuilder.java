@@ -3,22 +3,19 @@ package org.arkecosystem.crypto.transactions.builder;
 import org.arkecosystem.crypto.configuration.Fee;
 import org.arkecosystem.crypto.configuration.Network;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
-import org.arkecosystem.crypto.enums.TransactionTypeGroup;
-import org.arkecosystem.crypto.transactions.Transaction;
-import org.arkecosystem.crypto.utils.Slot;
+import org.arkecosystem.crypto.transactions.types.Transaction;
 
 public abstract class AbstractTransactionBuilder<
         TBuilder extends AbstractTransactionBuilder<TBuilder>> {
     public Transaction transaction;
 
     public AbstractTransactionBuilder() {
-        this.transaction = new Transaction();
-        this.transaction.type = this.getType();
-        this.transaction.fee = Fee.getCoreFee(this.getType());
-        this.transaction.timestamp = Slot.time();
+        this.transaction = getTransactionInstance();
+        this.transaction.type = this.transaction.getTransactionType();
+        this.transaction.fee = Fee.getCoreFee(this.transaction.getTransactionType());
         this.transaction.version = 2;
         this.transaction.network = Network.get().version();
-        this.transaction.typeGroup = TransactionTypeGroup.CORE.getValue();
+        this.transaction.typeGroup = this.transaction.getTransactionTypeGroup();
         this.transaction.nonce = 0;
     }
 
@@ -43,7 +40,7 @@ public abstract class AbstractTransactionBuilder<
 
     public TBuilder secondSign(String passphrase) {
         this.transaction.secondSign(passphrase);
-        this.transaction.id = this.transaction.computeId();
+        this.transaction.id = this.transaction.getId();
 
         return this.instance();
     }
@@ -70,12 +67,12 @@ public abstract class AbstractTransactionBuilder<
                     "Version 2 MultiSignatureRegistration is not supported in java sdk");
         }
         this.transaction.sign(passphrase);
-        this.transaction.id = this.transaction.computeId();
+        this.transaction.id = this.transaction.getId();
 
         return this.instance();
     }
 
-    abstract int getType();
+    public abstract Transaction getTransactionInstance();
 
     abstract TBuilder instance();
 }

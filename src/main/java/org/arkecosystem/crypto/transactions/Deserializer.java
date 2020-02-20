@@ -62,12 +62,11 @@ public class Deserializer {
     }
 
     private void deserializeVendorField() {
-        // TODO check if deser is correct
         int vendorFieldLength = this.buffer.get();
         if (vendorFieldLength > 0) {
-            byte[] vendorFieldHex = new byte[vendorFieldLength];
-            this.buffer.get(vendorFieldHex);
-            transaction.vendorFieldHex = Hex.encode(vendorFieldHex);
+            byte[] vendorField = new byte[vendorFieldLength];
+            this.buffer.get(vendorField);
+            transaction.vendorField = new String(vendorField);
         }
     }
 

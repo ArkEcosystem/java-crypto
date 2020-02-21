@@ -24,6 +24,8 @@ public class Deserializer {
         this.transactionsClasses.put(CoreTransactionTypes.IPFS.getValue(), new Ipfs());
         this.transactionsClasses.put(
                 CoreTransactionTypes.MULTI_PAYMENT.getValue(), new MultiPayment());
+        this.transactionsClasses.put(CoreTransactionTypes.HTLC_LOCK.getValue(), new HtlcLock());
+        this.transactionsClasses.put(CoreTransactionTypes.HTLC_CLAIM.getValue(), new HtlcClaim());
         this.transactionsClasses.put(CoreTransactionTypes.HTLC_REFUND.getValue(), new HtlcRefund());
 
         this.buffer = ByteBuffer.wrap(Hex.decode(serialized)).slice();

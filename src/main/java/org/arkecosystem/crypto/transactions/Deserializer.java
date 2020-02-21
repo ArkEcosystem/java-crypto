@@ -21,7 +21,10 @@ public class Deserializer {
                 CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue(),
                 new SecondSignatureRegistration());
         this.transactionsClasses.put(CoreTransactionTypes.VOTE.getValue(), new Vote());
-        this.transactionsClasses.put(CoreTransactionTypes.IPFS.getValue(),new Ipfs());
+        this.transactionsClasses.put(CoreTransactionTypes.IPFS.getValue(), new Ipfs());
+        this.transactionsClasses.put(
+                CoreTransactionTypes.MULTI_PAYMENT.getValue(), new MultiPayment());
+        this.transactionsClasses.put(CoreTransactionTypes.HTLC_REFUND.getValue(), new HtlcRefund());
 
         this.buffer = ByteBuffer.wrap(Hex.decode(serialized)).slice();
         this.buffer.order(ByteOrder.LITTLE_ENDIAN);

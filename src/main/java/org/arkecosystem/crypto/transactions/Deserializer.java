@@ -6,9 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
-import org.arkecosystem.crypto.transactions.types.Transaction;
-import org.arkecosystem.crypto.transactions.types.Transfer;
-import org.arkecosystem.crypto.transactions.types.Vote;
+import org.arkecosystem.crypto.transactions.types.*;
 
 public class Deserializer {
 
@@ -19,7 +17,11 @@ public class Deserializer {
 
     public Deserializer(String serialized) {
         this.transactionsClasses.put(CoreTransactionTypes.TRANSFER.getValue(), new Transfer());
+        this.transactionsClasses.put(
+                CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue(),
+                new SecondSignatureRegistration());
         this.transactionsClasses.put(CoreTransactionTypes.VOTE.getValue(), new Vote());
+        this.transactionsClasses.put(CoreTransactionTypes.IPFS.getValue(),new Ipfs());
 
         this.buffer = ByteBuffer.wrap(Hex.decode(serialized)).slice();
         this.buffer.order(ByteOrder.LITTLE_ENDIAN);

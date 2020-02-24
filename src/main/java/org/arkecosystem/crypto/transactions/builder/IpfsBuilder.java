@@ -6,7 +6,7 @@ import org.arkecosystem.crypto.transactions.types.Transaction;
 
 public class IpfsBuilder extends AbstractTransactionBuilder<IpfsBuilder> {
 
-    public IpfsBuilder(){
+    public IpfsBuilder() {
         super();
         this.transaction.fee = Fees.IPFS.getValue();
     }

@@ -7,7 +7,7 @@ import org.arkecosystem.crypto.transactions.types.Transaction;
 
 public class MultiPaymentBuilder extends AbstractTransactionBuilder<MultiPaymentBuilder> {
 
-    public MultiPaymentBuilder(){
+    public MultiPaymentBuilder() {
         super();
         this.transaction.fee = Fees.MULTI_PAYMENT.getValue();
     }

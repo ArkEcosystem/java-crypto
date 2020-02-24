@@ -6,7 +6,7 @@ import org.arkecosystem.crypto.transactions.types.Transfer;
 
 public class TransferBuilder extends AbstractTransactionBuilder<TransferBuilder> {
 
-    public TransferBuilder(){
+    public TransferBuilder() {
         super();
         this.transaction.fee = Fees.TRANSFER.getValue();
     }

@@ -1,7 +1,6 @@
 package org.arkecosystem.crypto.transactions.builder;
 
 import java.util.List;
-
 import org.arkecosystem.crypto.enums.Fees;
 import org.arkecosystem.crypto.identities.Address;
 import org.arkecosystem.crypto.transactions.types.Transaction;
@@ -9,7 +8,7 @@ import org.arkecosystem.crypto.transactions.types.Vote;
 
 public class VoteBuilder extends AbstractTransactionBuilder<VoteBuilder> {
 
-    public VoteBuilder(){
+    public VoteBuilder() {
         super();
         this.transaction.fee = Fees.VOTE.getValue();
     }

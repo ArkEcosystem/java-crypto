@@ -8,7 +8,7 @@ import org.arkecosystem.crypto.transactions.types.Transaction;
 public class SecondSignatureRegistrationBuilder
         extends AbstractTransactionBuilder<SecondSignatureRegistrationBuilder> {
 
-    public SecondSignatureRegistrationBuilder(){
+    public SecondSignatureRegistrationBuilder() {
         super();
         this.transaction.fee = Fees.SECOND_SIGNATURE_REGISTRATION.getValue();
     }

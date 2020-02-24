@@ -6,7 +6,7 @@ import org.arkecosystem.crypto.transactions.types.Transaction;
 
 public class HtlcRefundBuilder extends AbstractTransactionBuilder<HtlcRefundBuilder> {
 
-    public HtlcRefundBuilder(){
+    public HtlcRefundBuilder() {
         super();
         this.transaction.fee = Fees.HTLC_REFUND.getValue();
     }

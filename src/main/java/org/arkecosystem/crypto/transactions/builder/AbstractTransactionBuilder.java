@@ -15,6 +15,7 @@ public abstract class AbstractTransactionBuilder<
         this.transaction.network = Network.get().version();
         this.transaction.typeGroup = this.transaction.getTransactionTypeGroup();
         this.transaction.nonce = 0;
+        this.transaction.amount = 0;
     }
 
     public TBuilder version(int version) {

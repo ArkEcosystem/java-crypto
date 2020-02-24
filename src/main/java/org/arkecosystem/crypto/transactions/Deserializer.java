@@ -23,7 +23,9 @@ public class Deserializer {
         this.transactionsClasses.put(
                 CoreTransactionTypes.DELEGATE_REGISTRATION.getValue(), new DelegateRegistration());
         this.transactionsClasses.put(CoreTransactionTypes.VOTE.getValue(), new Vote());
-
+        this.transactionsClasses.put(
+                CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue(),
+                new MultiSignatureRegistration());
         this.transactionsClasses.put(CoreTransactionTypes.IPFS.getValue(), new Ipfs());
         this.transactionsClasses.put(
                 CoreTransactionTypes.MULTI_PAYMENT.getValue(), new MultiPayment());

@@ -13,6 +13,7 @@ public class TransactionAsset {
     public HtlcLockAsset htlcLockAsset = new HtlcLockAsset();
     public HtlcClaimAsset htlcClaimAsset = new HtlcClaimAsset();
     public HtlcRefundAsset htlcRefundAsset = new HtlcRefundAsset();
+    public HashMap<String,Object> customAsset = new HashMap<>();
 
     public static class Signature {
         public String publicKey;

@@ -36,7 +36,7 @@ class MultiPaymentBuilderTest {
 
         assertTrue(actual.verify());
         assertTrue(
-            actual.secondVerify(
-                "03699e966b2525f9088a6941d8d94f7869964a000efe65783d78ac82e1199fe609"));
+                actual.secondVerify(
+                        "03699e966b2525f9088a6941d8d94f7869964a000efe65783d78ac82e1199fe609"));
     }
 }

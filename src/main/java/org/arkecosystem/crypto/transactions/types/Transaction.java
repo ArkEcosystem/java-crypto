@@ -4,7 +4,6 @@ import com.google.gson.GsonBuilder;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.identities.PrivateKey;
@@ -33,7 +32,7 @@ public abstract class Transaction {
     public String recipientId;
     public String id;
 
-    public void computeId(){
+    public void computeId() {
         this.id = this.getId();
     }
 

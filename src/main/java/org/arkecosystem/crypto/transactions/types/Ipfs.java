@@ -1,11 +1,10 @@
 package org.arkecosystem.crypto.transactions.types;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import org.arkecosystem.crypto.encoding.Base58;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 public class Ipfs extends Transaction {
 
@@ -36,11 +35,11 @@ public class Ipfs extends Transaction {
         buffer.get(hashBuffer);
 
         byte[] ipfsBuffer =
-            ByteBuffer.allocate(ipfsHashLength + 2)
-                .put(hashFunction)
-                .put(ipfsHashLength)
-                .put(hashBuffer)
-                .array();
+                ByteBuffer.allocate(ipfsHashLength + 2)
+                        .put(hashFunction)
+                        .put(ipfsHashLength)
+                        .put(hashBuffer)
+                        .array();
 
         this.asset.ipfs = Base58.encode(ipfsBuffer);
     }

@@ -20,10 +20,15 @@ public class Deserializer {
         this.transactionsClasses.put(
                 CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue(),
                 new SecondSignatureRegistration());
+        this.transactionsClasses.put(
+                CoreTransactionTypes.DELEGATE_REGISTRATION.getValue(), new DelegateRegistration());
         this.transactionsClasses.put(CoreTransactionTypes.VOTE.getValue(), new Vote());
+
         this.transactionsClasses.put(CoreTransactionTypes.IPFS.getValue(), new Ipfs());
         this.transactionsClasses.put(
                 CoreTransactionTypes.MULTI_PAYMENT.getValue(), new MultiPayment());
+        this.transactionsClasses.put(
+                CoreTransactionTypes.DELEGATE_RESIGNATION.getValue(), new DelegateResignation());
         this.transactionsClasses.put(CoreTransactionTypes.HTLC_LOCK.getValue(), new HtlcLock());
         this.transactionsClasses.put(CoreTransactionTypes.HTLC_CLAIM.getValue(), new HtlcClaim());
         this.transactionsClasses.put(CoreTransactionTypes.HTLC_REFUND.getValue(), new HtlcRefund());

@@ -47,5 +47,4 @@ public class MultiPayment extends Transaction {
                     new TransactionAsset.Payment(amount, Base58.encodeChecked(recipientId)));
         }
     }
-
 }

@@ -1,21 +1,20 @@
 package org.arkecosystem.crypto.transactions.deserializers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.google.gson.internal.LinkedTreeMap;
+import java.util.ArrayList;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 import org.arkecosystem.crypto.transactions.Deserializer;
 import org.arkecosystem.crypto.transactions.FixtureLoader;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 class MultiPaymentTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-            FixtureLoader.load("transactions/v2-ecdsa/multi-payment-sign");
+                FixtureLoader.load("transactions/v2-ecdsa/multi-payment-sign");
 
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
@@ -35,9 +34,9 @@ class MultiPaymentTest {
         ArrayList payments = ((ArrayList) asset.get("payments"));
         for (int i = 0; i < payments.size(); i++) {
             String recipientId =
-                (String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("recipientId");
+                    (String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("recipientId");
             String amount =
-                ((String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("amount"));
+                    ((String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("amount"));
             assertEquals(recipientId, actual.asset.multiPayment.payments.get(i).recipientId);
             assertEquals(Long.valueOf(amount), actual.asset.multiPayment.payments.get(i).amount);
         }
@@ -46,7 +45,7 @@ class MultiPaymentTest {
     @Test
     void passphraseVendorField() {
         LinkedTreeMap<String, Object> fixture =
-            FixtureLoader.load("transactions/v2-ecdsa/multi-payment-with-vendor-field-sign");
+                FixtureLoader.load("transactions/v2-ecdsa/multi-payment-with-vendor-field-sign");
 
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
@@ -62,14 +61,13 @@ class MultiPaymentTest {
         assertEquals(data.get("signature").toString(), actual.signature);
         assertEquals(data.get("id").toString(), actual.id);
 
-
         LinkedTreeMap<String, Object> asset = (LinkedTreeMap<String, Object>) data.get("asset");
         ArrayList payments = ((ArrayList) asset.get("payments"));
         for (int i = 0; i < payments.size(); i++) {
             String recipientId =
-                (String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("recipientId");
+                    (String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("recipientId");
             String amount =
-                ((String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("amount"));
+                    ((String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("amount"));
             assertEquals(recipientId, actual.asset.multiPayment.payments.get(i).recipientId);
             assertEquals(Long.valueOf(amount), actual.asset.multiPayment.payments.get(i).amount);
         }
@@ -80,7 +78,7 @@ class MultiPaymentTest {
     @Test
     void secondPassphrase() {
         LinkedTreeMap<String, Object> fixture =
-            FixtureLoader.load("transactions/v2-ecdsa/multi-payment-secondSign");
+                FixtureLoader.load("transactions/v2-ecdsa/multi-payment-secondSign");
 
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
@@ -100,9 +98,9 @@ class MultiPaymentTest {
         ArrayList payments = ((ArrayList) asset.get("payments"));
         for (int i = 0; i < payments.size(); i++) {
             String recipientId =
-                (String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("recipientId");
+                    (String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("recipientId");
             String amount =
-                ((String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("amount"));
+                    ((String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("amount"));
             assertEquals(recipientId, actual.asset.multiPayment.payments.get(i).recipientId);
             assertEquals(Long.valueOf(amount), actual.asset.multiPayment.payments.get(i).amount);
         }
@@ -113,7 +111,8 @@ class MultiPaymentTest {
     @Test
     void secondPassphraseVendorField() {
         LinkedTreeMap<String, Object> fixture =
-            FixtureLoader.load("transactions/v2-ecdsa/multi-payment-with-vendor-field-secondSign");
+                FixtureLoader.load(
+                        "transactions/v2-ecdsa/multi-payment-with-vendor-field-secondSign");
 
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
@@ -133,9 +132,9 @@ class MultiPaymentTest {
         ArrayList payments = ((ArrayList) asset.get("payments"));
         for (int i = 0; i < payments.size(); i++) {
             String recipientId =
-                (String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("recipientId");
+                    (String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("recipientId");
             String amount =
-                ((String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("amount"));
+                    ((String) ((LinkedTreeMap<String, Object>) payments.get(i)).get("amount"));
             assertEquals(recipientId, actual.asset.multiPayment.payments.get(i).recipientId);
             assertEquals(Long.valueOf(amount), actual.asset.multiPayment.payments.get(i).amount);
         }

@@ -15,7 +15,7 @@ public class TransferBuilder extends AbstractTransactionBuilder<TransferBuilder>
         return this;
     }
 
-    public TransferBuilder expiration(int expiration){
+    public TransferBuilder expiration(int expiration) {
         this.transaction.expiration = expiration;
         return this;
     }

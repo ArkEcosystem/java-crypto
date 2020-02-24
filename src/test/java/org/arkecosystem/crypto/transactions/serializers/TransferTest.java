@@ -36,7 +36,6 @@ class TransferTest {
         assertEquals(fixture.get("serialized").toString(), actual);
     }
 
-
     @Test
     void secondPassphrase() {
         LinkedTreeMap<String, Object> fixture =
@@ -60,5 +59,4 @@ class TransferTest {
 
         assertEquals(fixture.get("serialized").toString(), actual);
     }
-
 }

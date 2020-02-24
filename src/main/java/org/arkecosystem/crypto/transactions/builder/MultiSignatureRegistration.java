@@ -1,13 +1,18 @@
 package org.arkecosystem.crypto.transactions.builder;
 
 import java.util.List;
-import org.arkecosystem.crypto.enums.CoreTransactionTypes;
+import org.arkecosystem.crypto.transactions.types.Transaction;
 
 public class MultiSignatureRegistration
         extends AbstractTransactionBuilder<MultiSignatureRegistration> {
     public MultiSignatureRegistration() {
         super();
         this.transaction.version = 1;
+    }
+
+    @Override
+    public Transaction getTransactionInstance() {
+        return null;
     }
 
     public MultiSignatureRegistration min(int min) {
@@ -36,11 +41,6 @@ public class MultiSignatureRegistration
         this.transaction.fee = (keysgroup.size() + 1) * this.transaction.fee;
 
         return this;
-    }
-
-    @Override
-    public int getType() {
-        return CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue();
     }
 
     @Override

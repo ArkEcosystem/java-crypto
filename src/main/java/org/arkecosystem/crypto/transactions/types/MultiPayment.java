@@ -27,7 +27,7 @@ public class MultiPayment extends Transaction {
     }
 
     @Override
-    public HashMap<String, Object> assetHashMap() {
+    public HashMap<String, Object> assetToHashMap() {
         HashMap<String, Object> asset = new HashMap<>();
         ArrayList<HashMap<String, String>> payments = new ArrayList<>();
         for (TransactionAsset.Payment current : this.asset.multiPayment.payments) {

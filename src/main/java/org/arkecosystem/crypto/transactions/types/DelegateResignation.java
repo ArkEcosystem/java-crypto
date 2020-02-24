@@ -17,7 +17,7 @@ public class DelegateResignation extends Transaction {
     }
 
     @Override
-    public HashMap<String, Object> assetHashMap() {
+    public HashMap<String, Object> assetToHashMap() {
         return null;
     }
 

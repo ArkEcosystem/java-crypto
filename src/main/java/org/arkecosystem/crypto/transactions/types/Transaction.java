@@ -120,7 +120,7 @@ public abstract class Transaction {
             map.put("expiration", this.expiration);
         }
 
-        HashMap<String, Object> asset = this.assetHashMap();
+        HashMap<String, Object> asset = this.assetToHashMap();
         if (asset != null && !asset.isEmpty()) {
             map.put("asset", asset);
         }
@@ -135,7 +135,7 @@ public abstract class Transaction {
 
     public abstract int getTransactionTypeGroup();
 
-    public abstract HashMap<String, Object> assetHashMap();
+    public abstract HashMap<String, Object> assetToHashMap();
 
     public boolean hasVendorField() {
         return false;

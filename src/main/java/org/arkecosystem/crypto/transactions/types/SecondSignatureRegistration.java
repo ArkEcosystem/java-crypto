@@ -19,7 +19,7 @@ public class SecondSignatureRegistration extends Transaction {
     }
 
     @Override
-    public HashMap<String, Object> assetHashMap() {
+    public HashMap<String, Object> assetToHashMap() {
         HashMap<String, Object> asset = new HashMap<>();
 
         HashMap<String, String> publicKey = new HashMap<>();

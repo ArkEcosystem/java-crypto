@@ -20,7 +20,7 @@ public class Ipfs extends Transaction {
     }
 
     @Override
-    public HashMap<String, Object> assetHashMap() {
+    public HashMap<String, Object> assetToHashMap() {
         HashMap<String, Object> asset = new HashMap<>();
         asset.put("ipfs", this.asset.ipfs);
         return asset;

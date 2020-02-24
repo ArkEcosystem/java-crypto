@@ -20,7 +20,7 @@ public class HtlcRefund extends Transaction {
     }
 
     @Override
-    public HashMap<String, Object> assetHashMap() {
+    public HashMap<String, Object> assetToHashMap() {
         HashMap<String, Object> asset = new HashMap<>();
 
         HashMap<String, String> lockTransactionId = new HashMap<>();

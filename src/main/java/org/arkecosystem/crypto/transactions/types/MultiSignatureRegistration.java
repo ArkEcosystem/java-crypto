@@ -18,7 +18,7 @@ public class MultiSignatureRegistration extends Transaction {
     }
 
     @Override
-    public HashMap<String, Object> assetHashMap() {
+    public HashMap<String, Object> assetToHashMap() {
 
         throw new UnsupportedOperationException(
                 "MultiSignatureRegistration is not supported in java sdk");

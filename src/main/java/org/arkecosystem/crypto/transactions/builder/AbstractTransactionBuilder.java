@@ -1,6 +1,5 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.configuration.Fee;
 import org.arkecosystem.crypto.configuration.Network;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.transactions.types.Transaction;
@@ -12,7 +11,6 @@ public abstract class AbstractTransactionBuilder<
     public AbstractTransactionBuilder() {
         this.transaction = getTransactionInstance();
         this.transaction.type = this.transaction.getTransactionType();
-        this.transaction.fee = Fee.getCoreFee(this.transaction.getTransactionType());
         this.transaction.version = 2;
         this.transaction.network = Network.get().version();
         this.transaction.typeGroup = this.transaction.getTransactionTypeGroup();

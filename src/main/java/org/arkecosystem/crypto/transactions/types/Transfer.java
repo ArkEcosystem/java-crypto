@@ -2,6 +2,7 @@ package org.arkecosystem.crypto.transactions.types;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.HashMap;
 import org.arkecosystem.crypto.encoding.Base58;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
@@ -20,6 +21,11 @@ public class Transfer extends Transaction {
     @Override
     public boolean hasVendorField() {
         return true;
+    }
+
+    @Override
+    public HashMap<String, Object> assetHashMap() {
+        return null;
     }
 
     @Override

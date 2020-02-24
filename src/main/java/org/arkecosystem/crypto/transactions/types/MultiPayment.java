@@ -2,6 +2,8 @@ package org.arkecosystem.crypto.transactions.types;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.HashMap;
 import org.arkecosystem.crypto.encoding.Base58;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
@@ -22,6 +24,20 @@ public class MultiPayment extends Transaction {
     @Override
     public boolean hasVendorField() {
         return true;
+    }
+
+    @Override
+    public HashMap<String, Object> assetHashMap() {
+        HashMap<String, Object> asset = new HashMap<>();
+        ArrayList<HashMap<String, String>> payments = new ArrayList<>();
+        for (TransactionAsset.Payment current : this.asset.multiPayment.payments) {
+            HashMap<String, String> payment = new HashMap<>();
+            payment.put("amount", String.valueOf(current.amount));
+            payment.put("recipientId", current.recipientId);
+            payments.add(payment);
+        }
+        asset.put("payments", payments);
+        return asset;
     }
 
     @Override

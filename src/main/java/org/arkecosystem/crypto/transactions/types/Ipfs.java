@@ -2,6 +2,7 @@ package org.arkecosystem.crypto.transactions.types;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.HashMap;
 import org.arkecosystem.crypto.encoding.Base58;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
@@ -16,6 +17,13 @@ public class Ipfs extends Transaction {
     @Override
     public int getTransactionTypeGroup() {
         return TransactionTypeGroup.CORE.getValue();
+    }
+
+    @Override
+    public HashMap<String, Object> assetHashMap() {
+        HashMap<String, Object> asset = new HashMap<>();
+        asset.put("ipfs", this.asset.ipfs);
+        return asset;
     }
 
     @Override

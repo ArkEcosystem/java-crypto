@@ -2,10 +2,8 @@ package org.arkecosystem.crypto.transactions.types;
 
 import com.google.gson.GsonBuilder;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
 import org.arkecosystem.crypto.encoding.Hex;
-import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.arkecosystem.crypto.transactions.Serializer;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
@@ -110,6 +108,10 @@ public abstract class Transaction {
         map.put("nonce", String.valueOf(this.nonce));
         map.put("typeGroup", this.typeGroup);
 
+        if (this.secondSignature != null) {
+            map.put("secondSignature", this.secondSignature);
+        }
+
         if (this.vendorField != null && !this.vendorField.isEmpty()) {
             map.put("vendorField", this.vendorField);
         }
@@ -118,37 +120,8 @@ public abstract class Transaction {
             map.put("expiration", this.expiration);
         }
 
-        HashMap<String, Object> asset = new HashMap<>();
-        if (this.type == CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue()) {
-            HashMap<String, String> publicKey = new HashMap<>();
-            publicKey.put("publicKey", this.asset.signature.publicKey);
-            asset.put("signature", publicKey);
-        } else if (this.type == CoreTransactionTypes.VOTE.getValue()) {
-            asset.put("votes", this.asset.votes);
-        } else if (this.type == CoreTransactionTypes.DELEGATE_REGISTRATION.getValue()) {
-            HashMap<String, String> delegate = new HashMap<>();
-            delegate.put("username", this.asset.delegate.username);
-            asset.put("delegate", delegate);
-        } else if (this.type == CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue()) {
-            HashMap<String, Object> multisignature = new HashMap<>();
-            multisignature.put("min", this.asset.multisignature.min);
-            multisignature.put("lifetime", this.asset.multisignature.lifetime);
-            multisignature.put("keysgroup", this.asset.multisignature.keysgroup);
-            asset.put("multisignature", multisignature);
-        } else if (this.type == CoreTransactionTypes.IPFS.getValue()) {
-            asset.put("ipfs", this.asset.ipfs);
-        } else if (this.type == CoreTransactionTypes.MULTI_PAYMENT.getValue()) {
-            ArrayList<HashMap<String, String>> payments = new ArrayList<>();
-            for (TransactionAsset.Payment current : this.asset.multiPayment.payments) {
-                HashMap<String, String> payment = new HashMap<>();
-                payment.put("amount", String.valueOf(current.amount));
-                payment.put("recipientId", current.recipientId);
-                payments.add(payment);
-            }
-            asset.put("payments", payments);
-        }
-
-        if (!asset.isEmpty()) {
+        HashMap<String, Object> asset = this.assetHashMap();
+        if (asset != null && !asset.isEmpty()) {
             map.put("asset", asset);
         }
         return map;
@@ -161,6 +134,8 @@ public abstract class Transaction {
     public abstract int getTransactionType();
 
     public abstract int getTransactionTypeGroup();
+
+    public abstract HashMap<String, Object> assetHashMap();
 
     public boolean hasVendorField() {
         return false;

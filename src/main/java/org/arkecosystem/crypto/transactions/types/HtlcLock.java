@@ -2,6 +2,7 @@ package org.arkecosystem.crypto.transactions.types;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.HashMap;
 import org.arkecosystem.crypto.encoding.Base58;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
@@ -24,6 +25,22 @@ public class HtlcLock extends Transaction {
     @Override
     public boolean hasVendorField() {
         return true;
+    }
+
+    @Override
+    public HashMap<String, Object> assetHashMap() {
+        HashMap<String, Object> asset = new HashMap<>();
+
+        HashMap<String, Object> lock = new HashMap<>();
+        lock.put("secretHash", this.asset.htlcLockAsset.secretHash);
+
+        HashMap<String, Integer> expiration = new HashMap<>();
+        expiration.put("type", this.asset.htlcLockAsset.expiration.type.getValue());
+        expiration.put("value", this.asset.htlcLockAsset.expiration.value);
+        lock.put("expiration", expiration);
+
+        asset.put("lock", lock);
+        return asset;
     }
 
     @Override

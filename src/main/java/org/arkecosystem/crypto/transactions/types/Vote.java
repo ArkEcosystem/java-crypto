@@ -3,6 +3,7 @@ package org.arkecosystem.crypto.transactions.types;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
@@ -17,6 +18,13 @@ public class Vote extends Transaction {
     @Override
     public int getTransactionTypeGroup() {
         return TransactionTypeGroup.CORE.getValue();
+    }
+
+    @Override
+    public HashMap<String, Object> assetHashMap() {
+        HashMap<String, Object> asset = new HashMap<>();
+        asset.put("votes", this.asset.votes);
+        return asset;
     }
 
     @Override

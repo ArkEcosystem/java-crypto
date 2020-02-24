@@ -1,10 +1,16 @@
 package org.arkecosystem.crypto.transactions.builder;
 
+import org.arkecosystem.crypto.enums.Fees;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
 import org.arkecosystem.crypto.transactions.types.MultiPayment;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 
 public class MultiPaymentBuilder extends AbstractTransactionBuilder<MultiPaymentBuilder> {
+
+    public MultiPaymentBuilder(){
+        super();
+        this.transaction.fee = Fees.MULTI_PAYMENT.getValue();
+    }
 
     public MultiPaymentBuilder addPayment(String recipientId, long amount) {
         if (this.transaction.asset.multiPayment.payments.size() >= 2258) {

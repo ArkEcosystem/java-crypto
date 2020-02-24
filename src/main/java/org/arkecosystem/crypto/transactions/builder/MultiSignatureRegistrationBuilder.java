@@ -1,6 +1,8 @@
 package org.arkecosystem.crypto.transactions.builder;
 
 import java.util.List;
+
+import org.arkecosystem.crypto.enums.Fees;
 import org.arkecosystem.crypto.transactions.types.MultiSignatureRegistration;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 
@@ -9,6 +11,7 @@ public class MultiSignatureRegistrationBuilder
     public MultiSignatureRegistrationBuilder() {
         super();
         this.transaction.version = 1;
+        this.transaction.fee = Fees.MULTI_SIGNATURE_REGISTRATION.getValue();
     }
 
     @Override

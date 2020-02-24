@@ -1,11 +1,17 @@
 package org.arkecosystem.crypto.transactions.builder;
 
+import org.arkecosystem.crypto.enums.Fees;
 import org.arkecosystem.crypto.enums.HtlcLockExpirationType;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
 import org.arkecosystem.crypto.transactions.types.HtlcLock;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 
 public class HtlcLockBuilder extends AbstractTransactionBuilder<HtlcLockBuilder> {
+    public HtlcLockBuilder() {
+        super();
+        this.transaction.fee = Fees.HTLC_LOCK.getValue();
+    }
+
     public HtlcLockBuilder recipientId(String recipientId) {
         this.transaction.recipientId = recipientId;
         return this;

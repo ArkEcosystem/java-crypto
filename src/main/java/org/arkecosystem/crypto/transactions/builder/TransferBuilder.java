@@ -1,9 +1,15 @@
 package org.arkecosystem.crypto.transactions.builder;
 
+import org.arkecosystem.crypto.enums.Fees;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.arkecosystem.crypto.transactions.types.Transfer;
 
 public class TransferBuilder extends AbstractTransactionBuilder<TransferBuilder> {
+
+    public TransferBuilder(){
+        super();
+        this.transaction.fee = Fees.TRANSFER.getValue();
+    }
 
     public TransferBuilder recipient(String recipientId) {
         this.transaction.recipientId = recipientId;

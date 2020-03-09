@@ -13,27 +13,27 @@ public class TransactionAsset {
     public HtlcLockAsset htlcLockAsset = new HtlcLockAsset();
     public HtlcClaimAsset htlcClaimAsset = new HtlcClaimAsset();
     public HtlcRefundAsset htlcRefundAsset = new HtlcRefundAsset();
-    public HashMap<String,Object> customAsset = new HashMap<>();
+    public HashMap<String, Object> customAsset = new HashMap<>();
 
-    public static class Signature {
+    public class Signature {
         public String publicKey;
     }
 
-    public static class Delegate {
+    public class Delegate {
         public String username;
     }
 
-    public static class MultiSignature {
+    public class MultiSignature {
         public byte min;
         public byte lifetime;
         public List<String> keysgroup = new ArrayList<>();
     }
 
-    public static class MultiPayment {
+    public class MultiPayment {
         public List<Payment> payments = new ArrayList<>();
     }
 
-    public static class Payment {
+    public class Payment {
         public long amount;
         public String recipientId;
 
@@ -43,12 +43,12 @@ public class TransactionAsset {
         }
     }
 
-    public static class HtlcLockAsset {
+    public class HtlcLockAsset {
         public String secretHash;
         public Expiration expiration;
     }
 
-    public static class Expiration {
+    public class Expiration {
         public HtlcLockExpirationType type;
         public int value;
 
@@ -58,12 +58,12 @@ public class TransactionAsset {
         }
     }
 
-    public static class HtlcClaimAsset {
+    public class HtlcClaimAsset {
         public String lockTransactionId;
         public String unlockSecret;
     }
 
-    public static class HtlcRefundAsset {
+    public class HtlcRefundAsset {
         public String lockTransactionId;
     }
 }

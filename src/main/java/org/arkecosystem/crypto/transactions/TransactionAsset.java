@@ -15,15 +15,15 @@ public class TransactionAsset {
     public HtlcRefundAsset htlcRefundAsset = new HtlcRefundAsset();
     public HashMap<String, Object> customAsset = new HashMap<>();
 
-    public class Signature {
+    public static class Signature {
         public String publicKey;
     }
 
-    public class Delegate {
+    public static class Delegate {
         public String username;
     }
 
-    public class MultiSignature {
+    public static class MultiSignature {
         public byte min;
         public byte lifetime;
         public List<String> keysgroup = new ArrayList<>();
@@ -33,7 +33,7 @@ public class TransactionAsset {
         public List<Payment> payments = new ArrayList<>();
     }
 
-    public class Payment {
+    public static class Payment {
         public long amount;
         public String recipientId;
 
@@ -43,12 +43,12 @@ public class TransactionAsset {
         }
     }
 
-    public class HtlcLockAsset {
+    public static class HtlcLockAsset {
         public String secretHash;
         public Expiration expiration;
     }
 
-    public class Expiration {
+    public static class Expiration {
         public HtlcLockExpirationType type;
         public int value;
 
@@ -58,12 +58,12 @@ public class TransactionAsset {
         }
     }
 
-    public class HtlcClaimAsset {
+    public static class HtlcClaimAsset {
         public String lockTransactionId;
         public String unlockSecret;
     }
 
-    public class HtlcRefundAsset {
+    public static class HtlcRefundAsset {
         public String lockTransactionId;
     }
 }

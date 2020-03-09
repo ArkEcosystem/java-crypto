@@ -17,7 +17,7 @@ public class MultiPaymentBuilder extends AbstractTransactionBuilder<MultiPayment
             throw new MaximumPaymentCountExceededError();
         }
         this.transaction.asset.multiPayment.payments.add(
-                new TransactionAsset.Payment(amount, recipientId));
+            new TransactionAsset.Payment(amount, recipientId));
         return this;
     }
 

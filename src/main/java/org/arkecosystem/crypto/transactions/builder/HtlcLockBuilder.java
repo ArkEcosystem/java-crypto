@@ -25,7 +25,7 @@ public class HtlcLockBuilder extends AbstractTransactionBuilder<HtlcLockBuilder>
     public HtlcLockBuilder expirationType(
             HtlcLockExpirationType expirationType, int expirationValue) {
         this.transaction.asset.htlcLockAsset.expiration =
-                new TransactionAsset.Expiration(expirationType, expirationValue);
+            new TransactionAsset.Expiration(expirationType, expirationValue);
         return this;
     }
 

@@ -60,7 +60,7 @@ public class MultiPayment extends Transaction {
             long amount = buffer.getLong();
             buffer.get(recipientId);
             this.asset.multiPayment.payments.add(
-                    new TransactionAsset.Payment(amount, Base58.encodeChecked(recipientId)));
+                new TransactionAsset.Payment(amount, Base58.encodeChecked(recipientId)));
         }
     }
 }

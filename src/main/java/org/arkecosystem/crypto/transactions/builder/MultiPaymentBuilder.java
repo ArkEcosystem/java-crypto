@@ -13,11 +13,11 @@ public class MultiPaymentBuilder extends AbstractTransactionBuilder<MultiPayment
     }
 
     public MultiPaymentBuilder addPayment(String recipientId, long amount) {
-        if (this.transaction.asset.multiPayment.payments.size() >= 2258) {
+        if (this.transaction.asset.multiPayment.payments.size() >= 64) {
             throw new MaximumPaymentCountExceededError();
         }
         this.transaction.asset.multiPayment.payments.add(
-            new TransactionAsset.Payment(amount, recipientId));
+                new TransactionAsset.Payment(amount, recipientId));
         return this;
     }
 
@@ -40,6 +40,6 @@ public class MultiPaymentBuilder extends AbstractTransactionBuilder<MultiPayment
 
 class MaximumPaymentCountExceededError extends RuntimeException {
     MaximumPaymentCountExceededError() {
-        super("Expected a maximum of 2258 payments");
+        super("Expected a maximum of 64 payments");
     }
 }

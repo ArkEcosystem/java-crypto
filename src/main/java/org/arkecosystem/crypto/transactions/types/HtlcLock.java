@@ -62,8 +62,8 @@ public class HtlcLock extends Transaction {
         buffer.get(secretHash);
         this.asset.htlcLockAsset.secretHash = Hex.encode(secretHash);
         this.asset.htlcLockAsset.expiration =
-            new TransactionAsset.Expiration(
-                HtlcLockExpirationType.values()[buffer.get() - 1], buffer.getInt());
+                new TransactionAsset.Expiration(
+                        HtlcLockExpirationType.values()[buffer.get() - 1], buffer.getInt());
         byte[] recipientId = new byte[21];
         buffer.get(recipientId);
         this.recipientId = Base58.encodeChecked(recipientId);

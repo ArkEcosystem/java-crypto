@@ -29,7 +29,7 @@ public class TransactionAsset {
         public List<String> keysgroup = new ArrayList<>();
     }
 
-    public class MultiPayment {
+    public static class MultiPayment {
         public List<Payment> payments = new ArrayList<>();
     }
 

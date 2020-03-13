@@ -7,10 +7,10 @@ import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.transactions.Deserializer;
 import org.arkecosystem.crypto.transactions.FixtureLoader;
 import org.arkecosystem.crypto.transactions.Serializer;
-import org.arkecosystem.crypto.transactions.Transaction;
+import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
 
-public class DelegateResignationTest {
+class DelegateResignationTest {
 
     @Test
     void passphrase() {
@@ -18,8 +18,9 @@ public class DelegateResignationTest {
                 FixtureLoader.load("transactions/v2-ecdsa/delegate-resignation-sign");
 
         Transaction transaction =
-                new Deserializer().deserialize(fixture.get("serialized").toString());
-        String actual = Hex.encode(new Serializer().serialize(transaction));
+                new Deserializer(fixture.get("serialized").toString()).deserialize();
+
+        String actual = Hex.encode(Serializer.serialize(transaction));
 
         assertEquals(fixture.get("serialized").toString(), actual);
     }
@@ -30,8 +31,9 @@ public class DelegateResignationTest {
                 FixtureLoader.load("transactions/v2-ecdsa/delegate-resignation-secondSign");
 
         Transaction transaction =
-                new Deserializer().deserialize(fixture.get("serialized").toString());
-        String actual = Hex.encode(new Serializer().serialize(transaction));
+                new Deserializer(fixture.get("serialized").toString()).deserialize();
+
+        String actual = Hex.encode(Serializer.serialize(transaction));
 
         assertEquals(fixture.get("serialized").toString(), actual);
     }

@@ -2,145 +2,110 @@ package org.arkecosystem.crypto.transactions;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.HashMap;
+import java.util.Map;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
-import org.arkecosystem.crypto.enums.TransactionTypeGroup;
-import org.arkecosystem.crypto.identities.Address;
-import org.arkecosystem.crypto.transactions.deserializers.*;
+import org.arkecosystem.crypto.transactions.types.*;
 
 public class Deserializer {
 
-    private String serialized;
     private ByteBuffer buffer;
     private Transaction transaction;
 
-    public Transaction deserialize(String serialized) {
-        this.serialized = serialized;
+    private Map<Integer, Transaction> transactionsClasses = new HashMap<>();
+
+    public Deserializer(String serialized) {
+        this.transactionsClasses.put(CoreTransactionTypes.TRANSFER.getValue(), new Transfer());
+        this.transactionsClasses.put(
+                CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue(),
+                new SecondSignatureRegistration());
+        this.transactionsClasses.put(
+                CoreTransactionTypes.DELEGATE_REGISTRATION.getValue(), new DelegateRegistration());
+        this.transactionsClasses.put(CoreTransactionTypes.VOTE.getValue(), new Vote());
+        this.transactionsClasses.put(
+                CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue(),
+                new MultiSignatureRegistration());
+        this.transactionsClasses.put(CoreTransactionTypes.IPFS.getValue(), new Ipfs());
+        this.transactionsClasses.put(
+                CoreTransactionTypes.MULTI_PAYMENT.getValue(), new MultiPayment());
+        this.transactionsClasses.put(
+                CoreTransactionTypes.DELEGATE_RESIGNATION.getValue(), new DelegateResignation());
+        this.transactionsClasses.put(CoreTransactionTypes.HTLC_LOCK.getValue(), new HtlcLock());
+        this.transactionsClasses.put(CoreTransactionTypes.HTLC_CLAIM.getValue(), new HtlcClaim());
+        this.transactionsClasses.put(CoreTransactionTypes.HTLC_REFUND.getValue(), new HtlcRefund());
+
         this.buffer = ByteBuffer.wrap(Hex.decode(serialized)).slice();
         this.buffer.order(ByteOrder.LITTLE_ENDIAN);
+    }
+
+    public Transaction deserialize() {
         this.buffer.get();
 
-        this.transaction = new Transaction();
+        deserializeCommon();
+        deserializeVendorField();
 
-        int assetOffset = deserializeHeader();
-        deserializeTypeSpecific(assetOffset);
+        this.transaction.deserialize(this.buffer);
 
-        deserializeVersionOne();
+        deserializeSignature();
+
+        this.transaction.computeId();
 
         return this.transaction;
     }
 
-    private int deserializeHeader() {
-        transaction.version = this.buffer.get();
-        transaction.network = this.buffer.get();
-        if (transaction.version == 1) {
-            transaction.type = CoreTransactionTypes.values()[this.buffer.get()].getValue();
-            transaction.timestamp = this.buffer.getInt();
-        } else {
-            transaction.typeGroup = TransactionTypeGroup.values()[this.buffer.getInt()].getValue();
-            transaction.type = CoreTransactionTypes.values()[this.buffer.getShort()].getValue();
-            transaction.nonce = this.buffer.getLong();
-        }
+    private void deserializeCommon() {
+        int version = this.buffer.get();
+        int network = this.buffer.get();
+        int typeGroup = this.buffer.getInt();
+        int type = this.buffer.getShort();
+        long nonce = this.buffer.getLong();
+
+        this.transaction = this.transactionsClasses.get(type);
+        this.transaction.version = version;
+        this.transaction.network = network;
+        this.transaction.typeGroup = typeGroup;
+        this.transaction.type = type;
+        this.transaction.nonce = nonce;
+
         byte[] senderPublicKey = new byte[33];
         this.buffer.get(senderPublicKey);
-        transaction.senderPublicKey = Hex.encode(senderPublicKey);
+        this.transaction.senderPublicKey = Hex.encode(senderPublicKey);
 
-        transaction.fee = this.buffer.getLong();
+        this.transaction.fee = this.buffer.getLong();
+    }
 
+    private void deserializeVendorField() {
         int vendorFieldLength = this.buffer.get();
         if (vendorFieldLength > 0) {
-            byte[] vendorFieldHex = new byte[vendorFieldLength];
-            this.buffer.get(vendorFieldHex);
-            transaction.vendorFieldHex = Hex.encode(vendorFieldHex);
-        }
-
-        if (transaction.version == 1) {
-            return (41 + 8 + 1) * 2 + vendorFieldLength * 2;
-        } else {
-            return 59 * 2 + vendorFieldLength * 2;
+            byte[] vendorField = new byte[vendorFieldLength];
+            this.buffer.get(vendorField);
+            transaction.vendorField = new String(vendorField);
         }
     }
 
-    private void deserializeTypeSpecific(int assetOffset) {
-        CoreTransactionTypes transactionType = CoreTransactionTypes.values()[transaction.type];
-        switch (transactionType) {
-            case TRANSFER:
-                new Transfer(this.serialized, this.buffer, this.transaction)
-                        .deserialize(assetOffset);
-                break;
-            case SECOND_SIGNATURE_REGISTRATION:
-                new SecondSignatureRegistration(this.serialized, this.buffer, this.transaction)
-                        .deserialize(assetOffset);
-                break;
-            case DELEGATE_REGISTRATION:
-                new DelegateRegistration(this.serialized, this.buffer, this.transaction)
-                        .deserialize(assetOffset);
-                break;
-            case VOTE:
-                new Vote(this.serialized, this.buffer, this.transaction).deserialize(assetOffset);
-                break;
-            case MULTI_SIGNATURE_REGISTRATION:
-                new MultiSignatureRegistration(this.serialized, this.buffer, this.transaction)
-                        .deserialize(assetOffset);
-                break;
-            case IPFS:
-                new Ipfs(this.serialized, this.buffer, this.transaction).deserialize(assetOffset);
-                break;
-            case MULTI_PAYMENT:
-                new MultiPayment(this.serialized, this.buffer, this.transaction)
-                        .deserialize(assetOffset);
-                break;
-            case DELEGATE_RESIGNATION:
-                new DelegateResignation(this.serialized, this.buffer, this.transaction)
-                        .deserialize(assetOffset);
-                break;
-            case HTLC_LOCK:
-                new HtlcLock(this.serialized, this.buffer, this.transaction)
-                        .deserialize(assetOffset);
-                break;
-            case HTLC_CLAIM:
-                new HtlcClaim(this.serialized, this.buffer, this.transaction)
-                        .deserialize(assetOffset);
-                break;
-            case HTLC_REFUND:
-                new HtlcRefund(this.serialized, this.buffer, this.transaction)
-                        .deserialize(assetOffset);
-                break;
-            default:
-                throw new UnsupportedOperationException();
+    private void deserializeSignature() {
+        if (buffer.remaining() != 0) {
+            int signatureLength = currentSignatureLength();
+            byte[] signatureBuffer = new byte[signatureLength];
+            this.buffer.get(signatureBuffer);
+            this.transaction.signature = Hex.encode(signatureBuffer);
+        }
+
+        if (buffer.remaining() != 0) {
+            int signatureLength = currentSignatureLength();
+            byte[] signatureBuffer = new byte[signatureLength];
+            this.buffer.get(signatureBuffer);
+            this.transaction.secondSignature = Hex.encode(signatureBuffer);
         }
     }
 
-    private void deserializeVersionOne() {
-        if (transaction.secondSignature != null) {
-            transaction.signSignature = transaction.secondSignature;
-        }
-
-        if (transaction.type == CoreTransactionTypes.VOTE.getValue()) {
-            transaction.recipientId =
-                    Address.fromPublicKey(transaction.senderPublicKey, transaction.network);
-        }
-
-        if (transaction.type == CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue()) {
-            for (int i = 0; i < transaction.asset.multisignature.keysgroup.size(); i++) {
-                transaction.asset.multisignature.keysgroup.set(
-                        i, "+" + transaction.asset.multisignature.keysgroup.get(i));
-            }
-        }
-
-        if (transaction.vendorFieldHex != null) {
-            transaction.vendorField = new String(Hex.decode(transaction.vendorFieldHex));
-        }
-
-        if (transaction.id == null) {
-            transaction.id = transaction.computeId();
-        }
-
-        if (transaction.type == CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue()
-                || transaction.type
-                        == CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue()) {
-            transaction.recipientId =
-                    Address.fromPublicKey(transaction.senderPublicKey, transaction.network);
-        }
+    private int currentSignatureLength() {
+        int mark = this.buffer.position();
+        this.buffer.position(mark + 1);
+        String length = String.valueOf(this.buffer.get());
+        int signatureLength = Integer.parseInt(length) + 2;
+        this.buffer.position(mark);
+        return signatureLength;
     }
 }

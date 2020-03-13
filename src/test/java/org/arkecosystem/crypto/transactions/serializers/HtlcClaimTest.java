@@ -7,19 +7,19 @@ import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.transactions.Deserializer;
 import org.arkecosystem.crypto.transactions.FixtureLoader;
 import org.arkecosystem.crypto.transactions.Serializer;
-import org.arkecosystem.crypto.transactions.Transaction;
+import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
 
 public class HtlcClaimTest {
-
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
                 FixtureLoader.load("transactions/v2-ecdsa/htlc-claim-sign");
-
         Transaction transaction =
-                new Deserializer().deserialize(fixture.get("serialized").toString());
-        String actual = Hex.encode(new Serializer().serialize(transaction));
+                new Deserializer(fixture.get("serialized").toString()).deserialize();
+
+        String actual = Hex.encode(Serializer.serialize(transaction));
+
         assertEquals(fixture.get("serialized").toString(), actual);
     }
 
@@ -27,10 +27,10 @@ public class HtlcClaimTest {
     void secondPassphrase() {
         LinkedTreeMap<String, Object> fixture =
                 FixtureLoader.load("transactions/v2-ecdsa/htlc-claim-secondSign");
-
         Transaction transaction =
-                new Deserializer().deserialize(fixture.get("serialized").toString());
-        String actual = Hex.encode(new Serializer().serialize(transaction));
+                new Deserializer(fixture.get("serialized").toString()).deserialize();
+
+        String actual = Hex.encode(Serializer.serialize(transaction));
 
         assertEquals(fixture.get("serialized").toString(), actual);
     }

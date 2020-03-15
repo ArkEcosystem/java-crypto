@@ -73,5 +73,5 @@ public abstract class AbstractTransactionBuilder<
 
     public abstract Transaction getTransactionInstance();
 
-    abstract TBuilder instance();
+    public abstract TBuilder instance();
 }

@@ -1,9 +1,11 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class DelegateRegistrationBuilderTest {
     @Test
@@ -15,6 +17,11 @@ class DelegateRegistrationBuilderTest {
                         .nonce(3)
                         .sign("this is a top secret passphrase")
                         .transaction;
+
+        HashMap actualHashMap = actual.toHashMap();
+        HashMap actualAsset = (HashMap) actualHashMap.get("asset");
+        HashMap delegate = (HashMap) actualAsset.get("delegate");
+        assertEquals(delegate.get("username"), "java");
 
         assertTrue(actual.verify());
     }

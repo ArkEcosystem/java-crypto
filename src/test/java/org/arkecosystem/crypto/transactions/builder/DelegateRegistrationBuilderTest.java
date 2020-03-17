@@ -1,11 +1,10 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.transactions.types.Transaction;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.arkecosystem.crypto.transactions.types.Transaction;
+import org.junit.jupiter.api.Test;
 
 class DelegateRegistrationBuilderTest {
     @Test

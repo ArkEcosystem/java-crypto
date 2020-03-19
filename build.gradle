@@ -8,10 +8,11 @@ plugins {
 repositories {
     jcenter()
     mavenCentral()
+    maven()
 }
 
 group = 'org.arkecosystem'
-version = '1.2.2'
+version = '1.2.3'
 
 dependencies {
     compile group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.15.8'
@@ -30,7 +31,7 @@ publishing {
             url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
             credentials {
                 username = System.getenv("MVN_USERNAME")
-                password = System.getenv("MVN_PASSWORD")
+                password = System.getenv("MVN_USERNAME")
             }
         }
 

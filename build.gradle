@@ -30,7 +30,7 @@ publishing {
             url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
             credentials {
                 username = System.getenv("MVN_USERNAME")
-                password = System.getenv("MVN_USERNAME")
+                password = System.getenv("MVN_PASSWORD")
             }
         }
 

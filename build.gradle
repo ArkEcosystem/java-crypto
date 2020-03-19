@@ -11,7 +11,7 @@ repositories {
 }
 
 group = 'org.arkecosystem'
-version = '1.2.0'
+version = '1.2.1'
 
 dependencies {
     compile group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.15.8'

@@ -27,8 +27,8 @@ publishing {
         jcenter()
         mavenCentral() {
             credentials {
-                username "$mavenUser"
-                password "$mavenPassword"
+                username "$secrets.MAVEN_USER"
+                password "$secrets.MAVEN_SECRET"
             }
         }
 

@@ -9,7 +9,6 @@ import org.arkecosystem.crypto.transactions.Serializer;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
-import org.bitcoinj.core.SignatureDecodeException;
 
 public abstract class Transaction {
 
@@ -71,7 +70,7 @@ public abstract class Transaction {
 
         try {
             return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey());
-        } catch (SignatureDecodeException e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -84,7 +83,7 @@ public abstract class Transaction {
 
         try {
             return ECKey.verify(Sha256Hash.hash(bytes), signature, keys.getPubKey());
-        } catch (SignatureDecodeException e) {
+        } catch (Exception e) {
             return false;
         }
     }

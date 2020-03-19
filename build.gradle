@@ -11,7 +11,7 @@ repositories {
 }
 
 group = 'org.arkecosystem'
-version = '1.1.2'
+version = '1.2.0'
 
 publishing {
     publishing {
@@ -83,7 +83,6 @@ task formatCode(dependsOn: ['spotlessApply'])
 
 task fatJar(type: Jar) {
     manifest.from jar.manifest
-    classifier = 'standalone'
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     } {
@@ -95,12 +94,10 @@ task fatJar(type: Jar) {
 }
 
 task javadocJar(type: Jar) {
-    classifier = 'javadoc'
     from javadoc
 }
 
 task sourcesJar(type: Jar) {
-    classifier = 'sources'
     from sourceSets.main.allSource
 }
 

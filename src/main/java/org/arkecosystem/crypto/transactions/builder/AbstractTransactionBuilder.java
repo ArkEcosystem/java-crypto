@@ -23,15 +23,6 @@ public abstract class AbstractTransactionBuilder<
         return this.instance();
     };
 
-    public TBuilder typeGroup(int typeGroup) {
-        if (typeGroup > Short.MAX_VALUE) {
-            throw new IllegalArgumentException(
-                    "Type group should not be bigger then 2 bytes (bigger then 32767)");
-        }
-        this.transaction.typeGroup = typeGroup;
-        return this.instance();
-    }
-
     public TBuilder nonce(long nonce) {
         this.transaction.nonce = nonce;
         return this.instance();
@@ -73,5 +64,5 @@ public abstract class AbstractTransactionBuilder<
 
     public abstract Transaction getTransactionInstance();
 
-    abstract TBuilder instance();
+    public abstract TBuilder instance();
 }

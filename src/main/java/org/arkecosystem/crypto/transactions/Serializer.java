@@ -24,25 +24,31 @@ public class Serializer {
     }
 
     public byte[] serialize(boolean skipSignature, boolean skipSecondSignature) {
-        ByteBuffer buffer = ByteBuffer.allocate(512);
-        buffer.order(ByteOrder.LITTLE_ENDIAN);
 
-        serializeCommon(buffer);
-        serializeVendorField(buffer);
+        byte[] common = serializeCommon();
+        byte[] vendorField = serializeVendorField();
 
         byte[] typeBuffer = this.transaction.serialize();
+
+        byte[] signatures = serializeSignatures(skipSignature, skipSecondSignature);
+
+        ByteBuffer buffer =
+                ByteBuffer.allocate(
+                        common.length + vendorField.length + typeBuffer.length + signatures.length);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+
+        buffer.put(common);
+        buffer.put(vendorField);
         buffer.put(typeBuffer);
+        buffer.put(signatures);
 
-        serializeSignatures(buffer, skipSignature, skipSecondSignature);
-
-        byte[] result = new byte[buffer.position()];
-        buffer.rewind();
-        buffer.get(result);
-
-        return result;
+        return buffer.array();
     }
 
-    private void serializeCommon(ByteBuffer buffer) {
+    private byte[] serializeCommon() {
+        ByteBuffer buffer = ByteBuffer.allocate(58);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+
         buffer.put((byte) 0xff);
         if (this.transaction.version > 0) {
             buffer.put((byte) this.transaction.version);
@@ -61,17 +67,24 @@ public class Serializer {
 
         buffer.put(Hex.decode(this.transaction.senderPublicKey));
         buffer.putLong(this.transaction.fee);
+
+        return buffer.array();
     }
 
-    private void serializeVendorField(ByteBuffer buffer) {
+    private byte[] serializeVendorField() {
+        ByteBuffer buffer = ByteBuffer.allocate(1);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+
         if (this.transaction.hasVendorField()) {
             if (this.transaction.vendorField != null && !this.transaction.vendorField.equals("")) {
                 int vendorFieldLength = this.transaction.vendorField.length();
+                buffer = ByteBuffer.allocate(vendorFieldLength + 1);
                 buffer.put((byte) vendorFieldLength);
                 buffer.put(this.transaction.vendorField.getBytes());
             } else if (this.transaction.vendorFieldHex != null
-                    && !this.transaction.vendorFieldHex.equals("")) {
+                    && !this.transaction.vendorFieldHex.isEmpty()) {
                 int vendorFieldHexLength = this.transaction.vendorFieldHex.length();
+                buffer = ByteBuffer.allocate(vendorFieldHexLength + 1);
                 buffer.put((byte) (vendorFieldHexLength / 2));
                 buffer.put(Hex.decode(this.transaction.vendorFieldHex));
             } else {
@@ -80,10 +93,13 @@ public class Serializer {
         } else {
             buffer.put((byte) 0x00);
         }
+
+        return buffer.array();
     }
 
-    private void serializeSignatures(
-            ByteBuffer buffer, boolean skipSignature, boolean skipSecondSignature) {
+    private byte[] serializeSignatures(boolean skipSignature, boolean skipSecondSignature) {
+        ByteBuffer buffer = ByteBuffer.allocate(144);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
 
         if (!skipSignature && this.transaction.signature != null) {
             buffer.put(Hex.decode(this.transaction.signature));
@@ -92,5 +108,10 @@ public class Serializer {
         if (!skipSecondSignature && this.transaction.secondSignature != null) {
             buffer.put(Hex.decode(this.transaction.secondSignature));
         }
+        byte[] result = new byte[buffer.position()];
+        buffer.rewind();
+        buffer.get(result);
+
+        return result;
     }
 }

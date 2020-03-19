@@ -1,8 +1,10 @@
 package org.arkecosystem.crypto.transactions.builder;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +22,13 @@ class VoteBuilderTest {
                         .transaction;
 
         assertTrue(actual.verify());
+
+        HashMap actualHashMap = actual.toHashMap();
+        HashMap actualAsset = (HashMap) actualHashMap.get("asset");
+        assertEquals(
+                actualAsset.get("votes"),
+                Arrays.asList(
+                        "+034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"));
 
         Transaction actual2 =
                 new VoteBuilder()

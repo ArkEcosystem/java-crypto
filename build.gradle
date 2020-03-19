@@ -11,34 +11,7 @@ repositories {
 }
 
 group = 'org.arkecosystem'
-version = '1.1.2'
-
-publishing {
-    publishing {
-        repositories {
-            maven {
-                name = "github"
-                url = uri("https://maven.pkg.github.com/arkecosystem/java-crypto")
-                credentials {
-                    username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                    password = project.findProperty("gpr.key") ?: System.getenv("PASSWORD")
-                }
-            }
-        }
-        publications {
-            gpr(MavenPublication) {
-                from(components.java)
-            }
-        }
-    }
-
-    javadoc {
-        if (JavaVersion.current().isJava9Compatible()) {
-            options.addBooleanOption('html5', true)
-        }
-    }
-}
-
+version = '1.2.1'
 
 dependencies {
     compile group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.15.8'
@@ -48,6 +21,82 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
 }
+
+publishing {
+    repositories {
+        jcenter()
+        mavenCentral() {
+            name = "MavenRepo"
+            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+            credentials {
+                username = System.getenv("MVN_USERNAME")
+                password = System.getenv("MVN_PASSWORD")
+            }
+        }
+
+        maven {
+            name = "github"
+            url = uri("https://maven.pkg.github.com/arkecosystem/java-crypto")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("PASSWORD")
+            }
+        }
+
+        publications {
+            gpr(MavenPublication) {
+                from(components.java)
+            }
+            mavenJava(MavenPublication) {
+                artifactId = 'java-crypto'
+                from(components.java)
+                pom {
+                    name = 'java-crypto'
+                    versionMapping {
+                        usage('java-api') {
+                            fromResolutionOf('runtimeClasspath')
+                        }
+                        usage('java-runtime') {
+                            fromResolutionResult()
+                        }
+                    }
+                    description = 'A Lightweight ARK Core JAVA Crypto SDK Library'
+                    url = 'https://sdk.ark.dev/java/crypto'
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'https://github.com/ArkEcosystem/java-crypto/blob/master/LICENSE'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'kovaczan'
+                            name = 'Žan Kovač'
+                            email = 'zan@ark.io'
+                        }
+                        developer {
+                            id = 'kristjank'
+                            name = 'Kristjan Košič'
+                            email = 'kristjan@ark.io'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://github.com/arkecosystem/java-crypto.git'
+                        developerConnection = 'scm:git:ssh://github.com/arkecosystem/java-crypto.git'
+                        url = 'https://sdk.ark.dev/java/crypto'
+                    }
+                }
+            }
+        }
+    }
+}
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
 
 test {
     useJUnitPlatform()
@@ -83,7 +132,6 @@ task formatCode(dependsOn: ['spotlessApply'])
 
 task fatJar(type: Jar) {
     manifest.from jar.manifest
-    classifier = 'standalone'
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     } {
@@ -95,12 +143,10 @@ task fatJar(type: Jar) {
 }
 
 task javadocJar(type: Jar) {
-    classifier = 'javadoc'
     from javadoc
 }
 
 task sourcesJar(type: Jar) {
-    classifier = 'sources'
     from sourceSets.main.allSource
 }
 

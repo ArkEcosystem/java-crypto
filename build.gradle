@@ -26,9 +26,11 @@ publishing {
     repositories {
         jcenter()
         mavenCentral() {
+            name = "MavenRepo"
+            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
             credentials {
-                username "$secrets.MAVEN_USER"
-                password "$secrets.MAVEN_SECRET"
+                username = System.getenv("MVN_USERNAME")
+                password = System.getenv("MVN_PASSWORD")
             }
         }
 

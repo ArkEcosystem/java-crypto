@@ -4,7 +4,7 @@ import java.util.*;
 import org.arkecosystem.crypto.enums.HtlcLockExpirationType;
 
 public class TransactionAsset {
-    public Signature signature = new Signature();
+    public Signature signature = new        Signature();
     public List<String> votes = new ArrayList<>();
     public Delegate delegate = new Delegate();
     public MultiSignature multisignature = new MultiSignature();

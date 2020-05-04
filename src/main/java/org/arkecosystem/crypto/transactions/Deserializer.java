@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
+import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 import org.arkecosystem.crypto.transactions.types.*;
 
 public class Deserializer {
@@ -13,27 +14,29 @@ public class Deserializer {
     private ByteBuffer buffer;
     private Transaction transaction;
 
-    private Map<Integer, Transaction> transactionsClasses = new HashMap<>();
+    private Map<Integer, Map<Integer, Transaction>> transactionGroups = new HashMap<>();
 
     public Deserializer(String serialized) {
-        this.transactionsClasses.put(CoreTransactionTypes.TRANSFER.getValue(), new Transfer());
-        this.transactionsClasses.put(
+        Map<Integer, Transaction> coreTransactionTypes = new HashMap<>();
+        coreTransactionTypes.put(CoreTransactionTypes.TRANSFER.getValue(), new Transfer());
+        coreTransactionTypes.put(
                 CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue(),
                 new SecondSignatureRegistration());
-        this.transactionsClasses.put(
+        coreTransactionTypes.put(
                 CoreTransactionTypes.DELEGATE_REGISTRATION.getValue(), new DelegateRegistration());
-        this.transactionsClasses.put(CoreTransactionTypes.VOTE.getValue(), new Vote());
-        this.transactionsClasses.put(
+        coreTransactionTypes.put(CoreTransactionTypes.VOTE.getValue(), new Vote());
+        coreTransactionTypes.put(
                 CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue(),
                 new MultiSignatureRegistration());
-        this.transactionsClasses.put(CoreTransactionTypes.IPFS.getValue(), new Ipfs());
-        this.transactionsClasses.put(
-                CoreTransactionTypes.MULTI_PAYMENT.getValue(), new MultiPayment());
-        this.transactionsClasses.put(
+        coreTransactionTypes.put(CoreTransactionTypes.IPFS.getValue(), new Ipfs());
+        coreTransactionTypes.put(CoreTransactionTypes.MULTI_PAYMENT.getValue(), new MultiPayment());
+        coreTransactionTypes.put(
                 CoreTransactionTypes.DELEGATE_RESIGNATION.getValue(), new DelegateResignation());
-        this.transactionsClasses.put(CoreTransactionTypes.HTLC_LOCK.getValue(), new HtlcLock());
-        this.transactionsClasses.put(CoreTransactionTypes.HTLC_CLAIM.getValue(), new HtlcClaim());
-        this.transactionsClasses.put(CoreTransactionTypes.HTLC_REFUND.getValue(), new HtlcRefund());
+        coreTransactionTypes.put(CoreTransactionTypes.HTLC_LOCK.getValue(), new HtlcLock());
+        coreTransactionTypes.put(CoreTransactionTypes.HTLC_CLAIM.getValue(), new HtlcClaim());
+        coreTransactionTypes.put(CoreTransactionTypes.HTLC_REFUND.getValue(), new HtlcRefund());
+
+        transactionGroups.put(TransactionTypeGroup.CORE.getValue(), coreTransactionTypes);
 
         this.buffer = ByteBuffer.wrap(Hex.decode(serialized)).slice();
         this.buffer.order(ByteOrder.LITTLE_ENDIAN);
@@ -61,7 +64,7 @@ public class Deserializer {
         int type = this.buffer.getShort();
         long nonce = this.buffer.getLong();
 
-        this.transaction = this.transactionsClasses.get(type);
+        this.transaction = this.transactionGroups.get(typeGroup).get(type);
         this.transaction.version = version;
         this.transaction.network = network;
         this.transaction.typeGroup = typeGroup;
@@ -107,5 +110,32 @@ public class Deserializer {
         int signatureLength = Integer.parseInt(length) + 2;
         this.buffer.position(mark);
         return signatureLength;
+    }
+
+    //    public void setNewTypeGroup(int typeGroup, HashMap<Integer, Transaction> transactionTypes) {
+    //        this.transactionGroups.put(typeGroup, transactionTypes);
+    //    }
+    //
+    //    public void setNewType(int typeGroup, int type, Transaction transaction){
+    //        this.transactionGroups.get(typeGroup).put(type,transaction);
+    //    }
+
+    public void setNewTransactionType(Transaction transaction) {
+        if (this.transactionGroups.containsKey(transaction.getTransactionTypeGroup())) {
+            this.transactionGroups
+                    .get(transaction.getTransactionTypeGroup())
+                    .put(transaction.getTransactionType(), transaction);
+        } else {
+            Map<Integer, Transaction> newTransactionGroup = new HashMap<>();
+            newTransactionGroup.put(transaction.getTransactionType(), transaction);
+            this.transactionGroups.put(transaction.getTransactionTypeGroup(), newTransactionGroup);
+        }
+    }
+
+    public boolean hasTransactionType(int typeGroup, int type) {
+        if (!this.transactionGroups.containsKey(typeGroup)) {
+            return false;
+        }
+        return this.transactionGroups.get(typeGroup).containsKey(type);
     }
 }

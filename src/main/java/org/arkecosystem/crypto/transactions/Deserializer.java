@@ -112,7 +112,6 @@ public class Deserializer {
         return signatureLength;
     }
 
-
     public void setNewTransactionType(Transaction transaction) {
         if (this.transactionGroups.containsKey(transaction.getTransactionTypeGroup())) {
             this.transactionGroups

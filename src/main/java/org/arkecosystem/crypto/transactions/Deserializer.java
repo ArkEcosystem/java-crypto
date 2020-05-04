@@ -112,13 +112,6 @@ public class Deserializer {
         return signatureLength;
     }
 
-    //    public void setNewTypeGroup(int typeGroup, HashMap<Integer, Transaction> transactionTypes) {
-    //        this.transactionGroups.put(typeGroup, transactionTypes);
-    //    }
-    //
-    //    public void setNewType(int typeGroup, int type, Transaction transaction){
-    //        this.transactionGroups.get(typeGroup).put(type,transaction);
-    //    }
 
     public void setNewTransactionType(Transaction transaction) {
         if (this.transactionGroups.containsKey(transaction.getTransactionTypeGroup())) {

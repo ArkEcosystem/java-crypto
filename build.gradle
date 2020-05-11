@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id 'jacoco'
-    id 'com.diffplug.gradle.spotless' version '3.29.0'
+    id 'com.diffplug.gradle.spotless' version '3.30.0'
 }
 
 sourceCompatibility = 1.8

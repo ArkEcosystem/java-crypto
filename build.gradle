@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id 'jacoco'
-    id 'com.diffplug.spotless' version '5.1.0'
+    id 'com.diffplug.spotless' version '5.1.1'
 }
 
 sourceCompatibility = 1.8

@@ -3,6 +3,8 @@ package org.arkecosystem.crypto.transactions.types;
 import com.google.gson.GsonBuilder;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
+
+import org.arkecosystem.crypto.Schnorr;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.arkecosystem.crypto.transactions.Serializer;

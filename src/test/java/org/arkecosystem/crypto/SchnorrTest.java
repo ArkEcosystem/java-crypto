@@ -11,7 +11,7 @@ class SchnorrTest {
 
     @ParameterizedTest
     @CsvFileSource(resources = "/utils/test-vectors.csv", numLinesToSkip = 1)
-    void name(String secretKey, String publickey, String message, String signature, boolean expected, String comment) {
+    void schnorrSignAndVerify(String secretKey, String publickey, String message, String signature, boolean expected, String comment) {
 
         byte[] pubkey = Schnorr.hexStringToByteArray(publickey);
         byte[] msg = Schnorr.hexStringToByteArray(message);

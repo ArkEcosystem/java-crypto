@@ -1,11 +1,8 @@
 package org.arkecosystem.crypto;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Scanner;
 
 /**
  * Heavily inspired in https://github.com/miketwk/bip-schnorr-java/blob/master/Schnorr.java
@@ -23,7 +20,7 @@ public class Schnorr {
 
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
-    public static BigInteger[] point_add(BigInteger[] p1, BigInteger[] p2) {
+    public static BigInteger[] addPoint(BigInteger[] p1, BigInteger[] p2) {
         if (p1 == null || p1.length != 2)
             return p2;
 
@@ -44,12 +41,12 @@ public class Schnorr {
         return new BigInteger[]{x3, lam.multiply(p1[0].subtract(x3)).subtract(p1[1]).mod(p)};
     }
 
-    public static BigInteger[] point_mul(BigInteger[] P, BigInteger n) {
+    public static BigInteger[] multiplyPoint(BigInteger[] P, BigInteger n) {
         BigInteger[] R = null;
         for (int i = 0; i < 256; i++) {
             if (BigInteger.ONE.compareTo(n.shiftRight(i).and(BigInteger.ONE)) == 0)
-                R = point_add(R, P);
-            P = point_add(P, P);
+                R = addPoint(R, P);
+            P = addPoint(P, P);
         }
         return R;
     }
@@ -58,7 +55,7 @@ public class Schnorr {
         return x.modPow(p.subtract(BigInteger.ONE).divide(TWO), p);
     }
 
-    public static BigInteger[] point_from_bytes(byte[] b) {
+    public static BigInteger[] bytesToPoint(byte[] b) {
         if (b[0] != 2 && b[0] != 3)
             return null;
 
@@ -94,14 +91,14 @@ public class Schnorr {
         return new BigInteger(bytesToHex(data), 16);
     }
 
-    public static byte[] bytes_from_point(BigInteger[] point) {
+    public static byte[] pointToBytes(BigInteger[] point) {
         byte[] res = new byte[33];
         res[0] = BigInteger.ONE.compareTo(point[1].and(BigInteger.ONE)) == 0 ? (byte) 0x03 : (byte) 0x02;
         System.arraycopy(to32BytesData(point[0]), 0, res, 1, 32);
         return res;
     }
 
-    public static byte[] schnorr_sign(byte[] msg, BigInteger seckey) {
+    public static byte[] schnorrSign(byte[] msg, BigInteger seckey) {
         if (msg.length != 32)
             throw new RuntimeException("The message must be a 32-byte array.");
 
@@ -117,13 +114,13 @@ public class Schnorr {
             if (BigInteger.ZERO.compareTo(k0) == 0)
                 throw new RuntimeException("Failure. This happens only with negligible probability.");
 
-            BigInteger[] R = point_mul(G, k0);
+            BigInteger[] R = multiplyPoint(G, k0);
 
             BigInteger k = BigInteger.ONE.compareTo(jacobi(R[1])) != 0 ? n.subtract(k0) : k0;
             byte[] R0Bytes = to32BytesData(R[0]);
             byte[] eData = new byte[32 + 33 + 32];
             System.arraycopy(R0Bytes, 0, eData, 0, 32);
-            System.arraycopy(bytes_from_point(point_mul(G, seckey)), 0, eData, 32, 33);
+            System.arraycopy(pointToBytes(multiplyPoint(G, seckey)), 0, eData, 32, 33);
             System.arraycopy(msg, 0, eData, 65, 32);
             eData = sha256(eData);
             BigInteger e = toBigInteger(eData).mod(n);
@@ -139,7 +136,7 @@ public class Schnorr {
         }
     }
 
-    public static boolean schnorr_verify(byte[] msg, byte[] pubkey, byte[] sig) {
+    public static boolean schnorrVerify(byte[] msg, byte[] pubkey, byte[] sig) {
         if (msg.length != 32)
             throw new RuntimeException("The message must be a 32-byte array.");
 
@@ -149,7 +146,7 @@ public class Schnorr {
         if (sig.length != 64)
             throw new RuntimeException("The signature must be a 64-byte array.");
 
-        BigInteger[] P = point_from_bytes(pubkey);
+        BigInteger[] P = bytesToPoint(pubkey);
         if (P == null)
             return false;
 
@@ -162,12 +159,12 @@ public class Schnorr {
         try {
             byte[] eData = new byte[32 + 33 + 32];
             System.arraycopy(sig, 0, eData, 0, 32);
-            System.arraycopy(bytes_from_point(P), 0, eData, 32, 33);
+            System.arraycopy(pointToBytes(P), 0, eData, 32, 33);
             System.arraycopy(msg, 0, eData, 65, 32);
             eData = sha256(eData);
             BigInteger e = toBigInteger(eData).mod(n);
 
-            BigInteger[] R = point_add(point_mul(G, s), point_mul(P, n.subtract(e)));
+            BigInteger[] R = addPoint(multiplyPoint(G, s), multiplyPoint(P, n.subtract(e)));
             if (R == null || BigInteger.ONE.compareTo(jacobi(R[1])) != 0 || r.compareTo(R[0]) != 0)
                 return false;
 

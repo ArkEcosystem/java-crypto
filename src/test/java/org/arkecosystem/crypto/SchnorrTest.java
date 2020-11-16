@@ -18,10 +18,10 @@ class SchnorrTest {
 
         if (secretKey != null) {
             BigInteger seckeyNum = new BigInteger(secretKey, 16);
-            String sig_actual = Schnorr.bytesToHex(Schnorr.schnorr_sign(msg, seckeyNum));
+            String sig_actual = Schnorr.bytesToHex(Schnorr.schnorrSign(msg, seckeyNum));
             assertEquals(signature, sig_actual);
         }
-        boolean result_actual = Schnorr.schnorr_verify(msg, pubkey, Schnorr.hexStringToByteArray(signature));
+        boolean result_actual = Schnorr.schnorrVerify(msg, pubkey, Schnorr.hexStringToByteArray(signature));
         assertEquals(expected, result_actual, comment);
     }
 }

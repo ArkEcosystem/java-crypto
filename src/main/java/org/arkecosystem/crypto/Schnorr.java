@@ -1,8 +1,8 @@
 package org.arkecosystem.crypto;
 
+import org.bitcoinj.core.Sha256Hash;
+
 import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Heavily inspired in https://github.com/miketwk/bip-schnorr-java/blob/master/Schnorr.java
@@ -109,31 +109,26 @@ public class Schnorr {
         System.arraycopy(to32BytesData(seckey), 0, resultData, 0, 32);
         System.arraycopy(msg, 0, resultData, 32, msg.length);
 
-        try {
-            BigInteger k0 = toBigInteger(sha256(resultData)).mod(n);
-            if (BigInteger.ZERO.compareTo(k0) == 0)
-                throw new RuntimeException("Failure. This happens only with negligible probability.");
+        BigInteger k0 = toBigInteger(Sha256Hash.hash(resultData)).mod(n);
+        if (BigInteger.ZERO.compareTo(k0) == 0)
+            throw new RuntimeException("Failure. This happens only with negligible probability.");
 
-            BigInteger[] R = multiplyPoint(G, k0);
+        BigInteger[] R = multiplyPoint(G, k0);
 
-            BigInteger k = BigInteger.ONE.compareTo(jacobi(R[1])) != 0 ? n.subtract(k0) : k0;
-            byte[] R0Bytes = to32BytesData(R[0]);
-            byte[] eData = new byte[32 + 33 + 32];
-            System.arraycopy(R0Bytes, 0, eData, 0, 32);
-            System.arraycopy(pointToBytes(multiplyPoint(G, seckey)), 0, eData, 32, 33);
-            System.arraycopy(msg, 0, eData, 65, 32);
-            eData = sha256(eData);
-            BigInteger e = toBigInteger(eData).mod(n);
+        BigInteger k = BigInteger.ONE.compareTo(jacobi(R[1])) != 0 ? n.subtract(k0) : k0;
+        byte[] R0Bytes = to32BytesData(R[0]);
+        byte[] eData = new byte[32 + 33 + 32];
+        System.arraycopy(R0Bytes, 0, eData, 0, 32);
+        System.arraycopy(pointToBytes(multiplyPoint(G, seckey)), 0, eData, 32, 33);
+        System.arraycopy(msg, 0, eData, 65, 32);
+        eData = Sha256Hash.hash(eData);
+        BigInteger e = toBigInteger(eData).mod(n);
 
-            byte[] finalData = new byte[64];
-            System.arraycopy(R0Bytes, 0, finalData, 0, 32);
-            System.arraycopy(to32BytesData(e.multiply(seckey).add(k).mod(n)), 0, finalData, 32, 32);
+        byte[] finalData = new byte[64];
+        System.arraycopy(R0Bytes, 0, finalData, 0, 32);
+        System.arraycopy(to32BytesData(e.multiply(seckey).add(k).mod(n)), 0, finalData, 32, 32);
 
-            return finalData;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error occurs during schnorr_sign, e=" + e);
-        }
+        return finalData;
     }
 
     public static boolean schnorrVerify(byte[] msg, byte[] pubkey, byte[] sig) {
@@ -156,23 +151,16 @@ public class Schnorr {
         if (r.compareTo(p) >= 0 || s.compareTo(n) >= 0)
             return false;
 
-        try {
-            byte[] eData = new byte[32 + 33 + 32];
-            System.arraycopy(sig, 0, eData, 0, 32);
-            System.arraycopy(pointToBytes(P), 0, eData, 32, 33);
-            System.arraycopy(msg, 0, eData, 65, 32);
-            eData = sha256(eData);
-            BigInteger e = toBigInteger(eData).mod(n);
+        byte[] eData = new byte[32 + 33 + 32];
+        System.arraycopy(sig, 0, eData, 0, 32);
+        System.arraycopy(pointToBytes(P), 0, eData, 32, 33);
+        System.arraycopy(msg, 0, eData, 65, 32);
+        eData = Sha256Hash.hash(eData);
+        BigInteger e = toBigInteger(eData).mod(n);
 
-            BigInteger[] R = addPoint(multiplyPoint(G, s), multiplyPoint(P, n.subtract(e)));
-            if (R == null || BigInteger.ONE.compareTo(jacobi(R[1])) != 0 || r.compareTo(R[0]) != 0)
-                return false;
+        BigInteger[] R = addPoint(multiplyPoint(G, s), multiplyPoint(P, n.subtract(e)));
 
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error occurs during schnorr_verify, e=" + e);
-        }
+        return R != null && BigInteger.ONE.compareTo(jacobi(R[1])) == 0 && r.compareTo(R[0]) == 0;
     }
 
     public static byte[] hexStringToByteArray(String s) {
@@ -204,10 +192,4 @@ public class Schnorr {
         }
         return new String(hexChars);
     }
-
-    public static byte[] sha256(byte[] input) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        return digest.digest(input);
-    }
-
 }

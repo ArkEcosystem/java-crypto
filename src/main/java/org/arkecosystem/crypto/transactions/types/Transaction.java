@@ -1,10 +1,6 @@
 package org.arkecosystem.crypto.transactions.types;
 
 import com.google.gson.GsonBuilder;
-import java.nio.ByteBuffer;
-import java.util.HashMap;
-
-import org.arkecosystem.crypto.Schnorr;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.arkecosystem.crypto.transactions.Serializer;
@@ -12,6 +8,9 @@ import org.arkecosystem.crypto.transactions.TransactionAsset;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.SignatureDecodeException;
+
+import java.nio.ByteBuffer;
+import java.util.HashMap;
 
 public abstract class Transaction {
 

@@ -6,7 +6,7 @@ import org.arkecosystem.crypto.transactions.types.Transaction;
 
 public abstract class AbstractTransactionBuilder<
         TBuilder extends AbstractTransactionBuilder<TBuilder>> {
-    public Transaction transaction;
+    public final Transaction transaction;
 
     public AbstractTransactionBuilder() {
         this.transaction = getTransactionInstance();
@@ -21,12 +21,12 @@ public abstract class AbstractTransactionBuilder<
     public TBuilder version(int version) {
         this.transaction.version = version;
         return this.instance();
-    };
+    }
 
     public TBuilder nonce(long nonce) {
         this.transaction.nonce = nonce;
         return this.instance();
-    };
+    }
 
     public TBuilder secondSign(String passphrase) {
         this.transaction.secondSign(passphrase);
@@ -62,7 +62,7 @@ public abstract class AbstractTransactionBuilder<
         return this.instance();
     }
 
-    public abstract Transaction getTransactionInstance();
+    protected abstract Transaction getTransactionInstance();
 
-    public abstract TBuilder instance();
+    protected abstract TBuilder instance();
 }

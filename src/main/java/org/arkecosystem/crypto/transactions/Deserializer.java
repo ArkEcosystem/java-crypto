@@ -89,11 +89,7 @@ public class Deserializer {
     }
 
     private void deserializeSignatures() {
-        if (this.transaction.version == 1) {
-            deserializeEcdsa();
-        } else {
-            deserializeSchnorrOrEcdsa();
-        }
+        deserializeSchnorrOrEcdsa();
     }
 
     private void deserializeSchnorrOrEcdsa() {

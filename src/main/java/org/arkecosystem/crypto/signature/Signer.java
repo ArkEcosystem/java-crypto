@@ -7,6 +7,4 @@ public interface Signer {
 
     byte[] sign(byte[] message, ECKey key);
 
-    boolean verify(byte[] hash, ECKey key, byte[] signature);
-
 }

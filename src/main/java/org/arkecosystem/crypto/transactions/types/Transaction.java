@@ -3,9 +3,7 @@ package org.arkecosystem.crypto.transactions.types;
 import com.google.gson.GsonBuilder;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
-import org.arkecosystem.crypto.signature.ECDSASigner;
-import org.arkecosystem.crypto.signature.SchnorrSigner;
-import org.arkecosystem.crypto.signature.Signer;
+import org.arkecosystem.crypto.signature.*;
 import org.arkecosystem.crypto.transactions.Serializer;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
 import org.bitcoinj.core.ECKey;
@@ -68,7 +66,7 @@ public abstract class Transaction {
         byte[] signature = Hex.decode(this.signature);
         byte[] hash = Sha256Hash.hash(Serializer.serialize(this, true, true));
 
-        return signer().verify(hash, keys, signature);
+        return verifier(this.signature).verify(hash, keys, signature);
     }
 
     public boolean secondVerify(String secondPublicKey) {
@@ -77,7 +75,7 @@ public abstract class Transaction {
         byte[] signature = Hex.decode(this.secondSignature);
         byte[] hash = Sha256Hash.hash(Serializer.serialize(this, false, true));
 
-        return signer().verify(hash, keys, signature);
+        return verifier(this.secondSignature).verify(hash, keys, signature);
     }
 
     public String toJson() {
@@ -134,5 +132,10 @@ public abstract class Transaction {
 
     private Signer signer() {
         return this.version > 1 ? new SchnorrSigner() : new ECDSASigner();
+    }
+
+    private Verifier verifier(String signature) {
+        // 128 string length => 64 bits
+        return this.version > 1 && signature.length() == 128 ? new SchnorrVerifier() : new ECDSAVerifier();
     }
 }

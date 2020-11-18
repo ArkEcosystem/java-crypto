@@ -9,9 +9,4 @@ public class SchnorrSigner implements Signer {
     public byte[] sign(byte[] message, ECKey privateKey) {
         return Schnorr.schnorrSign(message, privateKey.getPrivKey());
     }
-
-    @Override
-    public boolean verify(byte[] hash, ECKey keys, byte[] signature) {
-        return Schnorr.schnorrVerify(hash, keys.getPubKey(), signature);
-    }
 }

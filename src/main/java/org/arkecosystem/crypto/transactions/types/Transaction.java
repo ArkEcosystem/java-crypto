@@ -1,14 +1,15 @@
 package org.arkecosystem.crypto.transactions.types;
 
 import com.google.gson.GsonBuilder;
-import org.arkecosystem.crypto.Schnorr;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
+import org.arkecosystem.crypto.signature.ECDSASigner;
+import org.arkecosystem.crypto.signature.SchnorrSigner;
+import org.arkecosystem.crypto.signature.Signer;
 import org.arkecosystem.crypto.transactions.Serializer;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
-import org.bitcoinj.core.SignatureDecodeException;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -46,13 +47,7 @@ public abstract class Transaction {
         this.senderPublicKey = privateKey.getPublicKeyAsHex();
         Sha256Hash hash = Sha256Hash.of(Serializer.serialize(this, true, true));
 
-        byte[] signature = this.version > 1 ?
-            Schnorr.schnorrSign(hash.getBytes(), privateKey.getPrivKey()) :
-            privateKey
-                .sign(hash)
-                .encodeToDER();
-
-        this.signature = Hex.encode(signature);
+        this.signature = Hex.encode(signer().sign(hash.getBytes(), privateKey));
 
         return this;
     }
@@ -62,13 +57,7 @@ public abstract class Transaction {
 
         Sha256Hash hash = Sha256Hash.of(Serializer.serialize(this, false, true));
 
-        byte[] signature = this.version > 1 ?
-            Schnorr.schnorrSign(hash.getBytes(), privateKey.getPrivKey()) :
-            privateKey
-                .sign(hash)
-                .encodeToDER();
-
-        this.secondSignature = Hex.encode(signature);
+        this.secondSignature = Hex.encode(signer().sign(hash.getBytes(), privateKey));
 
         return this;
     }
@@ -79,11 +68,7 @@ public abstract class Transaction {
         byte[] signature = Hex.decode(this.signature);
         byte[] hash = Sha256Hash.hash(Serializer.serialize(this, true, true));
 
-        try {
-            return this.version > 1 ? Schnorr.schnorrVerify(hash, keys.getPubKey(), signature) : ECKey.verify(hash, signature, keys.getPubKey());
-        } catch (SignatureDecodeException e) {
-            return false;
-        }
+        return signer().verify(hash, keys, signature);
     }
 
     public boolean secondVerify(String secondPublicKey) {
@@ -92,11 +77,7 @@ public abstract class Transaction {
         byte[] signature = Hex.decode(this.secondSignature);
         byte[] hash = Sha256Hash.hash(Serializer.serialize(this, false, true));
 
-        try {
-            return this.version > 1 ? Schnorr.schnorrVerify(hash, keys.getPubKey(), signature): ECKey.verify(hash, signature, keys.getPubKey());
-        } catch (SignatureDecodeException e) {
-            return false;
-        }
+        return signer().verify(hash, keys, signature);
     }
 
     public String toJson() {
@@ -149,5 +130,9 @@ public abstract class Transaction {
 
     public boolean hasVendorField() {
         return false;
+    }
+
+    private Signer signer() {
+        return this.version > 1 ? new SchnorrSigner() : new ECDSASigner();
     }
 }

@@ -28,13 +28,6 @@ public abstract class AbstractTransactionBuilder<
         return this.instance();
     }
 
-    public TBuilder secondSign(String passphrase) {
-        this.transaction.secondSign(passphrase);
-        this.transaction.id = this.transaction.getId();
-
-        return this.instance();
-    }
-
     public TBuilder network(int network) {
         this.transaction.network = network;
         return this.instance();
@@ -57,6 +50,20 @@ public abstract class AbstractTransactionBuilder<
                     "Version 2 MultiSignatureRegistration is not supported in java sdk");
         }
         this.transaction.sign(passphrase);
+        this.transaction.id = this.transaction.getId();
+
+        return this.instance();
+    }
+
+    public TBuilder secondSign(String passphrase) {
+        this.transaction.secondSign(passphrase);
+        this.transaction.id = this.transaction.getId();
+
+        return this.instance();
+    }
+
+    public TBuilder multiSign(String passphrase, int index) {
+        this.transaction.multiSign(passphrase, index);
         this.transaction.id = this.transaction.getId();
 
         return this.instance();

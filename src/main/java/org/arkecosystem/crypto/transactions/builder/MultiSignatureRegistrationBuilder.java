@@ -10,7 +10,6 @@ public class MultiSignatureRegistrationBuilder
         extends AbstractTransactionBuilder<MultiSignatureRegistrationBuilder> {
     public MultiSignatureRegistrationBuilder() {
         super();
-        this.transaction.version = 1;
         this.transaction.fee = Fees.MULTI_SIGNATURE_REGISTRATION.getValue();
     }
 

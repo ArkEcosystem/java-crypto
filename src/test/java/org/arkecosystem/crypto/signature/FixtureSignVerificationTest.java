@@ -42,12 +42,10 @@ public class FixtureSignVerificationTest {
         "transactions/v2-ecdsa/htlc-refund-sign",
     })
     void name(String file) {
-        System.out.println(file);
         LinkedTreeMap<String, Object> fixture = FixtureLoader.load(file);
 
         Transaction actual = new Deserializer(fixture.get("serialized").toString()).deserialize();
 
         assertTrue(actual.verify());
-
     }
 }

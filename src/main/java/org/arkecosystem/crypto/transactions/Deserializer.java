@@ -1,20 +1,21 @@
 package org.arkecosystem.crypto.transactions;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.HashMap;
-import java.util.Map;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 import org.arkecosystem.crypto.transactions.types.*;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Deserializer {
 
-    private ByteBuffer buffer;
+    private final ByteBuffer buffer;
     private Transaction transaction;
 
-    private Map<Integer, Map<Integer, Transaction>> transactionGroups = new HashMap<>();
+    private final Map<Integer, Map<Integer, Transaction>> transactionGroups = new HashMap<>();
 
     public Deserializer(String serialized) {
         Map<Integer, Transaction> coreTransactionTypes = new HashMap<>();

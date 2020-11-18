@@ -1,14 +1,15 @@
 package org.arkecosystem.crypto.transactions;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import org.arkecosystem.crypto.configuration.Network;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
 public class Serializer {
 
-    private Transaction transaction;
+    private final Transaction transaction;
 
     public Serializer(Transaction transaction) {
         this.transaction = transaction;

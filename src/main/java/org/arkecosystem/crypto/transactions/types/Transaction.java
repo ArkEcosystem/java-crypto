@@ -131,7 +131,7 @@ public abstract class Transaction {
     }
 
     private Signer signer() {
-        return this.version > 1 ? new SchnorrSigner() : new ECDSASigner();
+        return new SchnorrSigner();
     }
 
     private Verifier verifier(String signature) {

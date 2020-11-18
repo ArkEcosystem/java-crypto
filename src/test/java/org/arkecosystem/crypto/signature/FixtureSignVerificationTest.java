@@ -41,7 +41,59 @@ public class FixtureSignVerificationTest {
         "transactions/v2-ecdsa/multi-payment-with-vendor-field-secondSign",
         "transactions/v2-ecdsa/htlc-refund-sign",
     })
-    void name(String file) {
+    void checkEcdsa(String file) {
+        LinkedTreeMap<String, Object> fixture = FixtureLoader.load(file);
+
+        Transaction actual = new Deserializer(fixture.get("serialized").toString()).deserialize();
+
+        assertTrue(actual.verify());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+       "transactions/v2-schnorr/second-signature-registration",
+//       "transactions/v2-schnorr/htlc-lock-multiSign",
+//       "transactions/v2-schnorr/htlc-claim-multiSign",
+       "transactions/v2-schnorr/transfer-with-vendor-field-secondSign",
+       "transactions/v2-schnorr/transfer-secondSign",
+//       "transactions/v2-schnorr/multi-signature-registration",
+//       "transactions/v2-schnorr/htlc-refund-multiSign",
+//       "transactions/v2-schnorr/ipfs-multiSign",
+       "transactions/v2-schnorr/transfer-sign",
+//       "transactions/v2-schnorr/htlc-lock-with-vendor-field-multiSign",
+       "transactions/v2-schnorr/multi-payment-secondSign",
+       "transactions/v2-schnorr/delegate-resignation-secondSign",
+       "transactions/v2-schnorr/htlc-claim-sign",
+       "transactions/v2-schnorr/htlc-claim-secondSign",
+       "transactions/v2-schnorr/htlc-lock-sign",
+//       "transactions/v2-schnorr/vote-multiSign",
+       "transactions/v2-schnorr/htlc-refund-secondSign",
+       "transactions/v2-schnorr/delegate-registration-sign",
+//       "transactions/v2-schnorr/multi-payment-multiSign",
+       "transactions/v2-schnorr/vote-sign",
+       "transactions/v2-schnorr/multi-payment-sign",
+//       "transactions/v2-schnorr/transfer-with-vendor-field-multiSign",
+       "transactions/v2-schnorr/multi-payment-with-vendor-field-sign",
+       "transactions/v2-schnorr/delegate-registration-secondSign",
+       "transactions/v2-schnorr/ipfs-secondSign",
+       "transactions/v2-schnorr/htlc-lock-secondSign",
+       "transactions/v2-schnorr/unvote-sign",
+//       "transactions/v2-schnorr/unvote-multiSign",
+       "transactions/v2-schnorr/vote-secondSign",
+       "transactions/v2-schnorr/delegate-resignation-sign",
+       "transactions/v2-schnorr/htlc-lock-with-vendor-field-sign",
+//       "transactions/v2-schnorr/delegate-registration-multiSign",
+       "transactions/v2-schnorr/ipfs-sign",
+       "transactions/v2-schnorr/htlc-lock-with-vendor-field-secondSign",
+//       "transactions/v2-schnorr/transfer-multiSign",
+       "transactions/v2-schnorr/unvote-secondSign",
+       "transactions/v2-schnorr/transfer-with-vendor-field-sign",
+//       "transactions/v2-schnorr/multi-payment-with-vendor-field-multiSign",
+//       "transactions/v2-schnorr/delegate-resignation-multiSign",
+       "transactions/v2-schnorr/multi-payment-with-vendor-field-secondSign",
+       "transactions/v2-schnorr/htlc-refund-sign",
+    })
+    void checkSchnorr(String file) {
         LinkedTreeMap<String, Object> fixture = FixtureLoader.load(file);
 
         Transaction actual = new Deserializer(fixture.get("serialized").toString()).deserialize();

@@ -51,7 +51,7 @@ public class Deserializer {
 
         this.transaction.deserialize(this.buffer);
 
-        deserializeSignature();
+        deserializeSignatures();
 
         this.transaction.computeId();
 
@@ -88,7 +88,23 @@ public class Deserializer {
         }
     }
 
-    private void deserializeSignature() {
+    private void deserializeSignatures() {
+        if (this.transaction.version == 1) {
+            deserializeEcdsa();
+        } else {
+            deserializeSchnorrOrEcdsa();
+        }
+    }
+
+    private void deserializeSchnorrOrEcdsa() {
+        if (detectSchnorr(buffer)) {
+            deserializeSchnorr();
+        } else {
+            deserializeEcdsa();
+        }
+    }
+
+    private void deserializeEcdsa() {
         if (buffer.remaining() != 0) {
             int signatureLength = currentSignatureLength();
             byte[] signatureBuffer = new byte[signatureLength];
@@ -102,6 +118,29 @@ public class Deserializer {
             this.buffer.get(signatureBuffer);
             this.transaction.secondSignature = Hex.encode(signatureBuffer);
         }
+    }
+
+    private boolean canReadNonMultiSignature() {
+        return buffer.hasRemaining() && (buffer.remaining() % 64 == 0 || buffer.remaining() % 65 != 0);
+    };
+
+    private void deserializeSchnorr() {
+        if (canReadNonMultiSignature()) {
+            byte[] signatureBuffer = new byte[64];
+            buffer.get(signatureBuffer);
+            transaction.signature = Hex.encode(signatureBuffer);
+        }
+
+        if (canReadNonMultiSignature()) {
+            byte[] signatureBuffer = new byte[64];
+            buffer.get(signatureBuffer);
+            transaction.secondSignature = Hex.encode(signatureBuffer);
+        }
+    }
+
+    private boolean detectSchnorr(ByteBuffer buffer) {
+        int remaining = buffer.remaining();
+        return remaining == 64 || remaining == 128;
     }
 
     private int currentSignatureLength() {

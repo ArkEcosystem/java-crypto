@@ -118,7 +118,7 @@ public class Deserializer {
 
     private boolean canReadNonMultiSignature() {
         return buffer.hasRemaining() && (buffer.remaining() % 64 == 0 || buffer.remaining() % 65 != 0);
-    };
+    }
 
     private void deserializeSchnorr() {
         if (canReadNonMultiSignature()) {

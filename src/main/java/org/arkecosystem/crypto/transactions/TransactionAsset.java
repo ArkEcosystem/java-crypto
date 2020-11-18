@@ -1,7 +1,10 @@
 package org.arkecosystem.crypto.transactions;
 
-import java.util.*;
 import org.arkecosystem.crypto.enums.HtlcLockExpirationType;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class TransactionAsset {
     public Signature signature = new Signature();
@@ -25,8 +28,7 @@ public class TransactionAsset {
 
     public static class MultiSignature {
         public byte min;
-        public byte lifetime;
-        public List<String> keysgroup = new ArrayList<>();
+        public List<String> publicKeys = new ArrayList<>();
     }
 
     public static class MultiPayment {

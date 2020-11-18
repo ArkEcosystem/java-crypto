@@ -13,18 +13,6 @@ public class FixtureSignVerificationTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-        "transactions/V1/transfer/second-passphrase",
-        "transactions/V1/transfer/second-passphrase-with-vendor-field",
-        "transactions/V1/transfer/passphrase-with-vendor-field",
-        "transactions/V1/transfer/passphrase",
-        "transactions/V1/transfer/passphrase-with-vendor-field-hex",
-        "transactions/V1/transfer/second-passphrase-with-vendor-field-hex",
-        "transactions/V1/second_signature_registration/second-passphrase",
-        "transactions/V1/multi_signature_registration/passphrase",
-        "transactions/V1/vote/second-passphrase",
-        "transactions/V1/vote/passphrase",
-        "transactions/V1/delegate_registration/second-passphrase",
-        "transactions/V1/delegate_registration/passphrase",
         "transactions/v2-ecdsa/second-signature-registration",
         "transactions/v2-ecdsa/transfer-with-vendor-field-secondSign",
         "transactions/v2-ecdsa/transfer-secondSign",

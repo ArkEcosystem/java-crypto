@@ -136,6 +136,6 @@ public abstract class Transaction {
 
     private Verifier verifier(String signature) {
         // 128 string length => 64 bits
-        return this.version > 1 && signature.length() == 128 ? new SchnorrVerifier() : new ECDSAVerifier();
+        return signature.length() == 128 ? new SchnorrVerifier() : new ECDSAVerifier();
     }
 }

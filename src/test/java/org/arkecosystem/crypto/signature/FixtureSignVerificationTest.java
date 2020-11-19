@@ -113,8 +113,7 @@ public class FixtureSignVerificationTest {
 
         Transaction actual = new Deserializer(fixture.get("serialized").toString()).deserialize();
 
-//        if (actual.signatures != null)
-//            assertTrue(actual.verifyMulti()); // TODO Doesn't exist
-
+        if (actual.signatures != null)
+            assertTrue(actual.verify());
     }
 }

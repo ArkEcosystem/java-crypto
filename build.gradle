@@ -117,7 +117,6 @@ if (project.hasProperty("signing.keyId")) {
 
 test {
     useJUnitPlatform()
-    failFast = true
     testLogging {
         events 'PASSED', 'FAILED', 'SKIPPED'
     }

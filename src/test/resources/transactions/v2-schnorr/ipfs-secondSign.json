@@ -1,0 +1,19 @@
+{
+    "data": {
+        "version": 2,
+        "network": 23,
+        "typeGroup": 1,
+        "type": 5,
+        "nonce": "1",
+        "senderPublicKey": "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192",
+        "fee": "500000000",
+        "amount": "0",
+        "asset": {
+            "ipfs": "QmR45FmbVVrixReBwJkhEKde2qwHYaQzGxu4ZoDeswuF9w"
+        },
+        "signature": "0b6e81b123de99e953d3073a8760d3213ab5f5cf512e65a2dd73aebb410966d8fbc59e775deb4f23c51be0847402b5e1d4ee68732b3e6d8e8914d259d7e373eb",
+        "secondSignature": "336bcec35df44c82b60b8b7acf1c71bfe554bfc2d1d98aefa3e268eaabcd5fd60288b73d32e1f8b653308df72653cb12631a313de68398b98d7479ae6722dc2e",
+        "id": "673581d99e94c16766ff971f12332c93c334d684a1e847a9b30c5359c5924ac3"
+    },
+    "serialized": "ff02170100000005000100000000000000034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed1920065cd1d000000000012202853f0f11ab91d73b73a2a86606103f45dd469ad2e89ec6f9a25febe8758d3fe0b6e81b123de99e953d3073a8760d3213ab5f5cf512e65a2dd73aebb410966d8fbc59e775deb4f23c51be0847402b5e1d4ee68732b3e6d8e8914d259d7e373eb336bcec35df44c82b60b8b7acf1c71bfe554bfc2d1d98aefa3e268eaabcd5fd60288b73d32e1f8b653308df72653cb12631a313de68398b98d7479ae6722dc2e"
+}

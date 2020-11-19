@@ -1,20 +1,21 @@
 package org.arkecosystem.crypto.transactions;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.HashMap;
-import java.util.Map;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 import org.arkecosystem.crypto.transactions.types.*;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Deserializer {
 
-    private ByteBuffer buffer;
+    private final ByteBuffer buffer;
     private Transaction transaction;
 
-    private Map<Integer, Map<Integer, Transaction>> transactionGroups = new HashMap<>();
+    private final Map<Integer, Map<Integer, Transaction>> transactionGroups = new HashMap<>();
 
     public Deserializer(String serialized) {
         Map<Integer, Transaction> coreTransactionTypes = new HashMap<>();
@@ -50,7 +51,7 @@ public class Deserializer {
 
         this.transaction.deserialize(this.buffer);
 
-        deserializeSignature();
+        deserializeSignatures();
 
         this.transaction.computeId();
 
@@ -87,7 +88,19 @@ public class Deserializer {
         }
     }
 
-    private void deserializeSignature() {
+    private void deserializeSignatures() {
+        deserializeSchnorrOrEcdsa();
+    }
+
+    private void deserializeSchnorrOrEcdsa() {
+        if (detectSchnorr(buffer)) {
+            deserializeSchnorr();
+        } else {
+            deserializeEcdsa();
+        }
+    }
+
+    private void deserializeEcdsa() {
         if (buffer.remaining() != 0) {
             int signatureLength = currentSignatureLength();
             byte[] signatureBuffer = new byte[signatureLength];
@@ -101,6 +114,29 @@ public class Deserializer {
             this.buffer.get(signatureBuffer);
             this.transaction.secondSignature = Hex.encode(signatureBuffer);
         }
+    }
+
+    private boolean canReadNonMultiSignature() {
+        return buffer.hasRemaining() && (buffer.remaining() % 64 == 0 || buffer.remaining() % 65 != 0);
+    };
+
+    private void deserializeSchnorr() {
+        if (canReadNonMultiSignature()) {
+            byte[] signatureBuffer = new byte[64];
+            buffer.get(signatureBuffer);
+            transaction.signature = Hex.encode(signatureBuffer);
+        }
+
+        if (canReadNonMultiSignature()) {
+            byte[] signatureBuffer = new byte[64];
+            buffer.get(signatureBuffer);
+            transaction.secondSignature = Hex.encode(signatureBuffer);
+        }
+    }
+
+    private boolean detectSchnorr(ByteBuffer buffer) {
+        int remaining = buffer.remaining();
+        return remaining == 64 || remaining == 128;
     }
 
     private int currentSignatureLength() {

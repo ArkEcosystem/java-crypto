@@ -1,0 +1,33 @@
+{
+    "data": {
+        "version": 2,
+        "network": 23,
+        "typeGroup": 1,
+        "type": 6,
+        "nonce": "1",
+        "senderPublicKey": "03fb92a2c3efaa177d8a51fc0cdf41905098d8b2cd900cbac94617492827e5f015",
+        "fee": "10000000",
+        "amount": "0",
+        "vendorFieldHex": "74686973206973206120746f70207365637265742076656e646f72206669656c64",
+        "vendorField": "this is a top secret vendor field",
+        "asset": {
+            "payments": [
+                {
+                    "amount": "1",
+                    "recipientId": "AHXtmB84sTZ9Zd35h9Y1vfFvPE2Xzqj8ri"
+                },
+                {
+                    "amount": "2",
+                    "recipientId": "AZFEPTWnn2Sn8wDZgCRF8ohwKkrmk2AZi1"
+                }
+            ]
+        },
+        "signatures": [
+            "000557aab4ee58e668cf631fe9755222aaec133726488737b1e321c1322d00f7b5aaf2dff0488e5e10d1804d370dcb1d31c751c6d14d2e61d21187e8b7e2fe451d",
+            "016151423b2e79d2d87b21dc2c73bfb0cd700c96811a71f89b8474df3862cef847ab9229975175cc4fdae0ef9d3b25ba6190004d3752eb375a54a708b42fd8b518",
+            "02378ff87ec84f79e14ae044755ba05b403b467d5c4d0b673a03c67ef75fad56223029c9d68959e2add8c33ec8b43c9a99e038dada6d4c4b412a471ee525730a08"
+        ],
+        "id": "3534d43c391e0c0f95cbf7dd91a1d2dfe068e65d999f0e29a28dee212619a98a"
+    },
+    "serialized": "ff0217010000000600010000000000000003fb92a2c3efaa177d8a51fc0cdf41905098d8b2cd900cbac94617492827e5f01580969800000000002174686973206973206120746f70207365637265742076656e646f72206669656c640200010000000000000017134b5be4b327ddf9c2bb47fec8a1a44189e90f74020000000000000017bfa6aec83cf1bd03a0cab9f35c85ff51a3e9f041000557aab4ee58e668cf631fe9755222aaec133726488737b1e321c1322d00f7b5aaf2dff0488e5e10d1804d370dcb1d31c751c6d14d2e61d21187e8b7e2fe451d016151423b2e79d2d87b21dc2c73bfb0cd700c96811a71f89b8474df3862cef847ab9229975175cc4fdae0ef9d3b25ba6190004d3752eb375a54a708b42fd8b51802378ff87ec84f79e14ae044755ba05b403b467d5c4d0b673a03c67ef75fad56223029c9d68959e2add8c33ec8b43c9a99e038dada6d4c4b412a471ee525730a08"
+}

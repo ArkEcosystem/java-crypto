@@ -1,9 +1,8 @@
 package org.arkecosystem.crypto.transactions.builder;
 
 import org.arkecosystem.crypto.enums.Fees;
-import org.arkecosystem.crypto.identities.PrivateKey;
+import org.arkecosystem.crypto.identities.PublicKey;
 import org.arkecosystem.crypto.transactions.types.Transaction;
-import org.bitcoinj.core.ECKey;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -15,17 +14,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MultiSignatureRegistrationBuilderTest {
 
     @Test
+    @SuppressWarnings("unchecked")
     void build() {
 
-        ECKey key1 = PrivateKey.fromPassphrase("secret 1");
-        ECKey key2 = PrivateKey.fromPassphrase("secret 2");
-        ECKey key3 = PrivateKey.fromPassphrase("secret 3");
+        String key1 = PublicKey.fromPassphrase("secret 1");
+        String key2 = PublicKey.fromPassphrase("secret 2");
+        String key3 = PublicKey.fromPassphrase("secret 3");
 
-        List<String> publicKeys = Arrays.asList(
-            key1.getPublicKeyAsHex(),
-            key2.getPublicKeyAsHex(),
-            key3.getPublicKeyAsHex()
-        );
+        List<String> publicKeys = Arrays.asList(key1, key2, key3);
 
         Transaction actual =
             new MultiSignatureRegistrationBuilder()

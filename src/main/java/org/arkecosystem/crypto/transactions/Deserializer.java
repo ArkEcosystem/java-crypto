@@ -94,7 +94,7 @@ public class Deserializer {
     }
 
     private void deserializeSchnorrOrEcdsa() {
-        if (detectSchnorr(buffer)) {
+        if (detectSchnorr()) {
             deserializeSchnorr();
         } else {
             deserializeEcdsa();
@@ -174,7 +174,7 @@ public class Deserializer {
         }
     }
 
-    private boolean detectSchnorr(ByteBuffer buffer) {
+    private boolean detectSchnorr() {
         int remaining = buffer.remaining();
 
         // `signature` / `secondSignature`

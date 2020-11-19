@@ -71,13 +71,13 @@ public abstract class Transaction {
         if (this.signatures == null) {
             this.signatures = new ArrayList<>();
         }
-        this.version = 2; // TODO Is this needed? I guess not. Yet, someone could first multiSign and then change the version manually
+        this.version = 2; // TODO Is this needed? I guess not. Yet, someone could first multiSign and then change the version manually. Even if we set it to 2 here.
 
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
 
         Sha256Hash hash = Sha256Hash.of(Serializer.serialize(this, true, true, true));
 
-        String indexedSignature = Integer.toHexString(index) + Hex.encode(signer().sign(hash.getBytes(), privateKey));
+        String indexedSignature = Hex.encode(new byte[]{(byte) index}) + Hex.encode(signer().sign(hash.getBytes(), privateKey));
         this.signatures.add(indexedSignature);
 
         return this;

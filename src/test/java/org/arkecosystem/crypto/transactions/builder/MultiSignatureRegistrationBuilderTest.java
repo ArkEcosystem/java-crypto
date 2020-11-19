@@ -26,15 +26,13 @@ public class MultiSignatureRegistrationBuilderTest {
             key2.getPublicKeyAsHex(),
             key3.getPublicKeyAsHex()
         );
-        System.out.println(publicKeys);
-//        System.out.println(Arrays.asList(key1.getPrivateKeyAsHex(), key2.getPrivateKeyAsHex(), key3.getPrivateKeyAsHex()));
+
         Transaction actual =
             new MultiSignatureRegistrationBuilder()
                 .version(2)
                 .nonce(3)
                 .network(23)
                 .fee(Fees.MULTI_SIGNATURE_REGISTRATION.getValue())
-//                .amount(20)
                 .publicKeys(publicKeys)
                 .min(3)
                 .multiSign("secret 1", 0)
@@ -50,8 +48,8 @@ public class MultiSignatureRegistrationBuilderTest {
         assertNotNull(actualHashMap.get("asset"));
         HashMap actualAsset = (HashMap) actualHashMap.get("asset");
 
-        assertNotNull(actualAsset.get("multisignature"));
-        HashMap actualMultisignature = (HashMap) actualAsset.get("multisignature");
+        assertNotNull(actualAsset.get("multiSignature"));
+        HashMap actualMultisignature = (HashMap) actualAsset.get("multiSignature");
 
         byte actualMin = (byte) actualMultisignature.get("min");
         List<String> actualPublicKeys = (List<String>) actualMultisignature.get("publicKeys");

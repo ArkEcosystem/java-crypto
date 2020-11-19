@@ -100,7 +100,7 @@ public class Serializer {
     }
 
     private byte[] serializeSignatures(boolean skipSignature, boolean skipSecondSignature, boolean skipMultiSignature) {
-        ByteBuffer buffer = ByteBuffer.allocate(144);
+        ByteBuffer buffer = ByteBuffer.allocate(16 * 65);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
         if (!skipSignature && this.transaction.signature != null) {

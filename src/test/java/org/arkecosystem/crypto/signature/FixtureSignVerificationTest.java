@@ -1,11 +1,16 @@
 package org.arkecosystem.crypto.signature;
 
 import com.google.gson.internal.LinkedTreeMap;
+import org.arkecosystem.crypto.identities.PrivateKey;
 import org.arkecosystem.crypto.transactions.Deserializer;
 import org.arkecosystem.crypto.transactions.FixtureLoader;
 import org.arkecosystem.crypto.transactions.types.Transaction;
+import org.bitcoinj.core.ECKey;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -54,7 +59,7 @@ public class FixtureSignVerificationTest {
         "transactions/v2-schnorr/second-signature-registration",
         "transactions/v2-schnorr/transfer-with-vendor-field-secondSign",
         "transactions/v2-schnorr/transfer-secondSign",
-//        "transactions/v2-schnorr/multi-signature-registration",
+        "transactions/v2-schnorr/multi-signature-registration",
         "transactions/v2-schnorr/transfer-sign",
         "transactions/v2-schnorr/multi-payment-secondSign",
         "transactions/v2-schnorr/delegate-resignation-secondSign",
@@ -88,8 +93,10 @@ public class FixtureSignVerificationTest {
         if (actual.signature != null)
             assertTrue(actual.verify());
 
-//        if (actual.secondSignature != null)
-//            assertTrue(actual.secondVerify(secondPublicKey)); // TODO Where to get 2nd public key from
+        if (actual.secondSignature != null) {
+            ECKey secondPublicKey = PrivateKey.fromPassphrase("this is a top secret second passphrase");
+            assertTrue(actual.secondVerify(secondPublicKey.getPublicKeyAsHex()));
+        }
     }
 
     @ParameterizedTest
@@ -109,11 +116,22 @@ public class FixtureSignVerificationTest {
         "transactions/v2-schnorr/delegate-resignation-multiSign",
     })
     void checkSchnorrMultiSignature(String file) {
+        ECKey key1 = PrivateKey.fromPassphrase("this is a top secret passphrase 1");
+        ECKey key2 = PrivateKey.fromPassphrase("this is a top secret passphrase 2");
+        ECKey key3 = PrivateKey.fromPassphrase("this is a top secret passphrase 3");
+
         LinkedTreeMap<String, Object> fixture = FixtureLoader.load(file);
 
         Transaction actual = new Deserializer(fixture.get("serialized").toString()).deserialize();
 
+        List<String> publicKeys = Arrays.asList(
+            key1.getPublicKeyAsHex(),
+            key2.getPublicKeyAsHex(),
+            key3.getPublicKeyAsHex()
+        );
+
         if (actual.signatures != null)
-            assertTrue(actual.verify());
+            assertTrue(actual.multiVerify(3, publicKeys));
     }
+
 }

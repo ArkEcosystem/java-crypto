@@ -13,6 +13,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Transaction {
 
@@ -63,21 +64,15 @@ public abstract class Transaction {
         return this;
     }
 
-    public Transaction multiSign(String passphrase) {
-        return this.multiSign(passphrase, this.signatures.size());
-    }
-
     public Transaction multiSign(String passphrase, int index) {
         if (this.signatures == null) {
             this.signatures = new ArrayList<>();
         }
-        this.version = 2; // TODO Is this needed? I guess not. Yet, someone could first multiSign and then change the version manually. Even if we set it to 2 here.
 
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
+        byte[] hash = Sha256Hash.hash(Serializer.serialize(this, true, true, true));
 
-        Sha256Hash hash = Sha256Hash.of(Serializer.serialize(this, true, true, true));
-
-        String indexedSignature = Hex.encode(new byte[]{(byte) index}) + Hex.encode(signer().sign(hash.getBytes(), privateKey));
+        String indexedSignature = Hex.encode(new byte[]{(byte) index}) + Hex.encode(signer().sign(hash, privateKey));
         this.signatures.add(indexedSignature);
 
         return this;
@@ -101,6 +96,43 @@ public abstract class Transaction {
         return verifier(this.secondSignature).verify(hash, keys, signature);
     }
 
+    public boolean multiVerify(int min, List<String> publicKeys) {
+        if (publicKeys.isEmpty()) {
+            throw new RuntimeException("The multi signature asset is invalid.");
+        }
+
+        byte[] hash = Sha256Hash.hash(Serializer.serialize(this, false, true, true));
+
+        Map<Integer, Boolean> publicKeyIndexes = new HashMap<>();
+        int verifiedSignatures = 0;
+        boolean verified = false;
+        for (int i = 0; i < this.signatures.size(); i++) {
+            String signature = this.signatures.get(i);
+            int publicKeyIndex = Integer.parseInt(signature.substring(0, 2), 16);
+
+            if (!publicKeyIndexes.containsKey(publicKeyIndex)) {
+                publicKeyIndexes.put(publicKeyIndex, true);
+            } else {
+                throw new RuntimeException("Duplicate participant in multi signature");
+            }
+
+            String partialSignature = signature.substring(2);
+            String publicKey = publicKeys.get(publicKeyIndex);
+
+            if (verifier(partialSignature).verify(hash, ECKey.fromPublicOnly(Hex.decode(publicKey)), Hex.decode(partialSignature))) {
+                verifiedSignatures++;
+            }
+
+            if (verifiedSignatures == min) {
+                verified = true;
+                break;
+            } else if (signatures.size() - (i + 1 - verifiedSignatures) < min) {
+                break;
+            }
+        }
+        return verified;
+    }
+
     public String toJson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         return gsonBuilder.create().toJson(this.toHashMap());
@@ -122,6 +154,10 @@ public abstract class Transaction {
 
         if (this.secondSignature != null) {
             map.put("secondSignature", this.secondSignature);
+        }
+
+        if (this.signatures != null) {
+            map.put("signatures", this.signatures);
         }
 
         if (this.vendorField != null && !this.vendorField.isEmpty()) {

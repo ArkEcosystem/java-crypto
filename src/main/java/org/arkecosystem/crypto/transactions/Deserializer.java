@@ -7,6 +7,7 @@ import org.arkecosystem.crypto.transactions.types.*;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,18 +22,18 @@ public class Deserializer {
         Map<Integer, Transaction> coreTransactionTypes = new HashMap<>();
         coreTransactionTypes.put(CoreTransactionTypes.TRANSFER.getValue(), new Transfer());
         coreTransactionTypes.put(
-                CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue(),
-                new SecondSignatureRegistration());
+            CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue(),
+            new SecondSignatureRegistration());
         coreTransactionTypes.put(
-                CoreTransactionTypes.DELEGATE_REGISTRATION.getValue(), new DelegateRegistration());
+            CoreTransactionTypes.DELEGATE_REGISTRATION.getValue(), new DelegateRegistration());
         coreTransactionTypes.put(CoreTransactionTypes.VOTE.getValue(), new Vote());
         coreTransactionTypes.put(
-                CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue(),
-                new MultiSignatureRegistration());
+            CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue(),
+            new MultiSignatureRegistration());
         coreTransactionTypes.put(CoreTransactionTypes.IPFS.getValue(), new Ipfs());
         coreTransactionTypes.put(CoreTransactionTypes.MULTI_PAYMENT.getValue(), new MultiPayment());
         coreTransactionTypes.put(
-                CoreTransactionTypes.DELEGATE_RESIGNATION.getValue(), new DelegateResignation());
+            CoreTransactionTypes.DELEGATE_RESIGNATION.getValue(), new DelegateResignation());
         coreTransactionTypes.put(CoreTransactionTypes.HTLC_LOCK.getValue(), new HtlcLock());
         coreTransactionTypes.put(CoreTransactionTypes.HTLC_CLAIM.getValue(), new HtlcClaim());
         coreTransactionTypes.put(CoreTransactionTypes.HTLC_REFUND.getValue(), new HtlcRefund());
@@ -101,19 +102,31 @@ public class Deserializer {
     }
 
     private void deserializeEcdsa() {
-        if (buffer.remaining() != 0) {
+        if (buffer.hasRemaining()) {
             int signatureLength = currentSignatureLength();
             byte[] signatureBuffer = new byte[signatureLength];
             this.buffer.get(signatureBuffer);
             this.transaction.signature = Hex.encode(signatureBuffer);
         }
 
-        if (buffer.remaining() != 0) {
+        if (buffer.hasRemaining() && !beginningMultiSignature()) {
             int signatureLength = currentSignatureLength();
             byte[] signatureBuffer = new byte[signatureLength];
             this.buffer.get(signatureBuffer);
             this.transaction.secondSignature = Hex.encode(signatureBuffer);
         }
+
+        if (buffer.hasRemaining() && beginningMultiSignature()) {
+            buffer.get(); // ignore marker
+
+            byte[] signatureBuffer = new byte[buffer.remaining()];
+            this.buffer.get(signatureBuffer);
+            this.transaction.signatures = new ArrayList<>();
+            this.transaction.signatures.add(Hex.encode(signatureBuffer)); // TODO check this is the right way. I think we may need to split it into multiple elements
+        }
+
+        if (buffer.hasRemaining())
+            throw new RuntimeException("signature buffer not exhausted");
     }
 
     private boolean canReadNonMultiSignature() {
@@ -132,11 +145,54 @@ public class Deserializer {
             buffer.get(signatureBuffer);
             transaction.secondSignature = Hex.encode(signatureBuffer);
         }
+
+        if (buffer.hasRemaining()) {
+            if (buffer.remaining() % 65 == 0) {
+                transaction.signatures = new ArrayList<>();
+
+                int count = buffer.remaining() / 65;
+                Map<Integer, Boolean> publicKeyIndexes = new HashMap<>();
+                for (int i = 0; i < count; i++) {
+                    byte[] signatureBuffer = new byte[65];
+                    buffer.get(signatureBuffer);
+                    String multiSignaturePart = Hex.encode(signatureBuffer);
+                    int publicKeyIndex = Integer.parseInt(multiSignaturePart.substring(0, 2), 16);
+
+                    if (!publicKeyIndexes.containsKey(publicKeyIndex)) {
+                        publicKeyIndexes.put(publicKeyIndex, true);
+                    } else {
+                        throw new RuntimeException("Duplicate participant in multi signature");
+//                        throw new DuplicateParticipantInMultiSignatureError();
+                    }
+
+                    transaction.signatures.add(multiSignaturePart);
+                }
+            } else {
+                throw new RuntimeException("signature buffer not exhausted");
+//                throw new InvalidTransactionBytesError("signature buffer not exhausted");
+            }
+        }
     }
 
     private boolean detectSchnorr(ByteBuffer buffer) {
         int remaining = buffer.remaining();
-        return remaining == 64 || remaining == 128;
+
+        // `signature` / `secondSignature`
+        if (remaining == 64 || remaining == 128) {
+            return true;
+        }
+
+        // `signatures` of a multi signature transaction (type != 4)
+        if (remaining % 65 == 0) {
+            return true;
+        }
+
+        // only possiblity left is a type 4 transaction with and without a `secondSignature`.
+        if ((remaining - 64) % 65 == 0 || (remaining - 128) % 65 == 0) {
+            return true;
+        }
+
+        return false;
     }
 
     private int currentSignatureLength() {
@@ -148,11 +204,18 @@ public class Deserializer {
         return signatureLength;
     }
 
+    private boolean beginningMultiSignature() {
+        int mark = this.buffer.position();
+        byte marker = this.buffer.get();
+        this.buffer.position(mark);
+        return marker == (byte) 255;
+    }
+
     public void setNewTransactionType(Transaction transaction) {
         if (this.transactionGroups.containsKey(transaction.getTransactionTypeGroup())) {
             this.transactionGroups
-                    .get(transaction.getTransactionTypeGroup())
-                    .put(transaction.getTransactionType(), transaction);
+                .get(transaction.getTransactionTypeGroup())
+                .put(transaction.getTransactionType(), transaction);
         } else {
             Map<Integer, Transaction> newTransactionGroup = new HashMap<>();
             newTransactionGroup.put(transaction.getTransactionType(), transaction);

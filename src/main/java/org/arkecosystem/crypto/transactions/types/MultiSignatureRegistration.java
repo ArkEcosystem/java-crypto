@@ -25,8 +25,8 @@ public class MultiSignatureRegistration extends Transaction {
         HashMap<String, Object> asset = new HashMap<>();
 
         HashMap<String, Object> publicKey = new HashMap<>();
-        publicKey.put("min", this.asset.multisignature.min);
-        publicKey.put("publicKeys", this.asset.multisignature.publicKeys);
+        publicKey.put("min", this.asset.multiSignature.min);
+        publicKey.put("publicKeys", this.asset.multiSignature.publicKeys);
 
         asset.put("multiSignature", publicKey);
         return asset;
@@ -34,13 +34,13 @@ public class MultiSignatureRegistration extends Transaction {
 
     @Override
     public byte[] serialize() {
-        ByteBuffer buffer = ByteBuffer.allocate(2 + this.asset.multisignature.publicKeys.size() * 33);
+        ByteBuffer buffer = ByteBuffer.allocate(2 + this.asset.multiSignature.publicKeys.size() * 33);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
-        buffer.put(this.asset.multisignature.min);
+        buffer.put(this.asset.multiSignature.min);
 
-        buffer.put((byte) this.asset.multisignature.publicKeys.size());
-        for (String publicKey: this.asset.multisignature.publicKeys) {
+        buffer.put((byte) this.asset.multiSignature.publicKeys.size());
+        for (String publicKey: this.asset.multiSignature.publicKeys) {
             buffer.put(Hex.decode(publicKey));
         }
 
@@ -49,13 +49,13 @@ public class MultiSignatureRegistration extends Transaction {
 
     @Override
     public void deserialize(ByteBuffer buffer) {
-        this.asset.multisignature.min = buffer.get();
+        this.asset.multiSignature.min = buffer.get();
 
         int publicKeyLength = buffer.get();
         for (int i = 0; i < publicKeyLength; i++) {
             byte[] publicKeyBuffer = new byte[33];
             buffer.get(publicKeyBuffer);
-            this.asset.multisignature.publicKeys.add(Hex.encode(publicKeyBuffer));
+            this.asset.multiSignature.publicKeys.add(Hex.encode(publicKeyBuffer));
         }
     }
 }

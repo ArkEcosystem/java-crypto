@@ -23,13 +23,13 @@ public class MultiSignatureRegistrationBuilder
     }
 
     public MultiSignatureRegistrationBuilder min(byte min) {
-        this.transaction.asset.multisignature.min = min;
+        this.transaction.asset.multiSignature.min = min;
 
         return this;
     }
 
     public MultiSignatureRegistrationBuilder publicKeys(List<String> publicKeys) {
-        this.transaction.asset.multisignature.publicKeys = publicKeys;
+        this.transaction.asset.multiSignature.publicKeys = publicKeys;
 
         this.transaction.fee = (publicKeys.size() + 1) * this.transaction.fee;
 

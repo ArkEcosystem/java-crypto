@@ -10,7 +10,7 @@ public class TransactionAsset {
     public Signature signature = new Signature();
     public List<String> votes = new ArrayList<>();
     public Delegate delegate = new Delegate();
-    public MultiSignature multisignature = new MultiSignature();
+    public MultiSignature multiSignature = new MultiSignature();
     public MultiPayment multiPayment = new MultiPayment();
     public String ipfs;
     public HtlcLockAsset htlcLockAsset = new HtlcLockAsset();

@@ -3,7 +3,11 @@ package org.arkecosystem.crypto.transactions.types;
 import com.google.gson.GsonBuilder;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
-import org.arkecosystem.crypto.signature.*;
+import org.arkecosystem.crypto.signature.ECDSAVerifier;
+import org.arkecosystem.crypto.signature.SchnorrSigner;
+import org.arkecosystem.crypto.signature.SchnorrVerifier;
+import org.arkecosystem.crypto.signature.Signer;
+import org.arkecosystem.crypto.signature.Verifier;
 import org.arkecosystem.crypto.transactions.Serializer;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
 import org.bitcoinj.core.ECKey;
@@ -12,8 +16,9 @@ import org.bitcoinj.core.Sha256Hash;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 public abstract class Transaction {
 
@@ -103,15 +108,15 @@ public abstract class Transaction {
 
         byte[] hash = Sha256Hash.hash(Serializer.serialize(this, false, true, true));
 
-        Map<Integer, Boolean> publicKeyIndexes = new HashMap<>();
+        Set<Integer> publicKeyIndexes = new HashSet<>();
         int verifiedSignatures = 0;
         boolean verified = false;
         for (int i = 0; i < this.signatures.size(); i++) {
             String signature = this.signatures.get(i);
             int publicKeyIndex = Integer.parseInt(signature.substring(0, 2), 16);
 
-            if (!publicKeyIndexes.containsKey(publicKeyIndex)) {
-                publicKeyIndexes.put(publicKeyIndex, true);
+            if (!publicKeyIndexes.contains(publicKeyIndex)) {
+                publicKeyIndexes.add(publicKeyIndex);
             } else {
                 throw new RuntimeException("Duplicate participant in multi signature");
             }

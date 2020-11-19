@@ -3,13 +3,26 @@ package org.arkecosystem.crypto.transactions;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
-import org.arkecosystem.crypto.transactions.types.*;
+import org.arkecosystem.crypto.transactions.types.DelegateRegistration;
+import org.arkecosystem.crypto.transactions.types.DelegateResignation;
+import org.arkecosystem.crypto.transactions.types.HtlcClaim;
+import org.arkecosystem.crypto.transactions.types.HtlcLock;
+import org.arkecosystem.crypto.transactions.types.HtlcRefund;
+import org.arkecosystem.crypto.transactions.types.Ipfs;
+import org.arkecosystem.crypto.transactions.types.MultiPayment;
+import org.arkecosystem.crypto.transactions.types.MultiSignatureRegistration;
+import org.arkecosystem.crypto.transactions.types.SecondSignatureRegistration;
+import org.arkecosystem.crypto.transactions.types.Transaction;
+import org.arkecosystem.crypto.transactions.types.Transfer;
+import org.arkecosystem.crypto.transactions.types.Vote;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Deserializer {
 
@@ -151,25 +164,23 @@ public class Deserializer {
                 transaction.signatures = new ArrayList<>();
 
                 int count = buffer.remaining() / 65;
-                Map<Integer, Boolean> publicKeyIndexes = new HashMap<>();
+                Set<Integer> publicKeyIndexes = new HashSet<>();
                 for (int i = 0; i < count; i++) {
                     byte[] signatureBuffer = new byte[65];
                     buffer.get(signatureBuffer);
                     String multiSignaturePart = Hex.encode(signatureBuffer);
                     int publicKeyIndex = Integer.parseInt(multiSignaturePart.substring(0, 2), 16);
 
-                    if (!publicKeyIndexes.containsKey(publicKeyIndex)) {
-                        publicKeyIndexes.put(publicKeyIndex, true);
+                    if (!publicKeyIndexes.contains(publicKeyIndex)) {
+                        publicKeyIndexes.add(publicKeyIndex);
                     } else {
                         throw new RuntimeException("Duplicate participant in multi signature");
-//                        throw new DuplicateParticipantInMultiSignatureError();
                     }
 
                     transaction.signatures.add(multiSignaturePart);
                 }
             } else {
                 throw new RuntimeException("signature buffer not exhausted");
-//                throw new InvalidTransactionBytesError("signature buffer not exhausted");
             }
         }
     }

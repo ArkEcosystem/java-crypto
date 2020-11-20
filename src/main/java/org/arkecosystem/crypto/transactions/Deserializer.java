@@ -115,14 +115,14 @@ public class Deserializer {
     }
 
     private void deserializeEcdsa() {
-        if (buffer.hasRemaining()) {
+        if (buffer.remaining() != 0) {
             int signatureLength = currentSignatureLength();
             byte[] signatureBuffer = new byte[signatureLength];
             this.buffer.get(signatureBuffer);
             this.transaction.signature = Hex.encode(signatureBuffer);
         }
 
-        if (buffer.hasRemaining() && !beginningMultiSignature()) {
+        if (buffer.remaining() != 0) {
             int signatureLength = currentSignatureLength();
             byte[] signatureBuffer = new byte[signatureLength];
             this.buffer.get(signatureBuffer);
@@ -201,13 +201,6 @@ public class Deserializer {
         int signatureLength = Integer.parseInt(length) + 2;
         this.buffer.position(mark);
         return signatureLength;
-    }
-
-    private boolean beginningMultiSignature() {
-        int mark = this.buffer.position();
-        byte marker = this.buffer.get();
-        this.buffer.position(mark);
-        return marker == (byte) 255;
     }
 
     public void setNewTransactionType(Transaction transaction) {

@@ -97,7 +97,6 @@ public class FixtureSignVerificationTest {
         "transactions/v2-schnorr/transfer-multiSign",
         "transactions/v2-schnorr/multi-payment-with-vendor-field-multiSign",
         "transactions/v2-schnorr/delegate-resignation-multiSign",
-
     })
     void checkSchnorrSignature(String file) {
         LinkedTreeMap<String, Object> fixture = FixtureLoader.load(file);

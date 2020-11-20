@@ -75,9 +75,15 @@ public abstract class Transaction {
         }
 
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
-        byte[] hash = Sha256Hash.hash(Serializer.serialize(this, true, true, true));
 
-        String indexedSignature = Hex.encode(new byte[]{(byte) index}) + Hex.encode(signer().sign(hash, privateKey));
+        // This is needed given as no method senderPublicKey() is exposed in the builder
+        if (this.senderPublicKey == null) {
+            this.senderPublicKey = privateKey.getPublicKeyAsHex();
+        }
+
+        byte[] hash = Sha256Hash.hash(Serializer.serialize(this, true, true, true));
+        String signature = Hex.encode(signer().sign(hash, privateKey));
+        String indexedSignature = Hex.encode(new byte[]{(byte) index}) + signature;
         this.signatures.add(indexedSignature);
 
         return this;
@@ -107,6 +113,7 @@ public abstract class Transaction {
         }
 
         byte[] hash = Sha256Hash.hash(Serializer.serialize(this, true, true, true));
+        System.out.println("hash:             " + Hex.encode(hash));
 
         Set<Integer> publicKeyIndexes = new HashSet<>();
         int verifiedSignatures = 0;
@@ -124,6 +131,10 @@ public abstract class Transaction {
             String partialSignature = signature.substring(2);
             String publicKey = publicKeys.get(publicKeyIndex);
 
+            System.out.println("partialSignature: " + partialSignature);
+            System.out.println("publicKey:        " + publicKey);
+            System.out.println("verify:           " + verifier(partialSignature).verify(hash, ECKey.fromPublicOnly(Hex.decode(publicKey)), Hex.decode(partialSignature)));
+
             if (verifier(partialSignature).verify(hash, ECKey.fromPublicOnly(Hex.decode(publicKey)), Hex.decode(partialSignature))) {
                 verifiedSignatures++;
             }
@@ -131,8 +142,8 @@ public abstract class Transaction {
             if (verifiedSignatures == min) {
                 verified = true;
                 break;
-            } else if (signatures.size() - (i + 1 - verifiedSignatures) < min) {
-                break;
+//            } else if (signatures.size() - (i + 1 - verifiedSignatures) < min) {
+//                break;
             }
         }
         return verified;

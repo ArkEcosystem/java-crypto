@@ -128,18 +128,6 @@ public class Deserializer {
             this.buffer.get(signatureBuffer);
             this.transaction.secondSignature = Hex.encode(signatureBuffer);
         }
-
-        if (buffer.hasRemaining() && beginningMultiSignature()) {
-            buffer.get(); // ignore marker
-
-            byte[] signatureBuffer = new byte[buffer.remaining()];
-            this.buffer.get(signatureBuffer);
-            this.transaction.signatures = new ArrayList<>();
-            this.transaction.signatures.add(Hex.encode(signatureBuffer)); // TODO check this is the right way. I think we may need to split it into multiple elements
-        }
-
-        if (buffer.hasRemaining())
-            throw new RuntimeException("signature buffer not exhausted");
     }
 
     private boolean canReadNonMultiSignature() {

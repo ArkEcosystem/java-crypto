@@ -1,11 +1,10 @@
 package org.arkecosystem.crypto.signature;
 
 import com.google.gson.internal.LinkedTreeMap;
-import org.arkecosystem.crypto.identities.PrivateKey;
+import org.arkecosystem.crypto.identities.PublicKey;
 import org.arkecosystem.crypto.transactions.Deserializer;
 import org.arkecosystem.crypto.transactions.FixtureLoader;
 import org.arkecosystem.crypto.transactions.types.Transaction;
-import org.bitcoinj.core.ECKey;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -84,23 +83,7 @@ public class FixtureSignVerificationTest {
         "transactions/v2-schnorr/transfer-with-vendor-field-sign",
         "transactions/v2-schnorr/multi-payment-with-vendor-field-secondSign",
         "transactions/v2-schnorr/htlc-refund-sign",
-    })
-    void checkSchnorrSignature(String file) {
-        LinkedTreeMap<String, Object> fixture = FixtureLoader.load(file);
 
-        Transaction actual = new Deserializer(fixture.get("serialized").toString()).deserialize();
-
-        if (actual.signature != null)
-            assertTrue(actual.verify());
-
-        if (actual.secondSignature != null) {
-            ECKey secondPublicKey = PrivateKey.fromPassphrase("this is a top secret second passphrase");
-            assertTrue(actual.secondVerify(secondPublicKey.getPublicKeyAsHex()));
-        }
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {
         "transactions/v2-schnorr/htlc-lock-multiSign",
         "transactions/v2-schnorr/htlc-claim-multiSign",
         "transactions/v2-schnorr/htlc-refund-multiSign",
@@ -114,24 +97,37 @@ public class FixtureSignVerificationTest {
         "transactions/v2-schnorr/transfer-multiSign",
         "transactions/v2-schnorr/multi-payment-with-vendor-field-multiSign",
         "transactions/v2-schnorr/delegate-resignation-multiSign",
-    })
-    void checkSchnorrMultiSignature(String file) {
-        ECKey key1 = PrivateKey.fromPassphrase("this is a top secret passphrase 1");
-        ECKey key2 = PrivateKey.fromPassphrase("this is a top secret passphrase 2");
-        ECKey key3 = PrivateKey.fromPassphrase("this is a top secret passphrase 3");
 
+    })
+    void checkSchnorrSignature(String file) {
         LinkedTreeMap<String, Object> fixture = FixtureLoader.load(file);
 
         Transaction actual = new Deserializer(fixture.get("serialized").toString()).deserialize();
 
-        List<String> publicKeys = Arrays.asList(
-            key1.getPublicKeyAsHex(),
-            key2.getPublicKeyAsHex(),
-            key3.getPublicKeyAsHex()
-        );
+        if (actual.signature != null)
+            assertTrue(actual.verify());
 
-        if (actual.signatures != null)
-            assertTrue(actual.multiVerify(3, publicKeys));
+        if (actual.secondSignature != null) {
+            checkSecondSignature(actual);
+        }
+
+        if (actual.signatures != null) {
+            checkMultiSignature(actual);
+        }
     }
 
+    private void checkSecondSignature(Transaction actual) {
+        String secondPublicKey = PublicKey.fromPassphrase("this is a top secret second passphrase");
+        assertTrue(actual.secondVerify(secondPublicKey));
+    }
+
+    private void checkMultiSignature(Transaction actual) {
+        String key1 = PublicKey.fromPassphrase("this is a top secret passphrase 1");
+        String key2 = PublicKey.fromPassphrase("this is a top secret passphrase 2");
+        String key3 = PublicKey.fromPassphrase("this is a top secret passphrase 3");
+
+        List<String> publicKeys = Arrays.asList(key1, key2, key3);
+
+        assertTrue(actual.multiVerify(2, publicKeys));
+    }
 }

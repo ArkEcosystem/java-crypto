@@ -62,7 +62,7 @@ public abstract class Transaction {
     public Transaction secondSign(String passphrase) {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
 
-        Sha256Hash hash = Sha256Hash.of(Serializer.serialize(this, false, true, true));
+        Sha256Hash hash = Sha256Hash.of(Serializer.serialize(this, false, true, false));
 
         this.secondSignature = Hex.encode(signer().sign(hash.getBytes(), privateKey));
 
@@ -96,7 +96,7 @@ public abstract class Transaction {
         ECKey keys = ECKey.fromPublicOnly(Hex.decode(secondPublicKey));
 
         byte[] signature = Hex.decode(this.secondSignature);
-        byte[] hash = Sha256Hash.hash(Serializer.serialize(this, false, true, true));
+        byte[] hash = Sha256Hash.hash(Serializer.serialize(this, false, true, false));
 
         return verifier(this.secondSignature).verify(hash, keys, signature);
     }
@@ -106,7 +106,7 @@ public abstract class Transaction {
             throw new RuntimeException("The multi signature asset is invalid.");
         }
 
-        byte[] hash = Sha256Hash.hash(Serializer.serialize(this, false, true, true));
+        byte[] hash = Sha256Hash.hash(Serializer.serialize(this, true, true, true));
 
         Set<Integer> publicKeyIndexes = new HashSet<>();
         int verifiedSignatures = 0;

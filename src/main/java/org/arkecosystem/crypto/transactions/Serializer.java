@@ -20,7 +20,7 @@ public class Serializer {
     }
 
     public static byte[] serialize(Transaction transaction, boolean skipSignature, boolean skipSecondSignature, boolean skipMultiSignature) {
-        return new Serializer(transaction).serialize(skipSignature, skipSecondSignature, skipSecondSignature);
+        return new Serializer(transaction).serialize(skipSignature, skipSecondSignature, skipMultiSignature);
     }
 
     public byte[] serialize(boolean skipSignature, boolean skipSecondSignature, boolean skipMultiSignature) {

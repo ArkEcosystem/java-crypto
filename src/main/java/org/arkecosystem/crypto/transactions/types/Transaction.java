@@ -52,7 +52,7 @@ public abstract class Transaction {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
 
         this.senderPublicKey = privateKey.getPublicKeyAsHex();
-        Sha256Hash hash = Sha256Hash.of(Serializer.serialize(this, true, true, true));
+        Sha256Hash hash = Sha256Hash.of(Serializer.serialize(this, true, true, false));
 
         this.signature = Hex.encode(signer().sign(hash.getBytes(), privateKey));
 
@@ -87,7 +87,7 @@ public abstract class Transaction {
         ECKey keys = ECKey.fromPublicOnly(Hex.decode(this.senderPublicKey));
 
         byte[] signature = Hex.decode(this.signature);
-        byte[] hash = Sha256Hash.hash(Serializer.serialize(this, true, true, true));
+        byte[] hash = Sha256Hash.hash(Serializer.serialize(this, true, true, false));
 
         return verifier(this.signature).verify(hash, keys, signature);
     }

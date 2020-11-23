@@ -1,15 +1,15 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import java.util.List;
 import org.arkecosystem.crypto.enums.Fees;
 import org.arkecosystem.crypto.transactions.types.MultiSignatureRegistration;
 import org.arkecosystem.crypto.transactions.types.Transaction;
+
+import java.util.List;
 
 public class MultiSignatureRegistrationBuilder
         extends AbstractTransactionBuilder<MultiSignatureRegistrationBuilder> {
     public MultiSignatureRegistrationBuilder() {
         super();
-        this.transaction.version = 1;
         this.transaction.fee = Fees.MULTI_SIGNATURE_REGISTRATION.getValue();
     }
 
@@ -18,34 +18,20 @@ public class MultiSignatureRegistrationBuilder
         return new MultiSignatureRegistration();
     }
 
-    @Deprecated
     public MultiSignatureRegistrationBuilder min(int min) {
         return this.min((byte) min);
     }
 
-    @Deprecated
     public MultiSignatureRegistrationBuilder min(byte min) {
-        this.transaction.asset.multisignature.min = min;
+        this.transaction.asset.multiSignature.min = min;
 
         return this;
     }
 
-    @Deprecated
-    public MultiSignatureRegistrationBuilder lifetime(int lifetime) {
-        return this.lifetime((byte) lifetime);
-    }
+    public MultiSignatureRegistrationBuilder publicKeys(List<String> publicKeys) {
+        this.transaction.asset.multiSignature.publicKeys = publicKeys;
 
-    @Deprecated
-    public MultiSignatureRegistrationBuilder lifetime(byte lifetime) {
-        this.transaction.asset.multisignature.lifetime = lifetime;
-        return this;
-    }
-
-    @Deprecated
-    public MultiSignatureRegistrationBuilder keysgroup(List<String> keysgroup) {
-        this.transaction.asset.multisignature.keysgroup = keysgroup;
-
-        this.transaction.fee = (keysgroup.size() + 1) * this.transaction.fee;
+        this.transaction.fee = (publicKeys.size() + 1) * this.transaction.fee;
 
         return this;
     }

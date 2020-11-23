@@ -3,12 +3,26 @@ package org.arkecosystem.crypto.transactions;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
-import org.arkecosystem.crypto.transactions.types.*;
+import org.arkecosystem.crypto.transactions.types.DelegateRegistration;
+import org.arkecosystem.crypto.transactions.types.DelegateResignation;
+import org.arkecosystem.crypto.transactions.types.HtlcClaim;
+import org.arkecosystem.crypto.transactions.types.HtlcLock;
+import org.arkecosystem.crypto.transactions.types.HtlcRefund;
+import org.arkecosystem.crypto.transactions.types.Ipfs;
+import org.arkecosystem.crypto.transactions.types.MultiPayment;
+import org.arkecosystem.crypto.transactions.types.MultiSignatureRegistration;
+import org.arkecosystem.crypto.transactions.types.SecondSignatureRegistration;
+import org.arkecosystem.crypto.transactions.types.Transaction;
+import org.arkecosystem.crypto.transactions.types.Transfer;
+import org.arkecosystem.crypto.transactions.types.Vote;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Deserializer {
 
@@ -21,18 +35,18 @@ public class Deserializer {
         Map<Integer, Transaction> coreTransactionTypes = new HashMap<>();
         coreTransactionTypes.put(CoreTransactionTypes.TRANSFER.getValue(), new Transfer());
         coreTransactionTypes.put(
-                CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue(),
-                new SecondSignatureRegistration());
+            CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue(),
+            new SecondSignatureRegistration());
         coreTransactionTypes.put(
-                CoreTransactionTypes.DELEGATE_REGISTRATION.getValue(), new DelegateRegistration());
+            CoreTransactionTypes.DELEGATE_REGISTRATION.getValue(), new DelegateRegistration());
         coreTransactionTypes.put(CoreTransactionTypes.VOTE.getValue(), new Vote());
         coreTransactionTypes.put(
-                CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue(),
-                new MultiSignatureRegistration());
+            CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue(),
+            new MultiSignatureRegistration());
         coreTransactionTypes.put(CoreTransactionTypes.IPFS.getValue(), new Ipfs());
         coreTransactionTypes.put(CoreTransactionTypes.MULTI_PAYMENT.getValue(), new MultiPayment());
         coreTransactionTypes.put(
-                CoreTransactionTypes.DELEGATE_RESIGNATION.getValue(), new DelegateResignation());
+            CoreTransactionTypes.DELEGATE_RESIGNATION.getValue(), new DelegateResignation());
         coreTransactionTypes.put(CoreTransactionTypes.HTLC_LOCK.getValue(), new HtlcLock());
         coreTransactionTypes.put(CoreTransactionTypes.HTLC_CLAIM.getValue(), new HtlcClaim());
         coreTransactionTypes.put(CoreTransactionTypes.HTLC_REFUND.getValue(), new HtlcRefund());
@@ -93,7 +107,7 @@ public class Deserializer {
     }
 
     private void deserializeSchnorrOrEcdsa() {
-        if (detectSchnorr(buffer)) {
+        if (detectSchnorr()) {
             deserializeSchnorr();
         } else {
             deserializeEcdsa();
@@ -118,7 +132,7 @@ public class Deserializer {
 
     private boolean canReadNonMultiSignature() {
         return buffer.hasRemaining() && (buffer.remaining() % 64 == 0 || buffer.remaining() % 65 != 0);
-    };
+    }
 
     private void deserializeSchnorr() {
         if (canReadNonMultiSignature()) {
@@ -132,11 +146,52 @@ public class Deserializer {
             buffer.get(signatureBuffer);
             transaction.secondSignature = Hex.encode(signatureBuffer);
         }
+
+        if (buffer.hasRemaining()) {
+            if (buffer.remaining() % 65 == 0) {
+                transaction.signatures = new ArrayList<>();
+
+                int count = buffer.remaining() / 65;
+                Set<Integer> publicKeyIndexes = new HashSet<>();
+                for (int i = 0; i < count; i++) {
+                    byte[] signatureBuffer = new byte[65];
+                    buffer.get(signatureBuffer);
+                    String multiSignaturePart = Hex.encode(signatureBuffer);
+                    int publicKeyIndex = Integer.parseInt(multiSignaturePart.substring(0, 2), 16);
+
+                    if (!publicKeyIndexes.contains(publicKeyIndex)) {
+                        publicKeyIndexes.add(publicKeyIndex);
+                    } else {
+                        throw new RuntimeException("Duplicate participant in multi signature");
+                    }
+
+                    transaction.signatures.add(multiSignaturePart);
+                }
+            } else {
+                throw new RuntimeException("signature buffer not exhausted");
+            }
+        }
     }
 
-    private boolean detectSchnorr(ByteBuffer buffer) {
+    private boolean detectSchnorr() {
         int remaining = buffer.remaining();
-        return remaining == 64 || remaining == 128;
+
+        // `signature` / `secondSignature`
+        if (remaining == 64 || remaining == 128) {
+            return true;
+        }
+
+        // `signatures` of a multi signature transaction (type != 4)
+        if (remaining % 65 == 0) {
+            return true;
+        }
+
+        // only possiblity left is a type 4 transaction with and without a `secondSignature`.
+        if ((remaining - 64) % 65 == 0 || (remaining - 128) % 65 == 0) {
+            return true;
+        }
+
+        return false;
     }
 
     private int currentSignatureLength() {
@@ -151,8 +206,8 @@ public class Deserializer {
     public void setNewTransactionType(Transaction transaction) {
         if (this.transactionGroups.containsKey(transaction.getTransactionTypeGroup())) {
             this.transactionGroups
-                    .get(transaction.getTransactionTypeGroup())
-                    .put(transaction.getTransactionType(), transaction);
+                .get(transaction.getTransactionTypeGroup())
+                .put(transaction.getTransactionType(), transaction);
         } else {
             Map<Integer, Transaction> newTransactionGroup = new HashMap<>();
             newTransactionGroup.put(transaction.getTransactionType(), transaction);

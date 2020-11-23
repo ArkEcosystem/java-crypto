@@ -11,27 +11,26 @@ public class Serializer {
 
     private final Transaction transaction;
 
-    public Serializer(Transaction transaction) {
+    private Serializer(Transaction transaction) {
         this.transaction = transaction;
     }
 
     public static byte[] serialize(Transaction transaction) {
-        return new Serializer(transaction).serialize(false, false);
+        return serialize(transaction, false, false, false);
     }
 
-    public static byte[] serialize(
-            Transaction transaction, boolean skipSignature, boolean skipSecondSignature) {
-        return new Serializer(transaction).serialize(skipSignature, skipSecondSignature);
+    public static byte[] serialize(Transaction transaction, boolean skipSignature, boolean skipSecondSignature, boolean skipMultiSignature) {
+        return new Serializer(transaction).serialize(skipSignature, skipSecondSignature, skipMultiSignature);
     }
 
-    public byte[] serialize(boolean skipSignature, boolean skipSecondSignature) {
+    public byte[] serialize(boolean skipSignature, boolean skipSecondSignature, boolean skipMultiSignature) {
 
         byte[] common = serializeCommon();
         byte[] vendorField = serializeVendorField();
 
         byte[] typeBuffer = this.transaction.serialize();
 
-        byte[] signatures = serializeSignatures(skipSignature, skipSecondSignature);
+        byte[] signatures = serializeSignatures(skipSignature, skipSecondSignature, skipMultiSignature);
 
         ByteBuffer buffer =
                 ByteBuffer.allocate(
@@ -66,7 +65,9 @@ public class Serializer {
         buffer.putShort((short) this.transaction.type);
         buffer.putLong(this.transaction.nonce);
 
-        buffer.put(Hex.decode(this.transaction.senderPublicKey));
+        if (this.transaction.senderPublicKey != null) {
+            buffer.put(Hex.decode(this.transaction.senderPublicKey));
+        }
         buffer.putLong(this.transaction.fee);
 
         return buffer.array();
@@ -98,8 +99,8 @@ public class Serializer {
         return buffer.array();
     }
 
-    private byte[] serializeSignatures(boolean skipSignature, boolean skipSecondSignature) {
-        ByteBuffer buffer = ByteBuffer.allocate(144);
+    private byte[] serializeSignatures(boolean skipSignature, boolean skipSecondSignature, boolean skipMultiSignature) {
+        ByteBuffer buffer = ByteBuffer.allocate(16 * 65);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
         if (!skipSignature && this.transaction.signature != null) {
@@ -109,6 +110,11 @@ public class Serializer {
         if (!skipSecondSignature && this.transaction.secondSignature != null) {
             buffer.put(Hex.decode(this.transaction.secondSignature));
         }
+
+        if (!skipMultiSignature && this.transaction.signatures != null) {
+            buffer.put(Hex.decode(String.join("", this.transaction.signatures)));
+        }
+
         byte[] result = new byte[buffer.position()];
         buffer.rewind();
         buffer.get(result);

@@ -1,29 +1,31 @@
 plugins {
-    id 'java'
-    id 'maven'
+    id 'java-library'
     id 'maven-publish'
     id 'signing'
     id 'jacoco'
     id 'com.diffplug.spotless' version '5.6.1'
 }
 
+group = 'org.arkecosystem'
+version = '1.2.9'
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-    jcenter()
     mavenCentral()
 }
 
 dependencies {
-    compile group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.15.8'
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
-    compile 'com.google.guava:guava:29.0-jre'
+    implementation group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.15.8'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
+    implementation 'com.google.guava:guava:29.0-jre'
 
-    testCompile "org.slf4j:slf4j-simple:1.7.30"
+    testCompileOnly "org.slf4j:slf4j-api:1.7.30"
+    testRuntimeOnly "org.slf4j:slf4j-simple:1.7.30"
     testImplementation 'org.hamcrest:hamcrest-library:2.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testCompile 'org.junit.jupiter:junit-jupiter-params:5.7.0'
+    testCompileOnly 'org.junit.jupiter:junit-jupiter-params:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
 
@@ -39,75 +41,6 @@ task sourcesJar(type: Jar) {
 
 artifacts {
     archives javadocJar, sourcesJar
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            // repository(url: "file://${buildDir}/repo") {}
-
-            // repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
-            //    authentication(userName: '', password: '')
-            // }
-
-            //   snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-            //      authentication(userName: ossrhUsername, password: ossrhPassword)
-            //  }
-
-            pom.project {
-                groupId = 'org.arkecosystem'
-                version = '1.2.9'
-                artifactId = 'crypto'
-
-                name = 'java-crypto'
-                description = 'A Simple Cryptography Implementation in Java for the ARK CORE Blockchain Framework.'
-                url = 'https://sdk.ark.dev/java/crypto'
-                inceptionYear = '2018'
-
-                licenses {
-                    license {
-                        name = 'MIT'
-                        distribution = 'repo'
-                    }
-                }
-
-                developers {
-                    developer {
-                        name = 'Kovač Žan'
-                        email = 'zan@ark.io'
-                        organization = 'ARK Ecosystem'
-                        organizationUrl = 'https://ark.io'
-                    }
-                    developer {
-                        name = 'Kristjan Košič'
-                        email = 'kristjan@ark.io'
-                        organization = 'ARK Ecosystem'
-                        organizationUrl = 'https://ark.io'
-                    }
-                    developer {
-                        name = 'Brian Faust'
-                        email = 'brian@ark.io'
-                        organization = 'ARK Ecosystem'
-                        organizationUrl = 'https://ark.io'
-                    }
-                    developer {
-                        name = 'Joshua Noack'
-                        email = 'joshua@ark.io'
-                        organization = 'ARK Ecosystem'
-                        organizationUrl = 'https://ark.io'
-                    }
-                }
-
-                scm {
-                    connection = 'scm:git:git://github.com/ArkEcosystem/java-crypto.git'
-                    developerConnection = 'scm:git:ssh://github.com:ArkEcosystem/java-crypto.git'
-                    url = 'https://github.com/ArkEcosystem/java-crypto/tree/1.2.8'
-                }
-            }
-        }
-    }
 }
 
 if (project.hasProperty("signing.keyId")) {
@@ -159,5 +92,81 @@ task fatJar(type: Jar) {
 build.dependsOn 'spotlessApply'
 
 wrapper {
-    gradleVersion = '6.2.0'
+    gradleVersion = '6.7.1'
+}
+
+task writeNewPom {
+    doLast {
+        pom {
+            groupId = 'org.arkecosystem'
+            version = '1.2.9'
+            artifactId = 'crypto'
+
+            name = 'java-crypto'
+            description = 'A Simple Cryptography Implementation in Java for the ARK CORE Blockchain Framework.'
+            url = 'https://sdk.ark.dev/java/crypto'
+            inceptionYear = '2018'
+
+            licenses {
+                license {
+                    name = 'MIT'
+                    distribution = 'repo'
+                }
+            }
+
+            developers {
+                developer {
+                    name = 'Kovač Žan'
+                    email = 'zan@ark.io'
+                    organization = 'ARK Ecosystem'
+                    organizationUrl = 'https://ark.io'
+                }
+                developer {
+                    name = 'Kristjan Košič'
+                    email = 'kristjan@ark.io'
+                    organization = 'ARK Ecosystem'
+                    organizationUrl = 'https://ark.io'
+                }
+                developer {
+                    name = 'Brian Faust'
+                    email = 'brian@ark.io'
+                    organization = 'ARK Ecosystem'
+                    organizationUrl = 'https://ark.io'
+                }
+                developer {
+                    name = 'Joshua Noack'
+                    email = 'joshua@ark.io'
+                    organization = 'ARK Ecosystem'
+                    organizationUrl = 'https://ark.io'
+                }
+            }
+
+            scm {
+                connection = 'scm:git:git://github.com/ArkEcosystem/java-crypto.git'
+                developerConnection = 'scm:git:ssh://github.com:ArkEcosystem/java-crypto.git'
+                url = 'https://github.com/ArkEcosystem/java-crypto/tree/1.2.8'
+            }
+        }.writeTo("$buildDir/newpom.xml")
+    }
+}
+
+publishing {
+
+    publications {
+        myLibrary(MavenPublication) {
+            from components.java
+        }
+    }
+
+    repositories {
+        mavenLocal()
+        maven {
+            name = "OSSRH"
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = System.getenv("MVN_USERNAME")
+                password = System.getenv("MVN_PASSWORD")
+            }
+        }
+    }
 }

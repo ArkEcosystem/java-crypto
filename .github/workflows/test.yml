@@ -17,14 +17,19 @@ jobs:
                 java: [ 8, 9, 10, 11, 12, 13 ]
 
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v2
+
             - name: Use Java Version ${{ matrix.java }}
-              uses: actions/setup-java@v1
+              uses: actions/setup-java@v2
               with:
                   java-version: ${{ matrix.java }}
+                  distribution: 'adopt'
+
             - name: Install
               run: gradle dependencies
+
             - name: Test
               run: gradle test && gradle jacocoTestReport
+
             - name: Codecov
               run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}

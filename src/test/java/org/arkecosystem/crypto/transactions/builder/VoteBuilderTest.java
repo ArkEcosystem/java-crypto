@@ -79,14 +79,21 @@ class VoteBuilderTest {
             .transaction;
 
         assertTrue(actual.verify());
+
+        HashMap actualHashMap = actual.toHashMap();
+        HashMap actualAsset = (HashMap) actualHashMap.get("asset");
+        List actualVotes = (List) actualAsset.get("votes");
+
+        assertEquals(actualVotes, Arrays.asList(
+            "-034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193",
+            "+034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"
+        ));
     }
 
     @Test
-    void buildSecondSignature() {
+    void buildVoteSecondSignature() {
         Transaction actual = new VoteBuilder()
-            .addVotes(Arrays.asList(
-                "+034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"
-            ))
+            .addVote("+034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192")
             .version(2)
             .nonce(3)
             .sign("this is a top secret passphrase")

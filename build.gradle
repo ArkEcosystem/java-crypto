@@ -59,8 +59,8 @@ test {
 
 jacocoTestReport {
     reports {
-        xml.enabled true
-        html.enabled false
+        xml.required = true
+        html.required = true
     }
 }
 
@@ -92,7 +92,7 @@ task fatJar(type: Jar) {
 build.dependsOn 'spotlessApply'
 
 wrapper {
-    gradleVersion = '6.7.1'
+    gradleVersion = '7.2'
 }
 
 task writeNewPom {

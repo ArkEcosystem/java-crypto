@@ -28,10 +28,10 @@ jobs:
                     java-version: 8
                     cache: 'gradle'
 
-            -   name: Install
+            -   name: Format code
                 run: gradle format
 
-            -   name: Format code
+            -   name: Commit fixed code
                 uses: stefanzweifel/git-auto-commit-action@v4
                 with:
                     commit_message: "style: resolve style guide violations"

@@ -9,6 +9,34 @@ on:
         types: [ ready_for_review, synchronize, opened ]
 
 jobs:
+    format:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v2
+                with:
+                    ref: ${{ github.head_ref }}
+
+            -   name: Merge Conflict finder
+                uses: olivernybroe/action-conflict-finder@v1.1
+
+            -   name: Use Java Version ${{ matrix.java }}
+                uses: actions/setup-java@v2
+                with:
+                    distribution: 'adopt'
+                    java-version: 8
+                    cache: 'gradle'
+
+            -   name: Format code
+                run: gradle format
+
+            -   name: Commit fixed code
+                uses: stefanzweifel/git-auto-commit-action@v4
+                with:
+                    commit_message: "style: resolve style guide violations"
+                    branch: ${{ github.head_ref }}
+
     unit:
         runs-on: ubuntu-latest
         strategy:

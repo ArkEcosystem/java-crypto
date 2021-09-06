@@ -1,10 +1,9 @@
 package org.arkecosystem.crypto.transactions;
 
-import org.arkecosystem.crypto.enums.HtlcLockExpirationType;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.arkecosystem.crypto.enums.HtlcLockExpirationType;
 
 public class TransactionAsset {
     public Signature signature = new Signature();

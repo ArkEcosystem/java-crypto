@@ -1,6 +1,12 @@
 package org.arkecosystem.crypto.transactions.types;
 
 import com.google.gson.GsonBuilder;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.arkecosystem.crypto.signature.ECDSAVerifier;
@@ -12,13 +18,6 @@ import org.arkecosystem.crypto.transactions.Serializer;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
-
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public abstract class Transaction {
 
@@ -83,7 +82,7 @@ public abstract class Transaction {
 
         byte[] hash = Sha256Hash.hash(Serializer.serialize(this, true, true, true));
         String signature = Hex.encode(signer().sign(hash, privateKey));
-        String indexedSignature = Hex.encode(new byte[]{(byte) index}) + signature;
+        String indexedSignature = Hex.encode(new byte[] {(byte) index}) + signature;
         this.signatures.add(indexedSignature);
 
         return this;
@@ -130,7 +129,11 @@ public abstract class Transaction {
             String partialSignature = signature.substring(2);
             String publicKey = publicKeys.get(publicKeyIndex);
 
-            if (verifier(partialSignature).verify(hash, ECKey.fromPublicOnly(Hex.decode(publicKey)), Hex.decode(partialSignature))) {
+            if (verifier(partialSignature)
+                    .verify(
+                            hash,
+                            ECKey.fromPublicOnly(Hex.decode(publicKey)),
+                            Hex.decode(partialSignature))) {
                 verifiedSignatures++;
             }
 

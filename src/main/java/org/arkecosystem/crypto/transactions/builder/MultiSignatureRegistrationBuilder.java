@@ -1,10 +1,9 @@
 package org.arkecosystem.crypto.transactions.builder;
 
+import java.util.List;
 import org.arkecosystem.crypto.enums.Fees;
 import org.arkecosystem.crypto.transactions.types.MultiSignatureRegistration;
 import org.arkecosystem.crypto.transactions.types.Transaction;
-
-import java.util.List;
 
 public class MultiSignatureRegistrationBuilder
         extends AbstractTransactionBuilder<MultiSignatureRegistrationBuilder> {

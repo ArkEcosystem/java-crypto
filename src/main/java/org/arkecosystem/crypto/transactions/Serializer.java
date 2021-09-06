@@ -1,11 +1,10 @@
 package org.arkecosystem.crypto.transactions;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import org.arkecosystem.crypto.configuration.Network;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.transactions.types.Transaction;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 public class Serializer {
 
@@ -19,18 +18,25 @@ public class Serializer {
         return serialize(transaction, false, false, false);
     }
 
-    public static byte[] serialize(Transaction transaction, boolean skipSignature, boolean skipSecondSignature, boolean skipMultiSignature) {
-        return new Serializer(transaction).serialize(skipSignature, skipSecondSignature, skipMultiSignature);
+    public static byte[] serialize(
+            Transaction transaction,
+            boolean skipSignature,
+            boolean skipSecondSignature,
+            boolean skipMultiSignature) {
+        return new Serializer(transaction)
+                .serialize(skipSignature, skipSecondSignature, skipMultiSignature);
     }
 
-    public byte[] serialize(boolean skipSignature, boolean skipSecondSignature, boolean skipMultiSignature) {
+    public byte[] serialize(
+            boolean skipSignature, boolean skipSecondSignature, boolean skipMultiSignature) {
 
         byte[] common = serializeCommon();
         byte[] vendorField = serializeVendorField();
 
         byte[] typeBuffer = this.transaction.serialize();
 
-        byte[] signatures = serializeSignatures(skipSignature, skipSecondSignature, skipMultiSignature);
+        byte[] signatures =
+                serializeSignatures(skipSignature, skipSecondSignature, skipMultiSignature);
 
         ByteBuffer buffer =
                 ByteBuffer.allocate(
@@ -99,7 +105,8 @@ public class Serializer {
         return buffer.array();
     }
 
-    private byte[] serializeSignatures(boolean skipSignature, boolean skipSecondSignature, boolean skipMultiSignature) {
+    private byte[] serializeSignatures(
+            boolean skipSignature, boolean skipSecondSignature, boolean skipMultiSignature) {
         ByteBuffer buffer = ByteBuffer.allocate(16 * 65);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 

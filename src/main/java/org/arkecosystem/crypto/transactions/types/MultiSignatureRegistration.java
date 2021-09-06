@@ -1,12 +1,11 @@
 package org.arkecosystem.crypto.transactions.types;
 
-import org.arkecosystem.crypto.encoding.Hex;
-import org.arkecosystem.crypto.enums.CoreTransactionTypes;
-import org.arkecosystem.crypto.enums.TransactionTypeGroup;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.HashMap;
+import org.arkecosystem.crypto.encoding.Hex;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
+import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 
 public class MultiSignatureRegistration extends Transaction {
 
@@ -34,13 +33,14 @@ public class MultiSignatureRegistration extends Transaction {
 
     @Override
     public byte[] serialize() {
-        ByteBuffer buffer = ByteBuffer.allocate(2 + this.asset.multiSignature.publicKeys.size() * 33);
+        ByteBuffer buffer =
+                ByteBuffer.allocate(2 + this.asset.multiSignature.publicKeys.size() * 33);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
         buffer.put(this.asset.multiSignature.min);
 
         buffer.put((byte) this.asset.multiSignature.publicKeys.size());
-        for (String publicKey: this.asset.multiSignature.publicKeys) {
+        for (String publicKey : this.asset.multiSignature.publicKeys) {
             buffer.put(Hex.decode(publicKey));
         }
 

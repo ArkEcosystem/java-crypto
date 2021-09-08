@@ -24,7 +24,7 @@ public class VoteBuilder extends AbstractTransactionBuilder<VoteBuilder> {
     }
 
     public VoteBuilder sign(String passphrase) {
-        this.transaction.recipientId = Address.fromPassphrase(passphrase);
+        this.transaction.recipientId = Address.fromPassphrase(passphrase, this.transaction.network);
 
         super.sign(passphrase);
 

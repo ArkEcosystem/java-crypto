@@ -2,8 +2,13 @@ name: Publish package to the Maven Central Repository
 on:
     release:
         types: [created]
+    push:
+        branches:
+            - "master"
+            - "develop"
 
 jobs:
+    if: "contains(github.event.head_commit.message, 'release:')"
     publish:
         runs-on: ubuntu-latest
 

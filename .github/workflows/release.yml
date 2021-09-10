@@ -23,5 +23,7 @@ jobs:
             - name: Publish to the Maven Central Repository
               run: gradle publish
               env:
+                  ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_SIGNING_KEY }}
+                  ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_SIGNING_PASSWORD }}
                   MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
                   MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}

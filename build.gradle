@@ -150,9 +150,9 @@ publishing {
     }
 }
 
-if (project.hasProperty("signing.keyId")) {
-    apply plugin: 'signing'
-    signing {
-        sign publishing.publications.mavenJava
-    }
+signing {
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKey as String, signingPassword as String)
+    sign publishing.publications.mavenJava
 }

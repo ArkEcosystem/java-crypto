@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
-import org.arkecosystem.crypto.signature.ECDSAVerifier;
 import org.arkecosystem.crypto.signature.SchnorrSigner;
 import org.arkecosystem.crypto.signature.SchnorrVerifier;
 import org.arkecosystem.crypto.signature.Signer;
@@ -208,7 +207,6 @@ public abstract class Transaction {
     }
 
     private Verifier verifier(String signature) {
-        // 128 string length => 64 bits
-        return signature.length() == 128 ? new SchnorrVerifier() : new ECDSAVerifier();
+        return new SchnorrVerifier();
     }
 }

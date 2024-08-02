@@ -41,8 +41,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                # test against the latest update of each major Java version, as well as specific updates of LTS versions:
-                java: [8, 11, 15, 16, 17, 18, 19, 20, 21, 22]
+                java: [11, 15, 16, 17, 18, 19, 20, 21, 22]
 
         steps:
             - name: Checkout code

@@ -20,8 +20,8 @@ class TransferTest {
                 new Deserializer(fixture.get("serialized").toString()).deserialize();
 
         String actual = Hex.encode(Serializer.serialize(transaction));
-        
-        assertEquals(fixture.get("serialized").toString(), actual);        
+
+        assertEquals(fixture.get("serialized").toString(), actual);
     }
 
     @Test

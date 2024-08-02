@@ -29,10 +29,10 @@ public class Address {
         byte[] addressBytes = new byte[20];
 
         System.arraycopy(keccakHash, keccakHash.length - 20, addressBytes, 0, 20);
-        
+
         // Convert to checksum address
         String address = "0x" + Hex.encode(addressBytes);
-        
+
         return Keys.toChecksumAddress(address);
     }
 

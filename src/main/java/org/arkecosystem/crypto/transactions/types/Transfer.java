@@ -36,7 +36,7 @@ public class Transfer extends Transaction {
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         buffer.putLong(this.amount);
         buffer.putInt(this.expiration);
-        
+
         // Convert recipientId to a hex string without the 0x prefix and then to bytes
         byte[] recipientBytes = Hex.decode(Address.toBufferHexString(this.recipientId));
         buffer.put(recipientBytes);
@@ -47,7 +47,7 @@ public class Transfer extends Transaction {
     @Override
     public void deserialize(ByteBuffer buffer) {
         buffer.order(ByteOrder.LITTLE_ENDIAN);
-        
+
         this.amount = buffer.getLong();
         this.expiration = buffer.getInt();
 

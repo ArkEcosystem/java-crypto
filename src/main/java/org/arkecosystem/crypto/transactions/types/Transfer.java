@@ -32,7 +32,7 @@ public class Transfer extends Transaction {
 
     @Override
     public byte[] serialize() {
-        ByteBuffer buffer = ByteBuffer.allocate(24 + 20); // 24 bytes for amount and expiration, 20 bytes for address
+        ByteBuffer buffer = ByteBuffer.allocate(32);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         buffer.putLong(this.amount);
         buffer.putInt(this.expiration);

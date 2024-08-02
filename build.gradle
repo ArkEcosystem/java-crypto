@@ -19,6 +19,7 @@ repositories {
 
 dependencies {
     implementation 'org.bitcoinj:bitcoinj-core:0.16.3'
+    implementation files('libs/secp256k1-api-0.0.1.jar')
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.google.guava:guava:30.2.0-jre'
 

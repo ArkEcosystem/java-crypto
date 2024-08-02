@@ -10,8 +10,8 @@ group = 'org.arkecosystem'
 version = '2.0.0'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.toVersion("22")
+    targetCompatibility = JavaVersion.toVersion("22")
     withJavadocJar()
     withSourcesJar()
 }
@@ -24,6 +24,7 @@ repositories {
 dependencies {
     implementation 'org.bitcoinj:bitcoinj-core:0.16.3'
     implementation files('libs/secp256k1-api-0.0.1.jar')
+    implementation files('libs/secp256k1-foreign-0.0.1.jar')
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.google.guava:guava:30.2.0-jre'
 

@@ -1,58 +1,50 @@
 package org.arkecosystem.crypto.identities;
 
-import com.google.common.primitives.Bytes;
-import org.arkecosystem.crypto.configuration.Network;
-import org.arkecosystem.crypto.encoding.Base58;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.bitcoinj.core.ECKey;
-import org.bouncycastle.crypto.digests.RIPEMD160Digest;
+import org.web3j.crypto.Hash;
+import org.web3j.crypto.Keys;
 
 public class Address {
-    public static String fromPassphrase(String passphrase, Integer networkVersion) {
-        return fromPrivateKey(PrivateKey.fromPassphrase(passphrase), networkVersion);
-    }
-
     public static String fromPassphrase(String passphrase) {
-        return Address.fromPassphrase(passphrase, null);
-    }
-
-    public static String fromPublicKey(String publicKey, Integer networkVersion) {
-        byte[] publicKeyBytes = Hex.decode(publicKey);
-
-        RIPEMD160Digest digest = new RIPEMD160Digest();
-        digest.update(publicKeyBytes, 0, publicKeyBytes.length);
-        byte[] out = new byte[20];
-        digest.doFinal(out, 0);
-
-        if (networkVersion == null) {
-            networkVersion = Network.get().version();
-        }
-
-        byte[] bytes = Bytes.concat(new byte[] {networkVersion.byteValue()}, out);
-        return Base58.encodeChecked(bytes);
+        ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
+        return fromPrivateKey(privateKey);
     }
 
     public static String fromPublicKey(String publicKey) {
-        return Address.fromPublicKey(publicKey, null);
-    }
+        byte[] publicKeyBytes = Hex.decode(publicKey);
 
-    public static String fromPrivateKey(ECKey privateKey, Integer networkVersion) {
-        return fromPublicKey(privateKey.getPublicKeyAsHex(), networkVersion);
+        // Ensure the public key is uncompressed
+        ECKey ecKey = ECKey.fromPublicOnly(publicKeyBytes);
+        byte[] uncompressedPublicKeyBytes = ecKey.getPubKeyPoint().getEncoded(false);
+
+        // Remove the prefix (0x04)
+        byte[] rawPublicKey = new byte[uncompressedPublicKeyBytes.length - 1];
+        System.arraycopy(uncompressedPublicKeyBytes, 1, rawPublicKey, 0, rawPublicKey.length);
+
+        // Hash the public key using Keccak-256
+        byte[] keccakHash = Hash.sha3(rawPublicKey);
+
+        // Take the last 20 bytes of the Keccak-256 hash
+        byte[] addressBytes = new byte[20];
+
+        System.arraycopy(keccakHash, keccakHash.length - 20, addressBytes, 0, 20);
+        
+        // Convert to checksum address
+        String address = "0x" + Hex.encode(addressBytes);
+        
+        return Keys.toChecksumAddress(address);
     }
 
     public static String fromPrivateKey(ECKey privateKey) {
-        return Address.fromPrivateKey(privateKey, null);
-    }
-
-    public static Boolean validate(String address, Integer networkVersion) {
-        if (networkVersion == null) {
-            networkVersion = Network.get().version();
-        }
-
-        return Base58.decodeChecked(address)[0] == networkVersion;
+        byte[] publicKeyBytes = privateKey.getPubKey();
+        return fromPublicKey(Hex.encode(publicKeyBytes));
     }
 
     public static Boolean validate(String address) {
-        return Address.validate(address, null);
+        if (address == null || !address.matches("^0x[a-fA-F0-9]{40}$")) {
+            return false;
+        }
+        return address.equals(Keys.toChecksumAddress(address));
     }
 }

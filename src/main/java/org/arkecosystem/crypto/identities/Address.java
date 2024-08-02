@@ -40,11 +40,4 @@ public class Address {
         byte[] publicKeyBytes = privateKey.getPubKey();
         return fromPublicKey(Hex.encode(publicKeyBytes));
     }
-
-    public static Boolean validate(String address) {
-        if (address == null || !address.matches("^0x[a-fA-F0-9]{40}$")) {
-            return false;
-        }
-        return address.equals(Keys.toChecksumAddress(address));
-    }
 }

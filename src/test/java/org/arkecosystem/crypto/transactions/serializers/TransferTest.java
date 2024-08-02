@@ -15,13 +15,22 @@ class TransferTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/transfer-sign");
+                FixtureLoader.load("transactions/transfer/transfer-sign");
         Transaction transaction =
                 new Deserializer(fixture.get("serialized").toString()).deserialize();
 
         String actual = Hex.encode(Serializer.serialize(transaction));
 
+        
+        // Check serialization length
+        // assertEquals(fixture.get("serialized").toString().length(), actual.length());
+
+        // Signatures is not deterministic so we need to remove them from the comparison
+        // in pho I do this: substr($expected, 0, -128), substr($actual, 0, -128)
+
+        // assertEquals(fixture.get("serialized").toString().substring(0, 256), actual.substring(0, 256));
         assertEquals(fixture.get("serialized").toString(), actual);
+        
     }
 
     @Test

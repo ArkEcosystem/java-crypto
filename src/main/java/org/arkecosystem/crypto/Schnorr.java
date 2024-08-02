@@ -35,8 +35,7 @@ public class Schnorr {
                             .mod(p);
         else
             lam =
-                    (p2[1]
-                                    .subtract(p1[1])
+                    (p2[1].subtract(p1[1])
                                     .multiply(p2[0].subtract(p1[0]).modPow(p.subtract(TWO), p)))
                             .mod(p);
 

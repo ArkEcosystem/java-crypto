@@ -15,20 +15,7 @@ class ValidatorResignationTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/delegate-resignation-sign");
-
-        Transaction transaction =
-                new Deserializer(fixture.get("serialized").toString()).deserialize();
-
-        String actual = Hex.encode(Serializer.serialize(transaction));
-
-        assertEquals(fixture.get("serialized").toString(), actual);
-    }
-
-    @Test
-    void secondPassphrase() {
-        LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/delegate-resignation-secondSign");
+                FixtureLoader.load("transactions/validator_resignation/validator-resignation-sign");
 
         Transaction transaction =
                 new Deserializer(fixture.get("serialized").toString()).deserialize();

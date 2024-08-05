@@ -11,7 +11,6 @@ public class ValidatorResignationBuilderTest {
     void build() {
         Transaction actual =
                 new ValidatorResignationBuilder()
-                        .version(2)
                         .nonce(3)
                         .sign("this is a top secret passphrase")
                         .transaction;
@@ -27,7 +26,6 @@ public class ValidatorResignationBuilderTest {
     void buildSecondSignature() {
         Transaction actual =
                 new ValidatorResignationBuilder()
-                        .version(2)
                         .nonce(3)
                         .sign("this is a top secret passphrase")
                         .secondSign("this is a top secret second passphrase")

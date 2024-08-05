@@ -75,11 +75,7 @@ jobs:
               run: |
                 git clone https://gitlab.com/bitcoinj/secp256k1-jdk.git
                 cd secp256k1-jdk
-                if [ ${{ matrix.java }} -ge 22 ]; then
-                  ./gradlew -PjavaPath=$JAVA_HOME/lib build
-                else
-                  ./gradlew build
-                fi
+                gradle build
                 cp secp256k1-api/build/libs/secp256k1-api-0.0.1.jar ../lib
                 cp secp256k1-foreign/build/libs/secp256k1-foreign-0.0.1.jar ../lib
                 rm -rf secp256k1-jdk

@@ -88,8 +88,8 @@ jobs:
             - name: Build secp256k1-jdk
               run: |
                 $HOME/secp256k1-jdk/gradlew -p $HOME/secp256k1-jdk build -x test
-                cp $HOME/secp256k1-jdk/secp256k1-api/build/libs/secp256k1-api-0.0.1.jar ./lib
-                cp $HOME/secp256k1-jdk/secp256k1-foreign/build/libs/secp256k1-foreign-0.0.1.jar ./lib
+                cp $HOME/secp256k1-jdk/secp256k1-api/build/libs/secp256k1-api-0.0.1.jar ./libs
+                cp $HOME/secp256k1-jdk/secp256k1-foreign/build/libs/secp256k1-foreign-0.0.1.jar ./libs
 
             - name: Install
               run: gradle dependencies

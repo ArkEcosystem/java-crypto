@@ -102,39 +102,6 @@ public class Deserializer {
     }
 
     private void deserializeSignatures() {
-        deserializeSchnorrOrEcdsa();
-    }
-
-    private void deserializeSchnorrOrEcdsa() {
-        if (detectSchnorr()) {
-            deserializeSchnorr();
-        } else {
-            deserializeEcdsa();
-        }
-    }
-
-    private void deserializeEcdsa() {
-        if (buffer.remaining() != 0) {
-            int signatureLength = currentSignatureLength();
-            byte[] signatureBuffer = new byte[signatureLength];
-            this.buffer.get(signatureBuffer);
-            this.transaction.signature = Hex.encode(signatureBuffer);
-        }
-
-        if (buffer.remaining() != 0) {
-            int signatureLength = currentSignatureLength();
-            byte[] signatureBuffer = new byte[signatureLength];
-            this.buffer.get(signatureBuffer);
-            this.transaction.secondSignature = Hex.encode(signatureBuffer);
-        }
-    }
-
-    private boolean canReadNonMultiSignature() {
-        return buffer.hasRemaining()
-                && (buffer.remaining() % 64 == 0 || buffer.remaining() % 65 != 0);
-    }
-
-    private void deserializeSchnorr() {
         if (canReadNonMultiSignature()) {
             byte[] signatureBuffer = new byte[64];
             buffer.get(signatureBuffer);
@@ -173,34 +140,9 @@ public class Deserializer {
         }
     }
 
-    private boolean detectSchnorr() {
-        int remaining = buffer.remaining();
-
-        // `signature` / `secondSignature`
-        if (remaining == 64 || remaining == 128) {
-            return true;
-        }
-
-        // `signatures` of a multi signature transaction (type != 4)
-        if (remaining % 65 == 0) {
-            return true;
-        }
-
-        // only possiblity left is a type 4 transaction with and without a `secondSignature`.
-        if ((remaining - 64) % 65 == 0 || (remaining - 128) % 65 == 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private int currentSignatureLength() {
-        int mark = this.buffer.position();
-        this.buffer.position(mark + 1);
-        String length = String.valueOf(this.buffer.get());
-        int signatureLength = Integer.parseInt(length) + 2;
-        this.buffer.position(mark);
-        return signatureLength;
+    private boolean canReadNonMultiSignature() {
+        return buffer.hasRemaining()
+                && (buffer.remaining() % 64 == 0 || buffer.remaining() % 65 != 0);
     }
 
     public void setNewTransactionType(Transaction transaction) {

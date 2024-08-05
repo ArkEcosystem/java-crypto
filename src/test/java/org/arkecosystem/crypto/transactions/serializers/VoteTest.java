@@ -14,7 +14,7 @@ class VoteTest {
     @Test
     void passphraseVote() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/vote-sign");
+                FixtureLoader.load("transactions/vote/vote-sign");
         Transaction transaction =
                 new Deserializer(fixture.get("serialized").toString()).deserialize();
 
@@ -26,31 +26,7 @@ class VoteTest {
     @Test
     void passphraseUnvote() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/unvote-sign");
-        Transaction transaction =
-                new Deserializer(fixture.get("serialized").toString()).deserialize();
-
-        String actual = Hex.encode(Serializer.serialize(transaction));
-
-        assertEquals(fixture.get("serialized").toString(), actual);
-    }
-
-    @Test
-    void secondPassphraseVote() {
-        LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/vote-secondSign");
-        Transaction transaction =
-                new Deserializer(fixture.get("serialized").toString()).deserialize();
-
-        String actual = Hex.encode(Serializer.serialize(transaction));
-
-        assertEquals(fixture.get("serialized").toString(), actual);
-    }
-
-    @Test
-    void secondPassphraseUnvote() {
-        LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/unvote-secondSign");
+                FixtureLoader.load("transactions/vote/unvote-sign");
         Transaction transaction =
                 new Deserializer(fixture.get("serialized").toString()).deserialize();
 

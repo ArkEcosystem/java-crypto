@@ -8,6 +8,7 @@ import org.arkecosystem.crypto.enums.HtlcLockExpirationType;
 public class TransactionAsset {
     public Signature signature = new Signature();
     public List<String> votes = new ArrayList<>();
+    public List<String> unvotes = new ArrayList<>();
     public Delegate delegate = new Delegate();
     public MultiSignature multiSignature = new MultiSignature();
     public MultiPayment multiPayment = new MultiPayment();

@@ -17,14 +17,16 @@ import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-
 public class FixtureSignVerificationTest {
 
     private final String passphrase = "my super secret passphrase";
     private final String secondPassphrase = "this is a top secret second passphrase";
-    private final String musigPassphrase1 = "album pony urban cheap small blade cannon silent run reveal luxury glad predict excess fire beauty hollow reward solar egg exclude leaf sight degree";
-    private final String musigPassphrase2 = "hen slogan retire boss upset blame rocket slender area arch broom bring elder few milk bounce execute page evoke once inmate pear marine deliver";
-    private final String musigPassphrase3 = "top visa use bacon sun infant shrimp eye bridge fantasy chair sadness stable simple salad canoe raw hill target connect avoid promote spider category";
+    private final String musigPassphrase1 =
+            "album pony urban cheap small blade cannon silent run reveal luxury glad predict excess fire beauty hollow reward solar egg exclude leaf sight degree";
+    private final String musigPassphrase2 =
+            "hen slogan retire boss upset blame rocket slender area arch broom bring elder few milk bounce execute page evoke once inmate pear marine deliver";
+    private final String musigPassphrase3 =
+            "top visa use bacon sun infant shrimp eye bridge fantasy chair sadness stable simple salad canoe raw hill target connect avoid promote spider category";
 
     @ParameterizedTest
     @ValueSource(
@@ -32,7 +34,7 @@ public class FixtureSignVerificationTest {
                 "transactions/transfer/transfer-sign",
                 "transactions/transfer/transfer-with-vendor-field-sign",
                 // "transactions/transfer/transfer-multi-sign",
-            
+
                 "transactions/vote/vote-sign",
                 "transactions/vote/unvote-sign",
                 // "transactions/vote/vote-multi-sign",
@@ -59,7 +61,6 @@ public class FixtureSignVerificationTest {
         LinkedTreeMap<String, Object> fixture = FixtureLoader.load(file);
 
         Transaction actual = new Deserializer(fixture.get("serialized").toString()).deserialize();
-        
 
         if (actual.signature != null) assertTrue(actual.verify());
 
@@ -78,7 +79,7 @@ public class FixtureSignVerificationTest {
                 "transactions/transfer/transfer-sign",
                 "transactions/transfer/transfer-with-vendor-field-sign",
                 // "transactions/transfer/transfer-multi-sign",
-            
+
                 "transactions/vote/vote-sign",
                 "transactions/vote/unvote-sign",
                 // "transactions/vote/vote-multi-sign",
@@ -125,7 +126,7 @@ public class FixtureSignVerificationTest {
         if (withoutSignatures.secondSignature != null) {
             checkSecondSignature(withoutSignatures);
         }
-        
+
         int signatureLength = 128;
 
         if (withoutSignatures.signatures != null) {
@@ -137,11 +138,11 @@ public class FixtureSignVerificationTest {
         String serializedWithoutSignatures = Hex.encode(Serializer.serialize(withoutSignatures));
         String serializedFixture = fixture.get("serialized").toString();
 
-         // Exclude the last 128 characters (signature) for final comparison
+        // Exclude the last 128 characters (signature) for final comparison
         assertThat(
-            serializedWithoutSignatures.substring(0, serializedWithoutSignatures.length() - signatureLength),
-            is(serializedFixture.substring(0, serializedFixture.length() - signatureLength)));
-
+                serializedWithoutSignatures.substring(
+                        0, serializedWithoutSignatures.length() - signatureLength),
+                is(serializedFixture.substring(0, serializedFixture.length() - signatureLength)));
     }
 
     private void reSignUnsigned(Transaction actual, Transaction withoutSignatures) {

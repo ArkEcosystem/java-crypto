@@ -52,20 +52,26 @@ jobs:
             - name: Merge Conflict finder
               uses: olivernybroe/action-conflict-finder@v1.1
 
+            - name: Install Nix
+              run: |
+                curl -L https://nixos.org/nix/install | sh
+                . $HOME/.nix-profile/etc/profile.d/nix.sh
+
+            - name: Install libsecp256k1
+              run: |
+                nix profile install nixpkgs#secp256k1
+              env:
+                NIX_PATH: $HOME/.nix-profile/bin
+
+            - name: Set LD_LIBRARY_PATH
+              run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.nix-profile/lib" >> $GITHUB_ENV
+
             - name: Use Java Version ${{ matrix.java }}
               uses: actions/setup-java@v2
               with:
                   distribution: "zulu"
                   java-version: ${{ matrix.java }}
                   cache: "gradle"
-
-            - name: Install libsecp256k1
-              run: |
-                nix profile install nixpkgs#secp256k1
-                echo "$HOME/.nix-profile/lib" >> $GITHUB_ENV
-
-            - name: Set LD_LIBRARY_PATH
-              run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.nix-profile/lib" >> $GITHUB_ENV
 
             - name: Install
               run: gradle dependencies

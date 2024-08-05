@@ -14,7 +14,7 @@ class TransferBuilderTest {
     void build() {
         Transaction actual =
                 new TransferBuilder()
-                        .recipient("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25")
+                        .recipient("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A")
                         .amount(133380000000L)
                         .expiration(100000)
                         .vendorField("This is a transaction from Java")
@@ -28,7 +28,7 @@ class TransferBuilderTest {
         assertTrue(actual.verify());
 
         HashMap actualHashMap = actual.toHashMap();
-        assertEquals(actualHashMap.get("recipientId"), "AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25");
+        assertEquals(actualHashMap.get("recipientId"), "0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A");
         assertEquals(actualHashMap.get("amount"), "133380000000");
         assertEquals(actualHashMap.get("expiration"), 100000);
         assertEquals(actualHashMap.get("vendorField"), "This is a transaction from Java");
@@ -43,7 +43,7 @@ class TransferBuilderTest {
     void buildSecondSignature() {
         Transaction actual =
                 new TransferBuilder()
-                        .recipient("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25")
+                        .recipient("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A")
                         .amount(133380000000L)
                         .expiration(100000)
                         .vendorField("This is a transaction from Java")

@@ -13,7 +13,7 @@ class HtlcLockBuilderTest {
         Transaction actual =
                 new HtlcLockBuilder()
                         .amount(1000000)
-                        .recipientId("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25")
+                        .recipientId("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A")
                         .secretHash(
                                 "0f128d401958b1b30ad0d10406f47f9489321017b4614e6cb993fc63913c5454")
                         .expirationType(HtlcLockExpirationType.EPOCH_TIMESTAMP, 1)
@@ -41,7 +41,7 @@ class HtlcLockBuilderTest {
         Transaction actual =
                 new HtlcLockBuilder()
                         .amount(1000000)
-                        .recipientId("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25")
+                        .recipientId("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A")
                         .secretHash(
                                 "0f128d401958b1b30ad0d10406f47f9489321017b4614e6cb993fc63913c5454")
                         .expirationType(HtlcLockExpirationType.EPOCH_TIMESTAMP, 1)

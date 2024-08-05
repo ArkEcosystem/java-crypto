@@ -12,9 +12,9 @@ class MultiPaymentBuilderTest {
     void build() {
         Transaction actual =
                 new MultiPaymentBuilder()
-                        .addPayment("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25", 1)
-                        .addPayment("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25", 2)
-                        .addPayment("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25", 3)
+                        .addPayment("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A", 1)
+                        .addPayment("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A", 2)
+                        .addPayment("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A", 3)
                         .vendorField("This is a transaction from Java")
                         .sign("this is a top secret passphrase")
                         .transaction;
@@ -24,7 +24,7 @@ class MultiPaymentBuilderTest {
         ArrayList payments = (ArrayList) actualAsset.get("payments");
         HashMap payment = (HashMap) payments.get(0);
         assertEquals(payment.get("amount"), "1");
-        assertEquals(payment.get("recipientId"), "AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25");
+        assertEquals(payment.get("recipientId"), "0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A");
 
         assertTrue(actual.verify());
     }
@@ -33,9 +33,9 @@ class MultiPaymentBuilderTest {
     void buildSecondSignature() {
         Transaction actual =
                 new MultiPaymentBuilder()
-                        .addPayment("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25", 1)
-                        .addPayment("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25", 2)
-                        .addPayment("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25", 3)
+                        .addPayment("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A", 1)
+                        .addPayment("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A", 2)
+                        .addPayment("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A", 3)
                         .vendorField("This is a transaction from Java")
                         .sign("this is a top secret passphrase")
                         .secondSign("this is a top secret second passphrase")
@@ -51,12 +51,12 @@ class MultiPaymentBuilderTest {
     void testMaxPayments() {
         MultiPaymentBuilder actual = new MultiPaymentBuilder();
         for (int i = 0; i < 64; i++) {
-            actual.addPayment("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25", 1);
+            actual.addPayment("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A", 1);
         }
         Throwable exception =
                 assertThrows(
                         MaximumPaymentCountExceededError.class,
-                        () -> actual.addPayment("AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25", 1));
+                        () -> actual.addPayment("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A", 1));
         assertEquals("Expected a maximum of 64 payments", exception.getMessage());
     }
 }

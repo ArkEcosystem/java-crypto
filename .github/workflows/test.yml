@@ -6,65 +6,64 @@ on:
             - "master"
             - "develop"
     pull_request:
-        types: [ ready_for_review, synchronize, opened ]
+        types: [ready_for_review, synchronize, opened]
 
 jobs:
     format:
         runs-on: ubuntu-latest
 
         steps:
-            -   name: Checkout code
-                uses: actions/checkout@v2
-                with:
-                    ref: ${{ github.head_ref }}
+            - name: Checkout code
+              uses: actions/checkout@v2
+              with:
+                  ref: ${{ github.head_ref }}
 
-            -   name: Merge Conflict finder
-                uses: olivernybroe/action-conflict-finder@v1.1
+            - name: Merge Conflict finder
+              uses: olivernybroe/action-conflict-finder@v1.1
 
-            -   name: Use Java Version ${{ matrix.java }}
-                uses: actions/setup-java@v2
-                with:
-                    distribution: 'adopt'
-                    java-version: 8
-                    cache: 'gradle'
+            - name: Use Java Version ${{ matrix.java }}
+              uses: actions/setup-java@v2
+              with:
+                  distribution: "adopt"
+                  java-version: 22
+                  cache: "gradle"
 
-            -   name: Format code
-                run: gradle format
+            - name: Format code
+              run: gradle format
 
-            -   name: Commit fixed code
-                uses: stefanzweifel/git-auto-commit-action@v4
-                with:
-                    commit_message: "style: resolve style guide violations"
-                    branch: ${{ github.head_ref }}
+            - name: Commit fixed code
+              uses: stefanzweifel/git-auto-commit-action@v4
+              with:
+                  commit_message: "style: resolve style guide violations"
+                  branch: ${{ github.head_ref }}
 
     unit:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                # test against the latest update of each major Java version, as well as specific updates of LTS versions:
-                java: [ 8, 11, 15, 16, 17 ]
+                java: [11, 15, 16, 17, 18, 19, 20, 21, 22]
 
         steps:
-            -   name: Checkout code
-                uses: actions/checkout@v2
-                with:
-                    ref: ${{ github.head_ref }}
+            - name: Checkout code
+              uses: actions/checkout@v2
+              with:
+                  ref: ${{ github.head_ref }}
 
-            -   name: Merge Conflict finder
-                uses: olivernybroe/action-conflict-finder@v1.1
+            - name: Merge Conflict finder
+              uses: olivernybroe/action-conflict-finder@v1.1
 
-            -   name: Use Java Version ${{ matrix.java }}
-                uses: actions/setup-java@v2
-                with:
-                    distribution: 'zulu'
-                    java-version: ${{ matrix.java }}
-                    cache: 'gradle'
+            - name: Use Java Version ${{ matrix.java }}
+              uses: actions/setup-java@v2
+              with:
+                  distribution: "zulu"
+                  java-version: ${{ matrix.java }}
+                  cache: "gradle"
 
-            -   name: Install
-                run: gradle dependencies
+            - name: Install
+              run: gradle dependencies
 
-            -   name: Test
-                run: gradle test && gradle jacocoTestReport
+            - name: Test
+              run: gradle test && gradle jacocoTestReport
 
-            -   name: Codecov
-                run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}
+            - name: Codecov
+              run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}

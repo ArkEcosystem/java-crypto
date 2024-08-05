@@ -53,13 +53,7 @@ jobs:
               uses: olivernybroe/action-conflict-finder@v1.1
 
             - name: Install Nix
-              run: |
-                curl -L https://nixos.org/nix/install | sh
-                . $HOME/.nix-profile/etc/profile.d/nix.sh
-                echo ". $HOME/.nix-profile/etc/profile.d/nix.sh" >> $GITHUB_ENV
-
-            - name: Verify Nix installation
-              run: nix --version
+              uses: cachix/install-nix-action@v27
 
             - name: Install libsecp256k1
               run: |

@@ -12,6 +12,7 @@ public class TransactionAsset {
     public MultiSignature multiSignature = new MultiSignature();
     public MultiPayment multiPayment = new MultiPayment();
     public HashMap<String, Object> customAsset = new HashMap<>();
+    public long amount = 0L;
 
     public static class Signature {
         public String publicKey;

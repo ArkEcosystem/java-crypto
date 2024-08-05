@@ -59,6 +59,14 @@ jobs:
                   java-version: ${{ matrix.java }}
                   cache: "gradle"
 
+            - name: Install libsecp256k1
+              run: |
+                nix profile install nixpkgs#secp256k1
+                echo "$HOME/.nix-profile/lib" >> $GITHUB_ENV
+
+            - name: Set LD_LIBRARY_PATH
+              run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.nix-profile/lib" >> $GITHUB_ENV
+
             - name: Install
               run: gradle dependencies
 

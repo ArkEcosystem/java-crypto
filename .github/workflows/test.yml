@@ -40,7 +40,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                java: [21, 22]
+                java: [21]
 
         steps:
             - name: Checkout code
@@ -84,6 +84,15 @@ jobs:
                   distribution: "adopt"
                   java-version: ${{ matrix.java }}
                   cache: "gradle"
+
+            - name: Set JAVA_HOME
+              run: echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
+
+            - name: Add JAVA_HOME to PATH
+              run: echo "$JAVA_HOME/bin" >> $GITHUB_PATH
+
+            - name: Print java version
+              run: java -version
 
             - name: Build secp256k1-jdk
               run: |

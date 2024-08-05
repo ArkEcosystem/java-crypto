@@ -41,7 +41,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                java: [21, 22]
+                java: [17, 22]
 
         steps:
             - name: Checkout code
@@ -67,15 +67,19 @@ jobs:
             - name: Use Java Version ${{ matrix.java }}
               uses: actions/setup-java@v2
               with:
-                  distribution: "zulu"
+                  distribution: "adopt"
                   java-version: ${{ matrix.java }}
                   cache: "gradle"
 
-            - name: Dowload and compile libsecp256k1
+            - name: Download and compile secp256k1-jdk
               run: |
                 git clone https://gitlab.com/bitcoinj/secp256k1-jdk.git
                 cd secp256k1-jdk
-                ./gradlew build
+                if [ ${{ matrix.java }} -ge 22 ]; then
+                  ./gradlew -PjavaPath=$JAVA_HOME/lib build
+                else
+                  ./gradlew build
+                fi
                 cp secp256k1-api/build/libs/secp256k1-api-0.0.1.jar ../lib
                 cp secp256k1-foreign/build/libs/secp256k1-foreign-0.0.1.jar ../lib
                 rm -rf secp256k1-jdk

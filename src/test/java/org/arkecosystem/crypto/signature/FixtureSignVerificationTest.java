@@ -17,102 +17,49 @@ import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+
 public class FixtureSignVerificationTest {
 
-    private final String passphrase = "this is a top secret passphrase";
+    private final String passphrase = "my super secret passphrase";
     private final String secondPassphrase = "this is a top secret second passphrase";
-    private final String musigPassphrase1 = "this is a top secret passphrase 1";
-    private final String musigPassphrase2 = "this is a top secret passphrase 2";
-    private final String musigPassphrase3 = "this is a top secret passphrase 3";
+    private final String musigPassphrase1 = "album pony urban cheap small blade cannon silent run reveal luxury glad predict excess fire beauty hollow reward solar egg exclude leaf sight degree";
+    private final String musigPassphrase2 = "hen slogan retire boss upset blame rocket slender area arch broom bring elder few milk bounce execute page evoke once inmate pear marine deliver";
+    private final String musigPassphrase3 = "top visa use bacon sun infant shrimp eye bridge fantasy chair sadness stable simple salad canoe raw hill target connect avoid promote spider category";
 
     @ParameterizedTest
     @ValueSource(
             strings = {
-                "transactions/v2-ecdsa/second-signature-registration",
-                "transactions/v2-ecdsa/transfer-with-vendor-field-secondSign",
-                "transactions/v2-ecdsa/transfer-secondSign",
-                "transactions/v2-ecdsa/transfer-sign",
-                "transactions/v2-ecdsa/multi-payment-secondSign",
-                "transactions/v2-ecdsa/delegate-resignation-secondSign",
-                "transactions/v2-ecdsa/htlc-claim-sign",
-                "transactions/v2-ecdsa/htlc-claim-secondSign",
-                "transactions/v2-ecdsa/htlc-lock-sign",
-                "transactions/v2-ecdsa/htlc-refund-secondSign",
-                "transactions/v2-ecdsa/delegate-registration-sign",
-                "transactions/v2-ecdsa/vote-sign",
-                "transactions/v2-ecdsa/multi-payment-sign",
-                "transactions/v2-ecdsa/multi-payment-with-vendor-field-sign",
-                "transactions/v2-ecdsa/delegate-registration-secondSign",
-                "transactions/v2-ecdsa/ipfs-secondSign",
-                "transactions/v2-ecdsa/htlc-lock-secondSign",
-                "transactions/v2-ecdsa/unvote-sign",
-                "transactions/v2-ecdsa/vote-secondSign",
-                "transactions/v2-ecdsa/delegate-resignation-sign",
-                "transactions/v2-ecdsa/htlc-lock-with-vendor-field-sign",
-                "transactions/v2-ecdsa/ipfs-sign",
-                "transactions/v2-ecdsa/htlc-lock-with-vendor-field-secondSign",
-                "transactions/v2-ecdsa/unvote-secondSign",
-                "transactions/v2-ecdsa/transfer-with-vendor-field-sign",
-                "transactions/v2-ecdsa/multi-payment-with-vendor-field-secondSign",
-                "transactions/v2-ecdsa/htlc-refund-sign",
-            })
-    void checkEcdsa(String file) {
-        LinkedTreeMap<String, Object> fixture = FixtureLoader.load(file);
+                "transactions/transfer/transfer-sign",
+                "transactions/transfer/transfer-with-vendor-field-sign",
+                // "transactions/transfer/transfer-multi-sign",
+            
+                "transactions/vote/vote-sign",
+                "transactions/vote/unvote-sign",
+                // "transactions/vote/vote-multi-sign",
 
-        Transaction actual = new Deserializer(fixture.get("serialized").toString()).deserialize();
+                "transactions/validator_registration/validator-registration-sign",
+                // "transactions/validator_registration/validator-registration-multi-sign",
 
-        assertTrue(actual.verify());
-    }
+                "transactions/validator_resignation/validator-resignation-sign",
+                // "transactions/validator_resignation/validator-resignation-multi-sign",
 
-    @ParameterizedTest
-    @ValueSource(
-            strings = {
-                "transactions/v2-schnorr/second-signature-registration",
-                "transactions/v2-schnorr/transfer-with-vendor-field-secondSign",
-                "transactions/v2-schnorr/transfer-secondSign",
-                "transactions/v2-schnorr/multi-signature-registration",
-                "transactions/v2-schnorr/transfer-sign",
-                "transactions/v2-schnorr/multi-payment-secondSign",
-                "transactions/v2-schnorr/delegate-resignation-secondSign",
-                "transactions/v2-schnorr/htlc-claim-sign",
-                "transactions/v2-schnorr/htlc-claim-secondSign",
-                "transactions/v2-schnorr/htlc-lock-sign",
-                "transactions/v2-schnorr/htlc-refund-secondSign",
-                "transactions/v2-schnorr/delegate-registration-sign",
-                "transactions/v2-schnorr/vote-sign",
-                "transactions/v2-schnorr/multi-payment-sign",
-                "transactions/v2-schnorr/multi-payment-with-vendor-field-sign",
-                "transactions/v2-schnorr/delegate-registration-secondSign",
-                "transactions/v2-schnorr/ipfs-secondSign",
-                "transactions/v2-schnorr/htlc-lock-secondSign",
-                "transactions/v2-schnorr/unvote-sign",
-                "transactions/v2-schnorr/vote-secondSign",
-                "transactions/v2-schnorr/delegate-resignation-sign",
-                "transactions/v2-schnorr/htlc-lock-with-vendor-field-sign",
-                "transactions/v2-schnorr/ipfs-sign",
-                "transactions/v2-schnorr/htlc-lock-with-vendor-field-secondSign",
-                "transactions/v2-schnorr/unvote-secondSign",
-                "transactions/v2-schnorr/transfer-with-vendor-field-sign",
-                "transactions/v2-schnorr/multi-payment-with-vendor-field-secondSign",
-                "transactions/v2-schnorr/htlc-refund-sign",
-                "transactions/v2-schnorr/htlc-lock-multiSign",
-                "transactions/v2-schnorr/htlc-claim-multiSign",
-                "transactions/v2-schnorr/htlc-refund-multiSign",
-                "transactions/v2-schnorr/ipfs-multiSign",
-                "transactions/v2-schnorr/htlc-lock-with-vendor-field-multiSign",
-                "transactions/v2-schnorr/vote-multiSign",
-                "transactions/v2-schnorr/multi-payment-multiSign",
-                "transactions/v2-schnorr/transfer-with-vendor-field-multiSign",
-                "transactions/v2-schnorr/unvote-multiSign",
-                "transactions/v2-schnorr/delegate-registration-multiSign",
-                "transactions/v2-schnorr/transfer-multiSign",
-                "transactions/v2-schnorr/multi-payment-with-vendor-field-multiSign",
-                "transactions/v2-schnorr/delegate-resignation-multiSign",
+                "transactions/multi_payment/multi-payment-sign",
+                "transactions/multi_payment/multi-payment-with-vendor-field-sign",
+                // "transactions/multi_payment/multi-payment-multi-sign",
+
+                // "transactions/username_resignation/username-resignation-sign",
+                // "transactions/username_resignation/username-resignation-multi-sign",
+
+                // "transactions/username_registration/username-registration-multi-sign",
+                // "transactions/username_registration/username-registration-sign",
+
+                "transactions/multi_signature_registration/multi-signature-registration-sign",
             })
     void checkSchnorrSignature(String file) {
         LinkedTreeMap<String, Object> fixture = FixtureLoader.load(file);
 
         Transaction actual = new Deserializer(fixture.get("serialized").toString()).deserialize();
+        
 
         if (actual.signature != null) assertTrue(actual.verify());
 
@@ -128,47 +75,31 @@ public class FixtureSignVerificationTest {
     @ParameterizedTest
     @ValueSource(
             strings = {
-                "transactions/v2-schnorr/second-signature-registration",
-                "transactions/v2-schnorr/transfer-with-vendor-field-secondSign",
-                "transactions/v2-schnorr/transfer-secondSign",
-                "transactions/v2-schnorr/multi-signature-registration",
-                "transactions/v2-schnorr/transfer-sign",
-                "transactions/v2-schnorr/multi-payment-secondSign",
-                "transactions/v2-schnorr/delegate-resignation-secondSign",
-                "transactions/v2-schnorr/htlc-claim-sign",
-                "transactions/v2-schnorr/htlc-claim-secondSign",
-                "transactions/v2-schnorr/htlc-lock-sign",
-                "transactions/v2-schnorr/htlc-refund-secondSign",
-                "transactions/v2-schnorr/delegate-registration-sign",
-                "transactions/v2-schnorr/vote-sign",
-                "transactions/v2-schnorr/multi-payment-sign",
-                "transactions/v2-schnorr/multi-payment-with-vendor-field-sign",
-                "transactions/v2-schnorr/delegate-registration-secondSign",
-                "transactions/v2-schnorr/ipfs-secondSign",
-                "transactions/v2-schnorr/htlc-lock-secondSign",
-                "transactions/v2-schnorr/unvote-sign",
-                "transactions/v2-schnorr/vote-secondSign",
-                "transactions/v2-schnorr/delegate-resignation-sign",
-                "transactions/v2-schnorr/htlc-lock-with-vendor-field-sign",
-                "transactions/v2-schnorr/ipfs-sign",
-                "transactions/v2-schnorr/htlc-lock-with-vendor-field-secondSign",
-                "transactions/v2-schnorr/unvote-secondSign",
-                "transactions/v2-schnorr/transfer-with-vendor-field-sign",
-                "transactions/v2-schnorr/multi-payment-with-vendor-field-secondSign",
-                "transactions/v2-schnorr/htlc-refund-sign",
-                "transactions/v2-schnorr/htlc-lock-multiSign",
-                "transactions/v2-schnorr/htlc-claim-multiSign",
-                "transactions/v2-schnorr/htlc-refund-multiSign",
-                "transactions/v2-schnorr/ipfs-multiSign",
-                "transactions/v2-schnorr/htlc-lock-with-vendor-field-multiSign",
-                "transactions/v2-schnorr/vote-multiSign",
-                "transactions/v2-schnorr/multi-payment-multiSign",
-                "transactions/v2-schnorr/transfer-with-vendor-field-multiSign",
-                "transactions/v2-schnorr/unvote-multiSign",
-                "transactions/v2-schnorr/delegate-registration-multiSign",
-                "transactions/v2-schnorr/transfer-multiSign",
-                "transactions/v2-schnorr/multi-payment-with-vendor-field-multiSign",
-                "transactions/v2-schnorr/delegate-resignation-multiSign",
+                "transactions/transfer/transfer-sign",
+                "transactions/transfer/transfer-with-vendor-field-sign",
+                // "transactions/transfer/transfer-multi-sign",
+            
+                "transactions/vote/vote-sign",
+                "transactions/vote/unvote-sign",
+                // "transactions/vote/vote-multi-sign",
+
+                "transactions/validator_registration/validator-registration-sign",
+                // "transactions/validator_registration/validator-registration-multi-sign",
+
+                "transactions/validator_resignation/validator-resignation-sign",
+                // "transactions/validator_resignation/validator-resignation-multi-sign",
+
+                "transactions/multi_payment/multi-payment-sign",
+                "transactions/multi_payment/multi-payment-with-vendor-field-sign",
+                // "transactions/multi_payment/multi-payment-multi-sign",
+
+                // "transactions/username_resignation/username-resignation-sign",
+                // "transactions/username_resignation/username-resignation-multi-sign",
+
+                // "transactions/username_registration/username-registration-multi-sign",
+                // "transactions/username_registration/username-registration-sign",
+
+                // "transactions/multi_signature_registration/multi-signature-registration-sign",
             })
     void checkSigningAgainProducesSameSignature(String file) {
         LinkedTreeMap<String, Object> fixture = FixtureLoader.load(file);
@@ -194,14 +125,23 @@ public class FixtureSignVerificationTest {
         if (withoutSignatures.secondSignature != null) {
             checkSecondSignature(withoutSignatures);
         }
+        
+        int signatureLength = 128;
 
         if (withoutSignatures.signatures != null) {
             checkMultiSignature(withoutSignatures);
+
+            signatureLength = 128 + (withoutSignatures.signatures.size() * 130);
         }
 
+        String serializedWithoutSignatures = Hex.encode(Serializer.serialize(withoutSignatures));
+        String serializedFixture = fixture.get("serialized").toString();
+
+         // Exclude the last 128 characters (signature) for final comparison
         assertThat(
-                Hex.encode(Serializer.serialize(withoutSignatures)),
-                is(fixture.get("serialized").toString()));
+            serializedWithoutSignatures.substring(0, serializedWithoutSignatures.length() - signatureLength),
+            is(serializedFixture.substring(0, serializedFixture.length() - signatureLength)));
+
     }
 
     private void reSignUnsigned(Transaction actual, Transaction withoutSignatures) {

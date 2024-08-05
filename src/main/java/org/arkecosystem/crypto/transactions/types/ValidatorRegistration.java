@@ -3,6 +3,8 @@ package org.arkecosystem.crypto.transactions.types;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.HashMap;
+
+import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 
@@ -21,31 +23,24 @@ public class ValidatorRegistration extends Transaction {
     public HashMap<String, Object> assetToHashMap() {
         HashMap<String, Object> asset = new HashMap<>();
 
-        HashMap<String, String> delegate = new HashMap<>();
-        delegate.put("username", this.asset.delegate.username);
-        asset.put("delegate", delegate);
+        asset.put("validatorPublicKey", this.asset.validatorPublicKey);
 
         return asset;
     }
 
     @Override
     public byte[] serialize() {
-        byte[] delegateBytes = this.asset.delegate.username.getBytes();
-
-        ByteBuffer buffer = ByteBuffer.allocate(1 + delegateBytes.length);
+        ByteBuffer buffer = ByteBuffer.allocate(48);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
-        buffer.put((byte) delegateBytes.length);
-        buffer.put(delegateBytes);
+        buffer.put(Hex.decode(this.asset.validatorPublicKey));
+        
         return buffer.array();
     }
 
     @Override
     public void deserialize(ByteBuffer buffer) {
-        int usernameLength = buffer.get();
-
-        byte[] username = new byte[usernameLength];
-        buffer.get(username);
-
-        this.asset.delegate.username = new String(username);
+        byte[] validatorPublicKey = new byte[48];
+        buffer.get(validatorPublicKey);
+        this.asset.validatorPublicKey = Hex.encode(validatorPublicKey);
     }
 }

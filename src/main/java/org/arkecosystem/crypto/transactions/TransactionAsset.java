@@ -8,18 +8,14 @@ public class TransactionAsset {
     public Signature signature = new Signature();
     public List<String> votes = new ArrayList<>();
     public List<String> unvotes = new ArrayList<>();
-    public Delegate delegate = new Delegate();
     public MultiSignature multiSignature = new MultiSignature();
     public MultiPayment multiPayment = new MultiPayment();
     public HashMap<String, Object> customAsset = new HashMap<>();
     public long amount = 0L;
+    public String validatorPublicKey;
 
     public static class Signature {
         public String publicKey;
-    }
-
-    public static class Delegate {
-        public String username;
     }
 
     public static class MultiSignature {

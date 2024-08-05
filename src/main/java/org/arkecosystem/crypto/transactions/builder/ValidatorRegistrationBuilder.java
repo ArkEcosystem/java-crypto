@@ -11,8 +11,8 @@ public class ValidatorRegistrationBuilder
         this.transaction.fee = Fees.VALIDATOR_REGISTRATION.getValue();
     }
 
-    public ValidatorRegistrationBuilder username(String username) {
-        this.transaction.asset.delegate.username = username;
+    public ValidatorRegistrationBuilder publicKeyAsset(String publicKey) {
+        this.transaction.asset.validatorPublicKey = publicKey;
 
         return this;
     }

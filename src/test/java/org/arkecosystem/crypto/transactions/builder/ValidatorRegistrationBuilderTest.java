@@ -11,34 +11,17 @@ class ValidatorRegistrationBuilderTest {
     void build() {
         Transaction actual =
                 new ValidatorRegistrationBuilder()
-                        .username("java")
-                        .version(2)
+                        .publicKeyAsset("a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118")
                         .nonce(3)
                         .sign("this is a top secret passphrase")
                         .transaction;
 
         HashMap actualHashMap = actual.toHashMap();
-        HashMap actualAsset = (HashMap) actualHashMap.get("asset");
-        HashMap delegate = (HashMap) actualAsset.get("delegate");
-        assertEquals(delegate.get("username"), "java");
+        
+        HashMap asset = (HashMap) actualHashMap.get("asset");
+
+        assertEquals(asset.get("validatorPublicKey"), "a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118");
 
         assertTrue(actual.verify());
-    }
-
-    @Test
-    void buildSecondSignature() {
-        Transaction actual =
-                new ValidatorRegistrationBuilder()
-                        .username("java")
-                        .version(2)
-                        .nonce(3)
-                        .sign("this is a top secret passphrase")
-                        .secondSign("this is a top secret second passphrase")
-                        .transaction;
-
-        assertTrue(actual.verify());
-        assertTrue(
-                actual.secondVerify(
-                        "03699e966b2525f9088a6941d8d94f7869964a000efe65783d78ac82e1199fe609"));
     }
 }

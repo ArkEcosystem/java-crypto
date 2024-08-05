@@ -28,7 +28,8 @@ class TransferBuilderTest {
         assertTrue(actual.verify());
 
         HashMap actualHashMap = actual.toHashMap();
-        assertEquals(actualHashMap.get("recipientId"), "0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A");
+        assertEquals(
+                actualHashMap.get("recipientId"), "0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A");
         assertEquals(actualHashMap.get("amount"), "133380000000");
         assertEquals(actualHashMap.get("expiration"), 100000);
         assertEquals(actualHashMap.get("vendorField"), "This is a transaction from Java");

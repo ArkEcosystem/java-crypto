@@ -22,7 +22,7 @@ public class VoteBuilder extends AbstractTransactionBuilder<VoteBuilder> {
         this.transaction.asset.votes.add(vote);
         return this;
     }
-    
+
     public VoteBuilder addUnvotes(List unvotes) {
         this.transaction.asset.unvotes = unvotes;
         return this;

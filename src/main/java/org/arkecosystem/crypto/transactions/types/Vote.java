@@ -30,16 +30,15 @@ public class Vote extends Transaction {
 
     @Override
     public byte[] serialize() {
-        ByteBuffer buffer = ByteBuffer.allocate(
-            (1 + this.asset.votes.size() * 33)
-            + (1 + this.asset.unvotes.size() * 33)
-        );
+        ByteBuffer buffer =
+                ByteBuffer.allocate(
+                        (1 + this.asset.votes.size() * 33) + (1 + this.asset.unvotes.size() * 33));
 
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
         List<String> votes = new ArrayList<>(this.asset.votes);
         List<String> unvotes = new ArrayList<>(this.asset.unvotes);
-        
+
         buffer.put((byte) votes.size());
         buffer.put(Hex.decode(String.join("", votes)));
 

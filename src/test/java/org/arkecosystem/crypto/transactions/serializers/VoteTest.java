@@ -13,8 +13,7 @@ import org.junit.jupiter.api.Test;
 class VoteTest {
     @Test
     void passphraseVote() {
-        LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/vote/vote-sign");
+        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/vote/vote-sign");
         Transaction transaction =
                 new Deserializer(fixture.get("serialized").toString()).deserialize();
 
@@ -25,8 +24,7 @@ class VoteTest {
 
     @Test
     void passphraseUnvote() {
-        LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/vote/unvote-sign");
+        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/vote/unvote-sign");
         Transaction transaction =
                 new Deserializer(fixture.get("serialized").toString()).deserialize();
 

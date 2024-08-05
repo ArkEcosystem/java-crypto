@@ -22,6 +22,16 @@ public class VoteBuilder extends AbstractTransactionBuilder<VoteBuilder> {
         this.transaction.asset.votes.add(vote);
         return this;
     }
+    
+    public VoteBuilder addUnvotes(List unvotes) {
+        this.transaction.asset.unvotes = unvotes;
+        return this;
+    }
+
+    public VoteBuilder addUnvote(String unvote) {
+        this.transaction.asset.unvotes.add(unvote);
+        return this;
+    }
 
     public VoteBuilder sign(String passphrase) {
         this.transaction.recipientId = Address.fromPassphrase(passphrase);

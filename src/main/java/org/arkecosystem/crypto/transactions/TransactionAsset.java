@@ -3,7 +3,6 @@ package org.arkecosystem.crypto.transactions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.arkecosystem.crypto.enums.HtlcLockExpirationType;
 
 public class TransactionAsset {
     public Signature signature = new Signature();
@@ -12,10 +11,6 @@ public class TransactionAsset {
     public Delegate delegate = new Delegate();
     public MultiSignature multiSignature = new MultiSignature();
     public MultiPayment multiPayment = new MultiPayment();
-    public String ipfs;
-    public HtlcLockAsset htlcLockAsset = new HtlcLockAsset();
-    public HtlcClaimAsset htlcClaimAsset = new HtlcClaimAsset();
-    public HtlcRefundAsset htlcRefundAsset = new HtlcRefundAsset();
     public HashMap<String, Object> customAsset = new HashMap<>();
 
     public static class Signature {
@@ -43,29 +38,5 @@ public class TransactionAsset {
             this.amount = amount;
             this.recipientId = recipientId;
         }
-    }
-
-    public static class HtlcLockAsset {
-        public String secretHash;
-        public Expiration expiration;
-    }
-
-    public static class Expiration {
-        public HtlcLockExpirationType type;
-        public int value;
-
-        public Expiration(HtlcLockExpirationType type, int value) {
-            this.type = type;
-            this.value = value;
-        }
-    }
-
-    public static class HtlcClaimAsset {
-        public String lockTransactionId;
-        public String unlockSecret;
-    }
-
-    public static class HtlcRefundAsset {
-        public String lockTransactionId;
     }
 }

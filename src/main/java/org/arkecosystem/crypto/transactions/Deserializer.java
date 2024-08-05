@@ -12,10 +12,6 @@ import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 import org.arkecosystem.crypto.transactions.types.DelegateRegistration;
 import org.arkecosystem.crypto.transactions.types.DelegateResignation;
-import org.arkecosystem.crypto.transactions.types.HtlcClaim;
-import org.arkecosystem.crypto.transactions.types.HtlcLock;
-import org.arkecosystem.crypto.transactions.types.HtlcRefund;
-import org.arkecosystem.crypto.transactions.types.Ipfs;
 import org.arkecosystem.crypto.transactions.types.MultiPayment;
 import org.arkecosystem.crypto.transactions.types.MultiSignatureRegistration;
 import org.arkecosystem.crypto.transactions.types.SecondSignatureRegistration;
@@ -42,14 +38,10 @@ public class Deserializer {
         coreTransactionTypes.put(
                 CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue(),
                 new MultiSignatureRegistration());
-        coreTransactionTypes.put(CoreTransactionTypes.IPFS.getValue(), new Ipfs());
         coreTransactionTypes.put(CoreTransactionTypes.MULTI_PAYMENT.getValue(), new MultiPayment());
         coreTransactionTypes.put(
                 CoreTransactionTypes.DELEGATE_RESIGNATION.getValue(), new DelegateResignation());
-        coreTransactionTypes.put(CoreTransactionTypes.HTLC_LOCK.getValue(), new HtlcLock());
-        coreTransactionTypes.put(CoreTransactionTypes.HTLC_CLAIM.getValue(), new HtlcClaim());
-        coreTransactionTypes.put(CoreTransactionTypes.HTLC_REFUND.getValue(), new HtlcRefund());
-
+        
         transactionGroups.put(TransactionTypeGroup.CORE.getValue(), coreTransactionTypes);
 
         this.buffer = ByteBuffer.wrap(Hex.decode(serialized)).slice();

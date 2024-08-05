@@ -56,6 +56,10 @@ jobs:
               run: |
                 curl -L https://nixos.org/nix/install | sh
                 . $HOME/.nix-profile/etc/profile.d/nix.sh
+                echo ". $HOME/.nix-profile/etc/profile.d/nix.sh" >> $GITHUB_ENV
+
+            - name: Verify Nix installation
+              run: nix --version
 
             - name: Install libsecp256k1
               run: |

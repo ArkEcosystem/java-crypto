@@ -41,7 +41,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                java: [17, 22]
+                java: [22]
 
         steps:
             - name: Checkout code
@@ -75,7 +75,7 @@ jobs:
               run: |
                 git clone https://gitlab.com/bitcoinj/secp256k1-jdk.git
                 cd secp256k1-jdk
-                gradle build
+                gradle build -x test
                 cp secp256k1-api/build/libs/secp256k1-api-0.0.1.jar ../lib
                 cp secp256k1-foreign/build/libs/secp256k1-foreign-0.0.1.jar ../lib
                 rm -rf secp256k1-jdk

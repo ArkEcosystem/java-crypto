@@ -13,8 +13,7 @@ class VoteTest {
 
     @Test
     void passphraseVote() {
-        LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/vote/vote-sign");
+        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/vote/vote-sign");
 
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
@@ -36,8 +35,7 @@ class VoteTest {
 
     @Test
     void passphraseUnvote() {
-        LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/vote/unvote-sign");
+        LinkedTreeMap<String, Object> fixture = FixtureLoader.load("transactions/vote/unvote-sign");
 
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 

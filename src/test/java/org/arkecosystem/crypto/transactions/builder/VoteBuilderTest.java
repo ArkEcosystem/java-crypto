@@ -85,14 +85,10 @@ class VoteBuilderTest {
                 new VoteBuilder()
                         .addVotes(
                                 Arrays.asList(
-                                "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"
-                                )
-                        )
+                                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"))
                         .addUnvotes(
                                 Arrays.asList(
-                                "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193"
-                                )
-                        )
+                                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193"))
                         .nonce(3)
                         .sign("this is a top secret passphrase")
                         .transaction;
@@ -107,11 +103,12 @@ class VoteBuilderTest {
         assertEquals(
                 actualVotes,
                 Arrays.asList(
-                "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"));
+                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"));
 
         assertEquals(
                 actualUnvotes,
-                Arrays.asList("034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193"));
+                Arrays.asList(
+                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193"));
     }
 
     @Test

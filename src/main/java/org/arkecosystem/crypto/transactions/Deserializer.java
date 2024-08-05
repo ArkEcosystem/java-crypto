@@ -41,7 +41,7 @@ public class Deserializer {
         coreTransactionTypes.put(CoreTransactionTypes.MULTI_PAYMENT.getValue(), new MultiPayment());
         coreTransactionTypes.put(
                 CoreTransactionTypes.DELEGATE_RESIGNATION.getValue(), new DelegateResignation());
-        
+
         transactionGroups.put(TransactionTypeGroup.CORE.getValue(), coreTransactionTypes);
 
         this.buffer = ByteBuffer.wrap(Hex.decode(serialized)).slice();

@@ -26,7 +26,8 @@ class MultiPaymentTest {
     @Test
     void passphraseVendorField() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/multi_payment/multi-payment-with-vendor-field-sign");
+                FixtureLoader.load(
+                        "transactions/multi_payment/multi-payment-with-vendor-field-sign");
         Transaction transaction =
                 new Deserializer(fixture.get("serialized").toString()).deserialize();
 

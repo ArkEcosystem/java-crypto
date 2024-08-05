@@ -1,8 +1,8 @@
 package org.arkecosystem.crypto.transactions.builder;
 
 import org.arkecosystem.crypto.enums.Fees;
-import org.arkecosystem.crypto.transactions.types.ValidatorRegistration;
 import org.arkecosystem.crypto.transactions.types.Transaction;
+import org.arkecosystem.crypto.transactions.types.ValidatorRegistration;
 
 public class ValidatorRegistrationBuilder
         extends AbstractTransactionBuilder<ValidatorRegistrationBuilder> {

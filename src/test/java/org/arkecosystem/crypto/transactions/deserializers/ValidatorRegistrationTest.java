@@ -14,7 +14,8 @@ public class ValidatorRegistrationTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/validator_registration/validator-registration-sign");
+                FixtureLoader.load(
+                        "transactions/validator_registration/validator-registration-sign");
 
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
@@ -31,7 +32,7 @@ public class ValidatorRegistrationTest {
         assertEquals(data.get("id").toString(), actual.id);
 
         LinkedTreeMap<String, Object> asset = (LinkedTreeMap<String, Object>) data.get("asset");
-        
+
         assertEquals((asset.get("validatorPublicKey")), actual.asset.validatorPublicKey);
     }
 }

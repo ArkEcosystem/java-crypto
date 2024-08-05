@@ -58,15 +58,17 @@ public class MultiPayment extends Transaction {
     @Override
     public void deserialize(ByteBuffer buffer) {
         int paymentLength = buffer.getShort() & 0xff;
-        
+
         for (int i = 0; i < paymentLength; i++) {
             byte[] recipientId = new byte[20];
             long amount = buffer.getLong();
             buffer.get(recipientId);
             this.asset.multiPayment.payments.add(
-                    new TransactionAsset.Payment(amount, Keys.toChecksumAddress("0x" + Hex.encode(recipientId))));
+                    new TransactionAsset.Payment(
+                            amount, Keys.toChecksumAddress("0x" + Hex.encode(recipientId))));
         }
 
-        this.asset.amount = this.asset.multiPayment.payments.stream().mapToLong(p -> p.amount).sum();
+        this.asset.amount =
+                this.asset.multiPayment.payments.stream().mapToLong(p -> p.amount).sum();
     }
 }

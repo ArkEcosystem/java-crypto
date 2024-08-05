@@ -14,7 +14,8 @@ class ValidatorRegistrationTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/validator_registration/validator-registration-sign");
+                FixtureLoader.load(
+                        "transactions/validator_registration/validator-registration-sign");
         Transaction transaction =
                 new Deserializer(fixture.get("serialized").toString()).deserialize();
 
@@ -22,5 +23,4 @@ class ValidatorRegistrationTest {
 
         assertEquals(fixture.get("serialized").toString(), actual);
     }
-
 }

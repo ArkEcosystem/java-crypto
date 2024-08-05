@@ -10,8 +10,8 @@ import java.util.Set;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
-import org.arkecosystem.crypto.transactions.types.DelegateRegistration;
-import org.arkecosystem.crypto.transactions.types.DelegateResignation;
+import org.arkecosystem.crypto.transactions.types.ValidatorRegistration;
+import org.arkecosystem.crypto.transactions.types.ValidatorResignation;
 import org.arkecosystem.crypto.transactions.types.MultiPayment;
 import org.arkecosystem.crypto.transactions.types.MultiSignatureRegistration;
 import org.arkecosystem.crypto.transactions.types.SecondSignatureRegistration;
@@ -33,14 +33,14 @@ public class Deserializer {
                 CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue(),
                 new SecondSignatureRegistration());
         coreTransactionTypes.put(
-                CoreTransactionTypes.DELEGATE_REGISTRATION.getValue(), new DelegateRegistration());
+                CoreTransactionTypes.VALIDATOR_REGISTRATION.getValue(), new ValidatorRegistration());
         coreTransactionTypes.put(CoreTransactionTypes.VOTE.getValue(), new Vote());
         coreTransactionTypes.put(
                 CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue(),
                 new MultiSignatureRegistration());
         coreTransactionTypes.put(CoreTransactionTypes.MULTI_PAYMENT.getValue(), new MultiPayment());
         coreTransactionTypes.put(
-                CoreTransactionTypes.DELEGATE_RESIGNATION.getValue(), new DelegateResignation());
+                CoreTransactionTypes.VALIDATOR_RESIGNATION.getValue(), new ValidatorResignation());
         
         transactionGroups.put(TransactionTypeGroup.CORE.getValue(), coreTransactionTypes);
 

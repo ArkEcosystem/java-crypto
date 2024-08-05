@@ -9,7 +9,7 @@ import org.arkecosystem.crypto.transactions.FixtureLoader;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
 
-public class DelegateRegistrationTest {
+public class ValidatorRegistrationTest {
 
     @Test
     void passphrase() {

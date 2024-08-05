@@ -5,10 +5,10 @@ import java.util.HashMap;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 
-public class DelegateResignation extends Transaction {
+public class ValidatorResignation extends Transaction {
     @Override
     public int getTransactionType() {
-        return CoreTransactionTypes.DELEGATE_RESIGNATION.getValue();
+        return CoreTransactionTypes.VALIDATOR_RESIGNATION.getValue();
     }
 
     @Override

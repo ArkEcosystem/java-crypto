@@ -10,7 +10,7 @@ import org.arkecosystem.crypto.transactions.FixtureLoader;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
 
-class DelegateResignationTest {
+class ValidatorResignationTest {
 
     @Test
     void passphrase() {

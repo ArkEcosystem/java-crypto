@@ -6,10 +6,10 @@ import java.util.HashMap;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 
-public class DelegateRegistration extends Transaction {
+public class ValidatorRegistration extends Transaction {
     @Override
     public int getTransactionType() {
-        return CoreTransactionTypes.DELEGATE_REGISTRATION.getValue();
+        return CoreTransactionTypes.VALIDATOR_REGISTRATION.getValue();
     }
 
     @Override

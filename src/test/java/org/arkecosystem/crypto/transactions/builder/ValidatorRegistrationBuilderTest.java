@@ -6,11 +6,12 @@ import java.util.HashMap;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
 
-public class DelegateResignationBuilderTest {
+class ValidatorRegistrationBuilderTest {
     @Test
     void build() {
         Transaction actual =
-                new DelegateResignationBuilder()
+                new ValidatorRegistrationBuilder()
+                        .username("java")
                         .version(2)
                         .nonce(3)
                         .sign("this is a top secret passphrase")
@@ -18,7 +19,8 @@ public class DelegateResignationBuilderTest {
 
         HashMap actualHashMap = actual.toHashMap();
         HashMap actualAsset = (HashMap) actualHashMap.get("asset");
-        assertNull(actualAsset);
+        HashMap delegate = (HashMap) actualAsset.get("delegate");
+        assertEquals(delegate.get("username"), "java");
 
         assertTrue(actual.verify());
     }
@@ -26,7 +28,8 @@ public class DelegateResignationBuilderTest {
     @Test
     void buildSecondSignature() {
         Transaction actual =
-                new DelegateResignationBuilder()
+                new ValidatorRegistrationBuilder()
+                        .username("java")
                         .version(2)
                         .nonce(3)
                         .sign("this is a top secret passphrase")

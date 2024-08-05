@@ -10,13 +10,11 @@ import org.arkecosystem.crypto.transactions.Serializer;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
 
-class DelegateResignationTest {
-
+class ValidatorRegistrationTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/delegate-resignation-sign");
-
+                FixtureLoader.load("transactions/v2-ecdsa/delegate-registration-sign");
         Transaction transaction =
                 new Deserializer(fixture.get("serialized").toString()).deserialize();
 
@@ -28,8 +26,7 @@ class DelegateResignationTest {
     @Test
     void secondPassphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/delegate-resignation-secondSign");
-
+                FixtureLoader.load("transactions/v2-ecdsa/delegate-registration-secondSign");
         Transaction transaction =
                 new Deserializer(fixture.get("serialized").toString()).deserialize();
 

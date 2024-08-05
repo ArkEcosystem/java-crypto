@@ -21,7 +21,7 @@ jobs:
             - name: Merge Conflict finder
               uses: olivernybroe/action-conflict-finder@v1.1
 
-            - name: Use Java Version ${{ matrix.java }}
+            - name: Use Java Version 22
               uses: actions/setup-java@v2
               with:
                   distribution: "adopt"
@@ -41,7 +41,6 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                # java: [11, 15, 16, 17, 18, 19, 20, 21, 22]
                 java: [21, 22]
 
         steps:
@@ -65,21 +64,21 @@ jobs:
             - name: Set LD_LIBRARY_PATH
               run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.nix-profile/lib" >> $GITHUB_ENV
 
-            - name: Dowload and compile libsecp256k1
-              run: |
-                git clone https://gitlab.com/bitcoinj/secp256k1-jdk.git
-                cd secp256k1-jdk
-                gradle build
-                cp secp256k1-api/build/libs/secp256k1-api-0.0.1.jar ../lib
-                cp secp256k1-foreign/build/libs/secp256k1-foreign-0.0.1.jar ../lib
-                rm -rf secp256k1-jdk
-
             - name: Use Java Version ${{ matrix.java }}
               uses: actions/setup-java@v2
               with:
                   distribution: "zulu"
                   java-version: ${{ matrix.java }}
                   cache: "gradle"
+
+            - name: Dowload and compile libsecp256k1
+              run: |
+                git clone https://gitlab.com/bitcoinj/secp256k1-jdk.git
+                cd secp256k1-jdk
+                ./gradlew build
+                cp secp256k1-api/build/libs/secp256k1-api-0.0.1.jar ../lib
+                cp secp256k1-foreign/build/libs/secp256k1-foreign-0.0.1.jar ../lib
+                rm -rf secp256k1-jdk
 
             - name: Install
               run: gradle dependencies

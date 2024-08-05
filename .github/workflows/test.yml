@@ -21,11 +21,11 @@ jobs:
             - name: Merge Conflict finder
               uses: olivernybroe/action-conflict-finder@v1.1
 
-            - name: Use Java Version ${{ matrix.java }}
+            - name: Use Java Version 17
               uses: actions/setup-java@v2
               with:
                   distribution: "adopt"
-                  java-version: "22"
+                  java-version: "17"
                   cache: "gradle"
 
             - name: Format code
@@ -41,7 +41,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                java: [11, 15, 16, 17, 18, 19, 20, 21, 22]
+                java: [17, 18, 19, 20, 21, 22]
 
         steps:
             - name: Checkout code

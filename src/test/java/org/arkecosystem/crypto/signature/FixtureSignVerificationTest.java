@@ -49,11 +49,11 @@ public class FixtureSignVerificationTest {
                 "transactions/multi_payment/multi-payment-with-vendor-field-sign",
                 // "transactions/multi_payment/multi-payment-multi-sign",
 
-                // "transactions/username_resignation/username-resignation-sign",
+                "transactions/username_resignation/username-resignation-sign",
                 // "transactions/username_resignation/username-resignation-multi-sign",
 
+                "transactions/username_registration/username-registration-sign",
                 // "transactions/username_registration/username-registration-multi-sign",
-                // "transactions/username_registration/username-registration-sign",
 
                 "transactions/multi_signature_registration/multi-signature-registration-sign",
             })
@@ -94,11 +94,11 @@ public class FixtureSignVerificationTest {
                 "transactions/multi_payment/multi-payment-with-vendor-field-sign",
                 // "transactions/multi_payment/multi-payment-multi-sign",
 
-                // "transactions/username_resignation/username-resignation-sign",
+                "transactions/username_resignation/username-resignation-sign",
                 // "transactions/username_resignation/username-resignation-multi-sign",
 
+                "transactions/username_registration/username-registration-sign",
                 // "transactions/username_registration/username-registration-multi-sign",
-                // "transactions/username_registration/username-registration-sign",
 
                 // "transactions/multi_signature_registration/multi-signature-registration-sign",
             })

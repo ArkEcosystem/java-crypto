@@ -22,8 +22,8 @@ class UsernameRegistrationBuilderTest {
         HashMap asset = (HashMap) actualHashMap.get("asset");
 
         assertEquals(
-                asset.get("validatorPublicKey"),
-                "a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118");
+                asset.get("username"),
+                "alfonsobries");
 
         assertTrue(actual.verify());
     }

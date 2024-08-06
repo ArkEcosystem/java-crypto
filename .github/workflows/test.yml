@@ -38,10 +38,6 @@ jobs:
 
     unit:
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                java: [21]
-
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
@@ -63,38 +59,12 @@ jobs:
             - name: Set LD_LIBRARY_PATH
               run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.nix-profile/lib" >> $GITHUB_ENV
 
-            - name: Setup Cache for secp256k1-jdk repo
-              uses: actions/cache@v2
-              with:
-                  path: |
-                    ~/secp256k1-jdk
-                  key: ${{ runner.os }}-secp256k1-jdk-repo
-                  restore-keys: |
-                    ${{ runner.os }}-secp256k1-jdk-repo
-
-            - name: Clone secp256k1-jdk if not cached
-              run: |
-                if [ ! -d "$HOME/secp256k1-jdk" ]; then
-                  git clone https://gitlab.com/bitcoinj/secp256k1-jdk.git $HOME/secp256k1-jdk
-                fi
-
-            - name: Use Java Version ${{ matrix.java }}
+            - name: Use Java Version 22
               uses: actions/setup-java@v2
               with:
                   distribution: "adopt"
-                  java-version: ${{ matrix.java }}
+                  java-version: "22"
                   cache: "gradle"
-
-            - name: Build secp256k1-jdk
-              run: |
-                $HOME/secp256k1-jdk/gradlew -p $HOME/secp256k1-jdk build -x test \
-                  -PjavaToolchainVersion=21
-                  -PsourceCompatibility=21
-                  -PtargetCompatibility=21
-                  -PoptionsRelease=21
-                
-                cp $HOME/secp256k1-jdk/secp256k1-api/build/libs/secp256k1-api-0.0.1.jar ./libs
-                cp $HOME/secp256k1-jdk/secp256k1-foreign/build/libs/secp256k1-foreign-0.0.1.jar ./libs
 
             - name: Install
               run: gradle dependencies

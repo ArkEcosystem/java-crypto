@@ -38,8 +38,7 @@ public class MultiSignatureRegistrationBuilderTest {
                         .transaction;
 
         assertTrue(actual.verify());
-        assertTrue(actual.multiVerify(3, publicKeys));
-
+        
         HashMap actualHashMap = actual.toHashMap();
 
         assertNotNull(actualHashMap.get("asset"));

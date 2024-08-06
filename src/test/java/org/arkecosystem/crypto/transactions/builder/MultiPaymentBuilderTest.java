@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
 
@@ -58,5 +60,30 @@ class MultiPaymentBuilderTest {
                         MaximumPaymentCountExceededError.class,
                         () -> actual.addPayment("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A", 1));
         assertEquals("Expected a maximum of 64 payments", exception.getMessage());
+    }
+
+    @Test
+    void buildMultiSignature() {
+        Transaction actual =
+                new MultiPaymentBuilder()
+                        .addPayment("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A", 1)
+                        .addPayment("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A", 2)
+                        .addPayment("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A", 3)
+                        .vendorField("This is a transaction from Java")
+                        .multiSign("secret 1", 0)
+                        .multiSign("secret 2", 1)
+                        .multiSign("secret 3", 2)
+                        .sign("this is a top secret passphrase")
+                        .transaction;
+
+        assertTrue(actual.verify());
+
+        HashMap actualHashMap = actual.toHashMap();
+
+        assertNotNull(actualHashMap.get("signatures"));
+
+        List<String> actualSignatures = (List<String>) actualHashMap.get("signatures");
+
+        assertEquals(3, actualSignatures.size());
     }
 }

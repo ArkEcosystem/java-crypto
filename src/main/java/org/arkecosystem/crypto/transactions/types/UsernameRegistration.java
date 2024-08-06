@@ -31,9 +31,9 @@ public class UsernameRegistration extends Transaction {
         byte[] username = this.asset.username.getBytes();
 
         ByteBuffer buffer = ByteBuffer.allocate(username.length + 1);
-        
+
         buffer.order(ByteOrder.LITTLE_ENDIAN);
-        
+
         buffer.put((byte) username.length);
         buffer.put(username);
 
@@ -43,10 +43,10 @@ public class UsernameRegistration extends Transaction {
     @Override
     public void deserialize(ByteBuffer buffer) {
         int usernameLength = buffer.get() & 0xff;
-        
+
         byte[] username = new byte[usernameLength];
         buffer.get(username);
-        
+
         String utf8Username = new String(username);
         this.asset.username = utf8Username;
     }

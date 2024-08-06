@@ -14,8 +14,7 @@ public class UsernameRegistrationTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load(
-                        "transactions/username_registration/username-registration-sign");
+                FixtureLoader.load("transactions/username_registration/username-registration-sign");
 
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 

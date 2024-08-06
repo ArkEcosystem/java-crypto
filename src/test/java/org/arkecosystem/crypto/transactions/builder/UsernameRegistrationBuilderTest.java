@@ -11,8 +11,7 @@ class UsernameRegistrationBuilderTest {
     void build() {
         Transaction actual =
                 new UsernameRegistrationBuilder()
-                        .usernameAsset(
-                                "alfonsobries")
+                        .usernameAsset("alfonsobries")
                         .nonce(3)
                         .sign("this is a top secret passphrase")
                         .transaction;
@@ -21,9 +20,7 @@ class UsernameRegistrationBuilderTest {
 
         HashMap asset = (HashMap) actualHashMap.get("asset");
 
-        assertEquals(
-                asset.get("username"),
-                "alfonsobries");
+        assertEquals(asset.get("username"), "alfonsobries");
 
         assertTrue(actual.verify());
     }

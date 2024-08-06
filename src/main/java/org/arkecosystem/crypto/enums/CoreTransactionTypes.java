@@ -6,12 +6,10 @@ public enum CoreTransactionTypes {
     VALIDATOR_REGISTRATION(2),
     VOTE(3),
     MULTI_SIGNATURE_REGISTRATION(4),
-    IPFS(5),
     MULTI_PAYMENT(6),
     VALIDATOR_RESIGNATION(7),
-    HTLC_LOCK(8),
-    HTLC_CLAIM(9),
-    HTLC_REFUND(10);
+    USERNAME_REGISTRATION(8),
+    USERNAME_RESIGNATION(9);
 
     private final int value;
 

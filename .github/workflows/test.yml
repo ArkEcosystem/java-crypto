@@ -85,18 +85,12 @@ jobs:
                   java-version: ${{ matrix.java }}
                   cache: "gradle"
 
-            - name: Set JAVA_HOME
-              run: echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
-
-            - name: Add JAVA_HOME to PATH
-              run: echo "$JAVA_HOME/bin" >> $GITHUB_PATH
-
-            - name: Print java version
-              run: java -version
-
             - name: Build secp256k1-jdk
               run: |
-                $HOME/secp256k1-jdk/gradlew -p $HOME/secp256k1-jdk build -x test
+                $HOME/secp256k1-jdk/gradlew -p $HOME/secp256k1-jdk build -x test \
+                  -Dorg.gradle.java.installations.fromEnv=JAVA_HOME \
+                  -Dorg.gradle.java.installations.auto-detect=false \
+                  -DjavaToolchainVersion=21
                 cp $HOME/secp256k1-jdk/secp256k1-api/build/libs/secp256k1-api-0.0.1.jar ./libs
                 cp $HOME/secp256k1-jdk/secp256k1-foreign/build/libs/secp256k1-foreign-0.0.1.jar ./libs
 

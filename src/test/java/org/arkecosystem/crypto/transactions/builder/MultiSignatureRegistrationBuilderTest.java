@@ -35,7 +35,7 @@ public class MultiSignatureRegistrationBuilderTest {
                         .transaction;
 
         assertTrue(actual.verify());
-        
+
         HashMap actualHashMap = actual.toHashMap();
 
         assertNotNull(actualHashMap.get("asset"));

@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 public class FixtureSignVerificationTest {
 
     private final String secondPassphrase = "this is a top secret second passphrase";
-    
+
     @ParameterizedTest
     @ValueSource(
             strings = {

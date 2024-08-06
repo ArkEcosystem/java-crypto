@@ -4,9 +4,7 @@ import com.google.gson.GsonBuilder;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.arkecosystem.crypto.signature.SchnorrSigner;
@@ -104,7 +102,7 @@ public abstract class Transaction {
 
         return verifier().verify(hash, keys, signature);
     }
-    
+
     public String toJson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         return gsonBuilder.create().toJson(this.toHashMap());

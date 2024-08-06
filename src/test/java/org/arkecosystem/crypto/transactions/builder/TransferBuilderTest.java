@@ -4,12 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
 import org.arkecosystem.crypto.enums.Fees;
-import org.arkecosystem.crypto.identities.PublicKey;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
 
@@ -70,18 +67,19 @@ class TransferBuilderTest {
 
     @Test
     void buildMultiSignature() {
-        Transaction actual = new TransferBuilder()
-                .recipient("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A")
-                .amount(133380000000L)
-                .expiration(100000)
-                .vendorField("This is a transaction from Java")
-                .nonce(3)
-                .fee(Fees.TRANSFER.getValue())
-                .multiSign("secret 1", 0)
-                .multiSign("secret 2", 1)
-                .multiSign("secret 3", 2)
-                .sign("secret 1")
-                .transaction;
+        Transaction actual =
+                new TransferBuilder()
+                        .recipient("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A")
+                        .amount(133380000000L)
+                        .expiration(100000)
+                        .vendorField("This is a transaction from Java")
+                        .nonce(3)
+                        .fee(Fees.TRANSFER.getValue())
+                        .multiSign("secret 1", 0)
+                        .multiSign("secret 2", 1)
+                        .multiSign("secret 3", 2)
+                        .sign("secret 1")
+                        .transaction;
 
         assertTrue(actual.verify());
 

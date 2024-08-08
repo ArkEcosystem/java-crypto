@@ -68,11 +68,9 @@ jobs:
                 cmake ..
                 cmake --build . --config Release
 
-            - name: Copy mcl library to /usr/local/lib
+            - name: Copy libmcljava.so to /usr/local/lib
               run: |
-                echo "dir contents"
-                ls /home/runner/work/java-crypto/java-crypto/mcl/ffi/java/build
-                # sudo cp /home/runner/work/java-crypto/java-crypto/mcl/build/lib/libmcl.a /usr/local/lib/
+                sudo cp /home/runner/work/java-crypto/java-crypto/mcl/build/lib/libmcljava.so /usr/local/lib/
 
             - name: Install Nix
               uses: cachix/install-nix-action@v27

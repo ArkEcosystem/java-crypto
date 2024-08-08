@@ -97,9 +97,5 @@ jobs:
             - name: Test
               run: gradle test && gradle jacocoTestReport
 
-            - name: temporary Show test report if tests fail
-              if: failure()
-              run: cat build/reports/tests/test/classes/org.arkecosystem.crypto.transactions.builder.ValidatorRegistrationBuilderTest.html
-            
             - name: Codecov
               run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}

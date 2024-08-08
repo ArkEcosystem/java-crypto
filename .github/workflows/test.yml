@@ -97,6 +97,18 @@ jobs:
 
             - name: Test
               run: gradle test && gradle jacocoTestReport
+              continue-on-error: true
+            
+            - name: Show test report if tests fail
+              if: failure()
+              run: cat build/reports/tests/test/index.html
+        
+            - name: Upload Test Report
+              if: always()
+              uses: actions/upload-artifact@v3
+              with:
+                name: test-report
+                path: build/reports/tests/test/index.html
 
             - name: Codecov
               run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}

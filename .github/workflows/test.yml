@@ -52,6 +52,7 @@ jobs:
                 git clone https://github.com/herumi/mcl
                 cd mcl
                 make -j4
+                pwd
                 cd ffi/java
                 mkdir build
                 cd build

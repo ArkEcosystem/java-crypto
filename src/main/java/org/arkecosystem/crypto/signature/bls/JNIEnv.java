@@ -29,10 +29,16 @@ public class JNIEnv {
     }
 
     private Boolean sourceExist(String sourceName) {
-        File f = new File("." + File.separator + sourceName);
-        return f.exists();
+        String[] libraryPaths = System.getProperty("java.library.path").split(File.pathSeparator);
+        for (String path : libraryPaths) {
+            File f = new File(path, sourceName);
+            if (f.exists()) {
+                return true;
+            }
+        }
+        return false;
     }
-
+    
     public void prepare() {
         for (String s : sources) {
             copy(s);
@@ -44,14 +50,15 @@ public class JNIEnv {
             return true;
         } else {
             try {
-                File f = new File("." + File.separator + sourceName);
+                String[] libraryPaths = System.getProperty("java.library.path").split(File.pathSeparator);
+                File f = new File(libraryPaths[0], sourceName); // Using the first path in java.library.path
                 if (!f.exists()) {
                     f.createNewFile();
                     System.out.println("[JNIDEV]:DEFAULT JNI INITION:" + sourceName);
                 }
                 FileOutputStream os = new FileOutputStream(f);
 
-                InputStream is = getClass().getResourceAsStream(sourceName);
+                InputStream is = getClass().getResourceAsStream("/" + sourceName); // Modified to add leading slash
                 if (is == null) {
                     os.close();
                     return false;

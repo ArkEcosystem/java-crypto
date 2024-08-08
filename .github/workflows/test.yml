@@ -81,6 +81,9 @@ jobs:
               env:
                 NIX_PATH: $HOME/.nix-profile/bin
 
+            - name: Set LD_LIBRARY_PATH
+              run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOME/.nix-profile/lib" >> $GITHUB_ENV
+
             - name: Use Java Version 22
               uses: actions/setup-java@v2
               with:

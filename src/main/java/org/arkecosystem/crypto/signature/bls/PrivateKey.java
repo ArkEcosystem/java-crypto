@@ -7,13 +7,13 @@ import com.herumi.mcl.G1;
 import com.herumi.mcl.G2;
 import com.herumi.mcl.Mcl;
 
-public class PrivateKey implements java.security.PrivateKey{
+public class PrivateKey implements java.security.PrivateKey {
     private int curveType;
     private byte[] secKey;
 
     @Override
     public String getAlgorithm() {
-        if(curveType == Bls.BLS12_381) {
+        if (curveType == Bls.BLS12_381) {
             return "BLS12-381";
         } else {
             return "NOT SUPPORTED";
@@ -36,6 +36,7 @@ public class PrivateKey implements java.security.PrivateKey{
         fr.setByCSPRNG();
         secKey = fr.serialize();
     }
+
     public PublicKey getPublicKey() {
         G1 Q = new G1();
         Q.setStr(Bls.BaseG1);
@@ -47,6 +48,7 @@ public class PrivateKey implements java.security.PrivateKey{
         PublicKey publicKey = new PublicKey(curveType, pub.serialize());
         return publicKey;
     }
+
     /*
      * Sign a message
      */

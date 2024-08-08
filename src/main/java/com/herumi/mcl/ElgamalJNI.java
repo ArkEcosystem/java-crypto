@@ -9,43 +9,92 @@
 package com.herumi.mcl;
 
 public class ElgamalJNI {
-  public final static native long new_p_bool();
-  public final static native long copy_p_bool(boolean jarg1);
-  public final static native void delete_p_bool(long jarg1);
-  public final static native void p_bool_assign(long jarg1, boolean jarg2);
-  public final static native boolean p_bool_value(long jarg1);
-  public final static native void SystemInit(String jarg1);
-  public final static native String CipherText_toStr(long jarg1, CipherText jarg1_);
-  public final static native String CipherText_toString(long jarg1, CipherText jarg1_);
-  public final static native void CipherText_fromStr(long jarg1, CipherText jarg1_, String jarg2);
-  public final static native void CipherText_add(long jarg1, CipherText jarg1_, long jarg2, CipherText jarg2_);
-  public final static native void CipherText_mul__SWIG_0(long jarg1, CipherText jarg1_, int jarg2);
-  public final static native void CipherText_mul__SWIG_1(long jarg1, CipherText jarg1_, String jarg2);
-  public final static native long new_CipherText();
-  public final static native void delete_CipherText(long jarg1);
-  public final static native String PublicKey_toStr(long jarg1, PublicKey jarg1_);
-  public final static native String PublicKey_toString(long jarg1, PublicKey jarg1_);
-  public final static native void PublicKey_fromStr(long jarg1, PublicKey jarg1_, String jarg2);
-  public final static native void PublicKey_save(long jarg1, PublicKey jarg1_, String jarg2);
-  public final static native void PublicKey_load(long jarg1, PublicKey jarg1_, String jarg2);
-  public final static native void PublicKey_enc__SWIG_0(long jarg1, PublicKey jarg1_, long jarg2, CipherText jarg2_, int jarg3);
-  public final static native void PublicKey_enc__SWIG_1(long jarg1, PublicKey jarg1_, long jarg2, CipherText jarg2_, String jarg3);
-  public final static native void PublicKey_rerandomize(long jarg1, PublicKey jarg1_, long jarg2, CipherText jarg2_);
-  public final static native void PublicKey_add__SWIG_0(long jarg1, PublicKey jarg1_, long jarg2, CipherText jarg2_, int jarg3);
-  public final static native void PublicKey_add__SWIG_1(long jarg1, PublicKey jarg1_, long jarg2, CipherText jarg2_, String jarg3);
-  public final static native long new_PublicKey();
-  public final static native void delete_PublicKey(long jarg1);
-  public final static native String PrivateKey_toStr(long jarg1, PrivateKey jarg1_);
-  public final static native String PrivateKey_toString(long jarg1, PrivateKey jarg1_);
-  public final static native void PrivateKey_fromStr(long jarg1, PrivateKey jarg1_, String jarg2);
-  public final static native void PrivateKey_save(long jarg1, PrivateKey jarg1_, String jarg2);
-  public final static native void PrivateKey_load(long jarg1, PrivateKey jarg1_, String jarg2);
-  public final static native void PrivateKey_init(long jarg1, PrivateKey jarg1_);
-  public final static native long PrivateKey_getPublicKey(long jarg1, PrivateKey jarg1_);
-  public final static native int PrivateKey_dec__SWIG_0(long jarg1, PrivateKey jarg1_, long jarg2, CipherText jarg2_, long jarg3);
-  public final static native int PrivateKey_dec__SWIG_1(long jarg1, PrivateKey jarg1_, long jarg2, CipherText jarg2_);
-  public final static native void PrivateKey_setCache(long jarg1, PrivateKey jarg1_, int jarg2, int jarg3);
-  public final static native void PrivateKey_clearCache(long jarg1, PrivateKey jarg1_);
-  public final static native long new_PrivateKey();
-  public final static native void delete_PrivateKey(long jarg1);
+    public static final native long new_p_bool();
+
+    public static final native long copy_p_bool(boolean jarg1);
+
+    public static final native void delete_p_bool(long jarg1);
+
+    public static final native void p_bool_assign(long jarg1, boolean jarg2);
+
+    public static final native boolean p_bool_value(long jarg1);
+
+    public static final native void SystemInit(String jarg1);
+
+    public static final native String CipherText_toStr(long jarg1, CipherText jarg1_);
+
+    public static final native String CipherText_toString(long jarg1, CipherText jarg1_);
+
+    public static final native void CipherText_fromStr(long jarg1, CipherText jarg1_, String jarg2);
+
+    public static final native void CipherText_add(
+            long jarg1, CipherText jarg1_, long jarg2, CipherText jarg2_);
+
+    public static final native void CipherText_mul__SWIG_0(
+            long jarg1, CipherText jarg1_, int jarg2);
+
+    public static final native void CipherText_mul__SWIG_1(
+            long jarg1, CipherText jarg1_, String jarg2);
+
+    public static final native long new_CipherText();
+
+    public static final native void delete_CipherText(long jarg1);
+
+    public static final native String PublicKey_toStr(long jarg1, PublicKey jarg1_);
+
+    public static final native String PublicKey_toString(long jarg1, PublicKey jarg1_);
+
+    public static final native void PublicKey_fromStr(long jarg1, PublicKey jarg1_, String jarg2);
+
+    public static final native void PublicKey_save(long jarg1, PublicKey jarg1_, String jarg2);
+
+    public static final native void PublicKey_load(long jarg1, PublicKey jarg1_, String jarg2);
+
+    public static final native void PublicKey_enc__SWIG_0(
+            long jarg1, PublicKey jarg1_, long jarg2, CipherText jarg2_, int jarg3);
+
+    public static final native void PublicKey_enc__SWIG_1(
+            long jarg1, PublicKey jarg1_, long jarg2, CipherText jarg2_, String jarg3);
+
+    public static final native void PublicKey_rerandomize(
+            long jarg1, PublicKey jarg1_, long jarg2, CipherText jarg2_);
+
+    public static final native void PublicKey_add__SWIG_0(
+            long jarg1, PublicKey jarg1_, long jarg2, CipherText jarg2_, int jarg3);
+
+    public static final native void PublicKey_add__SWIG_1(
+            long jarg1, PublicKey jarg1_, long jarg2, CipherText jarg2_, String jarg3);
+
+    public static final native long new_PublicKey();
+
+    public static final native void delete_PublicKey(long jarg1);
+
+    public static final native String PrivateKey_toStr(long jarg1, PrivateKey jarg1_);
+
+    public static final native String PrivateKey_toString(long jarg1, PrivateKey jarg1_);
+
+    public static final native void PrivateKey_fromStr(long jarg1, PrivateKey jarg1_, String jarg2);
+
+    public static final native void PrivateKey_save(long jarg1, PrivateKey jarg1_, String jarg2);
+
+    public static final native void PrivateKey_load(long jarg1, PrivateKey jarg1_, String jarg2);
+
+    public static final native void PrivateKey_init(long jarg1, PrivateKey jarg1_);
+
+    public static final native long PrivateKey_getPublicKey(long jarg1, PrivateKey jarg1_);
+
+    public static final native int PrivateKey_dec__SWIG_0(
+            long jarg1, PrivateKey jarg1_, long jarg2, CipherText jarg2_, long jarg3);
+
+    public static final native int PrivateKey_dec__SWIG_1(
+            long jarg1, PrivateKey jarg1_, long jarg2, CipherText jarg2_);
+
+    public static final native void PrivateKey_setCache(
+            long jarg1, PrivateKey jarg1_, int jarg2, int jarg3);
+
+    public static final native void PrivateKey_clearCache(long jarg1, PrivateKey jarg1_);
+
+    public static final native long new_PrivateKey();
+
+    public static final native void delete_PrivateKey(long jarg1);
 }

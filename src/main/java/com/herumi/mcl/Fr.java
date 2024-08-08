@@ -9,105 +9,106 @@
 package com.herumi.mcl;
 
 public class Fr {
-  private transient long swigCPtr;
-  protected transient boolean swigCMemOwn;
+    private transient long swigCPtr;
+    protected transient boolean swigCMemOwn;
 
-  protected Fr(long cPtr, boolean cMemoryOwn) {
-    swigCMemOwn = cMemoryOwn;
-    swigCPtr = cPtr;
-  }
-
-  protected static long getCPtr(Fr obj) {
-    return (obj == null) ? 0 : obj.swigCPtr;
-  }
-
-  @SuppressWarnings("deprecation")
-  protected void finalize() {
-    delete();
-  }
-
-  public synchronized void delete() {
-    if (swigCPtr != 0) {
-      if (swigCMemOwn) {
-        swigCMemOwn = false;
-        MclJNI.delete_Fr(swigCPtr);
-      }
-      swigCPtr = 0;
+    protected Fr(long cPtr, boolean cMemoryOwn) {
+        swigCMemOwn = cMemoryOwn;
+        swigCPtr = cPtr;
     }
-  }
 
-  public Fr() {
-    this(MclJNI.new_Fr__SWIG_0(), true);
-  }
+    protected static long getCPtr(Fr obj) {
+        return (obj == null) ? 0 : obj.swigCPtr;
+    }
 
-  public Fr(Fr rhs) {
-    this(MclJNI.new_Fr__SWIG_1(Fr.getCPtr(rhs), rhs), true);
-  }
+    @SuppressWarnings("deprecation")
+    protected void finalize() {
+        delete();
+    }
 
-  public Fr(int x) {
-    this(MclJNI.new_Fr__SWIG_2(x), true);
-  }
+    public synchronized void delete() {
+        if (swigCPtr != 0) {
+            if (swigCMemOwn) {
+                swigCMemOwn = false;
+                MclJNI.delete_Fr(swigCPtr);
+            }
+            swigCPtr = 0;
+        }
+    }
 
-  public Fr(String str, int base) {
-    this(MclJNI.new_Fr__SWIG_3(str, base), true);
-  }
+    public Fr() {
+        this(MclJNI.new_Fr__SWIG_0(), true);
+    }
 
-  public Fr(String str) {
-    this(MclJNI.new_Fr__SWIG_4(str), true);
-  }
+    public Fr(Fr rhs) {
+        this(MclJNI.new_Fr__SWIG_1(Fr.getCPtr(rhs), rhs), true);
+    }
 
-  public boolean equals(Fr rhs) {
-    return MclJNI.Fr_equals(swigCPtr, this, Fr.getCPtr(rhs), rhs);
-  }
+    public Fr(int x) {
+        this(MclJNI.new_Fr__SWIG_2(x), true);
+    }
 
-  public boolean isZero() {
-    return MclJNI.Fr_isZero(swigCPtr, this);
-  }
+    public Fr(String str, int base) {
+        this(MclJNI.new_Fr__SWIG_3(str, base), true);
+    }
 
-  public boolean isOne() {
-    return MclJNI.Fr_isOne(swigCPtr, this);
-  }
+    public Fr(String str) {
+        this(MclJNI.new_Fr__SWIG_4(str), true);
+    }
 
-  public void setStr(String str, int base) {
-    MclJNI.Fr_setStr__SWIG_0(swigCPtr, this, str, base);
-  }
+    public boolean equals(Fr rhs) {
+        return MclJNI.Fr_equals(swigCPtr, this, Fr.getCPtr(rhs), rhs);
+    }
 
-  public void setStr(String str) {
-    MclJNI.Fr_setStr__SWIG_1(swigCPtr, this, str);
-  }
+    public boolean isZero() {
+        return MclJNI.Fr_isZero(swigCPtr, this);
+    }
 
-  public void setInt(int x) {
-    MclJNI.Fr_setInt(swigCPtr, this, x);
-  }
+    public boolean isOne() {
+        return MclJNI.Fr_isOne(swigCPtr, this);
+    }
 
-  public void clear() {
-    MclJNI.Fr_clear(swigCPtr, this);
-  }
+    public void setStr(String str, int base) {
+        MclJNI.Fr_setStr__SWIG_0(swigCPtr, this, str, base);
+    }
 
-  public void setByCSPRNG() {
-    MclJNI.Fr_setByCSPRNG(swigCPtr, this);
-  }
+    public void setStr(String str) {
+        MclJNI.Fr_setStr__SWIG_1(swigCPtr, this, str);
+    }
 
-  public String toString(int base) {
-    return MclJNI.Fr_toString__SWIG_0(swigCPtr, this, base);
-  }
+    public void setInt(int x) {
+        MclJNI.Fr_setInt(swigCPtr, this, x);
+    }
 
-  public String toString() {
-    return MclJNI.Fr_toString__SWIG_1(swigCPtr, this);
-  }
+    public void clear() {
+        MclJNI.Fr_clear(swigCPtr, this);
+    }
 
-  public void deserialize(byte[] cbuf) {
-    MclJNI.Fr_deserialize(swigCPtr, this, cbuf);
-  }
+    public void setByCSPRNG() {
+        MclJNI.Fr_setByCSPRNG(swigCPtr, this);
+    }
 
-  public void setLittleEndianMod(byte[] cbuf) {
-    MclJNI.Fr_setLittleEndianMod(swigCPtr, this, cbuf);
-  }
+    public String toString(int base) {
+        return MclJNI.Fr_toString__SWIG_0(swigCPtr, this, base);
+    }
 
-  public void setHashOf(byte[] cbuf) {
-    MclJNI.Fr_setHashOf(swigCPtr, this, cbuf);
-  }
+    public String toString() {
+        return MclJNI.Fr_toString__SWIG_1(swigCPtr, this);
+    }
 
-  public byte[] serialize() { return MclJNI.Fr_serialize(swigCPtr, this); }
+    public void deserialize(byte[] cbuf) {
+        MclJNI.Fr_deserialize(swigCPtr, this, cbuf);
+    }
 
+    public void setLittleEndianMod(byte[] cbuf) {
+        MclJNI.Fr_setLittleEndianMod(swigCPtr, this, cbuf);
+    }
+
+    public void setHashOf(byte[] cbuf) {
+        MclJNI.Fr_setHashOf(swigCPtr, this, cbuf);
+    }
+
+    public byte[] serialize() {
+        return MclJNI.Fr_serialize(swigCPtr, this);
+    }
 }

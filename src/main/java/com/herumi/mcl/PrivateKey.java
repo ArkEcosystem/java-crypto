@@ -9,79 +9,79 @@
 package com.herumi.mcl;
 
 public class PrivateKey {
-  private transient long swigCPtr;
-  protected transient boolean swigCMemOwn;
+    private transient long swigCPtr;
+    protected transient boolean swigCMemOwn;
 
-  protected PrivateKey(long cPtr, boolean cMemoryOwn) {
-    swigCMemOwn = cMemoryOwn;
-    swigCPtr = cPtr;
-  }
-
-  protected static long getCPtr(PrivateKey obj) {
-    return (obj == null) ? 0 : obj.swigCPtr;
-  }
-
-  @SuppressWarnings("deprecation")
-  protected void finalize() {
-    delete();
-  }
-
-  public synchronized void delete() {
-    if (swigCPtr != 0) {
-      if (swigCMemOwn) {
-        swigCMemOwn = false;
-        ElgamalJNI.delete_PrivateKey(swigCPtr);
-      }
-      swigCPtr = 0;
+    protected PrivateKey(long cPtr, boolean cMemoryOwn) {
+        swigCMemOwn = cMemoryOwn;
+        swigCPtr = cPtr;
     }
-  }
 
-  public String toStr() {
-    return ElgamalJNI.PrivateKey_toStr(swigCPtr, this);
-  }
+    protected static long getCPtr(PrivateKey obj) {
+        return (obj == null) ? 0 : obj.swigCPtr;
+    }
 
-  public String toString() {
-    return ElgamalJNI.PrivateKey_toString(swigCPtr, this);
-  }
+    @SuppressWarnings("deprecation")
+    protected void finalize() {
+        delete();
+    }
 
-  public void fromStr(String str) {
-    ElgamalJNI.PrivateKey_fromStr(swigCPtr, this, str);
-  }
+    public synchronized void delete() {
+        if (swigCPtr != 0) {
+            if (swigCMemOwn) {
+                swigCMemOwn = false;
+                ElgamalJNI.delete_PrivateKey(swigCPtr);
+            }
+            swigCPtr = 0;
+        }
+    }
 
-  public void save(String fileName) {
-    ElgamalJNI.PrivateKey_save(swigCPtr, this, fileName);
-  }
+    public String toStr() {
+        return ElgamalJNI.PrivateKey_toStr(swigCPtr, this);
+    }
 
-  public void load(String fileName) {
-    ElgamalJNI.PrivateKey_load(swigCPtr, this, fileName);
-  }
+    public String toString() {
+        return ElgamalJNI.PrivateKey_toString(swigCPtr, this);
+    }
 
-  public void init() {
-    ElgamalJNI.PrivateKey_init(swigCPtr, this);
-  }
+    public void fromStr(String str) {
+        ElgamalJNI.PrivateKey_fromStr(swigCPtr, this, str);
+    }
 
-  public PublicKey getPublicKey() {
-    return new PublicKey(ElgamalJNI.PrivateKey_getPublicKey(swigCPtr, this), true);
-  }
+    public void save(String fileName) {
+        ElgamalJNI.PrivateKey_save(swigCPtr, this, fileName);
+    }
 
-  public int dec(CipherText c, SWIGTYPE_p_bool b) {
-    return ElgamalJNI.PrivateKey_dec__SWIG_0(swigCPtr, this, CipherText.getCPtr(c), c, SWIGTYPE_p_bool.getCPtr(b));
-  }
+    public void load(String fileName) {
+        ElgamalJNI.PrivateKey_load(swigCPtr, this, fileName);
+    }
 
-  public int dec(CipherText c) {
-    return ElgamalJNI.PrivateKey_dec__SWIG_1(swigCPtr, this, CipherText.getCPtr(c), c);
-  }
+    public void init() {
+        ElgamalJNI.PrivateKey_init(swigCPtr, this);
+    }
 
-  public void setCache(int rangeMin, int rangeMax) {
-    ElgamalJNI.PrivateKey_setCache(swigCPtr, this, rangeMin, rangeMax);
-  }
+    public PublicKey getPublicKey() {
+        return new PublicKey(ElgamalJNI.PrivateKey_getPublicKey(swigCPtr, this), true);
+    }
 
-  public void clearCache() {
-    ElgamalJNI.PrivateKey_clearCache(swigCPtr, this);
-  }
+    public int dec(CipherText c, SWIGTYPE_p_bool b) {
+        return ElgamalJNI.PrivateKey_dec__SWIG_0(
+                swigCPtr, this, CipherText.getCPtr(c), c, SWIGTYPE_p_bool.getCPtr(b));
+    }
 
-  public PrivateKey() {
-    this(ElgamalJNI.new_PrivateKey(), true);
-  }
+    public int dec(CipherText c) {
+        return ElgamalJNI.PrivateKey_dec__SWIG_1(swigCPtr, this, CipherText.getCPtr(c), c);
+    }
 
+    public void setCache(int rangeMin, int rangeMax) {
+        ElgamalJNI.PrivateKey_setCache(swigCPtr, this, rangeMin, rangeMax);
+    }
+
+    public void clearCache() {
+        ElgamalJNI.PrivateKey_clearCache(swigCPtr, this);
+    }
+
+    public PrivateKey() {
+        this(ElgamalJNI.new_PrivateKey(), true);
+    }
 }

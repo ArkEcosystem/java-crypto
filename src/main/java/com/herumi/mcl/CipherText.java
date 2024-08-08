@@ -9,59 +9,58 @@
 package com.herumi.mcl;
 
 public class CipherText {
-  private transient long swigCPtr;
-  protected transient boolean swigCMemOwn;
+    private transient long swigCPtr;
+    protected transient boolean swigCMemOwn;
 
-  protected CipherText(long cPtr, boolean cMemoryOwn) {
-    swigCMemOwn = cMemoryOwn;
-    swigCPtr = cPtr;
-  }
-
-  protected static long getCPtr(CipherText obj) {
-    return (obj == null) ? 0 : obj.swigCPtr;
-  }
-
-  @SuppressWarnings("deprecation")
-  protected void finalize() {
-    delete();
-  }
-
-  public synchronized void delete() {
-    if (swigCPtr != 0) {
-      if (swigCMemOwn) {
-        swigCMemOwn = false;
-        ElgamalJNI.delete_CipherText(swigCPtr);
-      }
-      swigCPtr = 0;
+    protected CipherText(long cPtr, boolean cMemoryOwn) {
+        swigCMemOwn = cMemoryOwn;
+        swigCPtr = cPtr;
     }
-  }
 
-  public String toStr() {
-    return ElgamalJNI.CipherText_toStr(swigCPtr, this);
-  }
+    protected static long getCPtr(CipherText obj) {
+        return (obj == null) ? 0 : obj.swigCPtr;
+    }
 
-  public String toString() {
-    return ElgamalJNI.CipherText_toString(swigCPtr, this);
-  }
+    @SuppressWarnings("deprecation")
+    protected void finalize() {
+        delete();
+    }
 
-  public void fromStr(String str) {
-    ElgamalJNI.CipherText_fromStr(swigCPtr, this, str);
-  }
+    public synchronized void delete() {
+        if (swigCPtr != 0) {
+            if (swigCMemOwn) {
+                swigCMemOwn = false;
+                ElgamalJNI.delete_CipherText(swigCPtr);
+            }
+            swigCPtr = 0;
+        }
+    }
 
-  public void add(CipherText c) {
-    ElgamalJNI.CipherText_add(swigCPtr, this, CipherText.getCPtr(c), c);
-  }
+    public String toStr() {
+        return ElgamalJNI.CipherText_toStr(swigCPtr, this);
+    }
 
-  public void mul(int m) {
-    ElgamalJNI.CipherText_mul__SWIG_0(swigCPtr, this, m);
-  }
+    public String toString() {
+        return ElgamalJNI.CipherText_toString(swigCPtr, this);
+    }
 
-  public void mul(String str) {
-    ElgamalJNI.CipherText_mul__SWIG_1(swigCPtr, this, str);
-  }
+    public void fromStr(String str) {
+        ElgamalJNI.CipherText_fromStr(swigCPtr, this, str);
+    }
 
-  public CipherText() {
-    this(ElgamalJNI.new_CipherText(), true);
-  }
+    public void add(CipherText c) {
+        ElgamalJNI.CipherText_add(swigCPtr, this, CipherText.getCPtr(c), c);
+    }
 
+    public void mul(int m) {
+        ElgamalJNI.CipherText_mul__SWIG_0(swigCPtr, this, m);
+    }
+
+    public void mul(String str) {
+        ElgamalJNI.CipherText_mul__SWIG_1(swigCPtr, this, str);
+    }
+
+    public CipherText() {
+        this(ElgamalJNI.new_CipherText(), true);
+    }
 }

@@ -9,105 +9,106 @@
 package com.herumi.mcl;
 
 public class G1 {
-  private transient long swigCPtr;
-  protected transient boolean swigCMemOwn;
+    private transient long swigCPtr;
+    protected transient boolean swigCMemOwn;
 
-  protected G1(long cPtr, boolean cMemoryOwn) {
-    swigCMemOwn = cMemoryOwn;
-    swigCPtr = cPtr;
-  }
-
-  protected static long getCPtr(G1 obj) {
-    return (obj == null) ? 0 : obj.swigCPtr;
-  }
-
-  @SuppressWarnings("deprecation")
-  protected void finalize() {
-    delete();
-  }
-
-  public synchronized void delete() {
-    if (swigCPtr != 0) {
-      if (swigCMemOwn) {
-        swigCMemOwn = false;
-        MclJNI.delete_G1(swigCPtr);
-      }
-      swigCPtr = 0;
+    protected G1(long cPtr, boolean cMemoryOwn) {
+        swigCMemOwn = cMemoryOwn;
+        swigCPtr = cPtr;
     }
-  }
 
-  public G1() {
-    this(MclJNI.new_G1__SWIG_0(), true);
-  }
+    protected static long getCPtr(G1 obj) {
+        return (obj == null) ? 0 : obj.swigCPtr;
+    }
 
-  public G1(G1 rhs) {
-    this(MclJNI.new_G1__SWIG_1(G1.getCPtr(rhs), rhs), true);
-  }
+    @SuppressWarnings("deprecation")
+    protected void finalize() {
+        delete();
+    }
 
-  public G1(Fp x, Fp y) {
-    this(MclJNI.new_G1__SWIG_2(Fp.getCPtr(x), x, Fp.getCPtr(y), y), true);
-  }
+    public synchronized void delete() {
+        if (swigCPtr != 0) {
+            if (swigCMemOwn) {
+                swigCMemOwn = false;
+                MclJNI.delete_G1(swigCPtr);
+            }
+            swigCPtr = 0;
+        }
+    }
 
-  public boolean equals(G1 rhs) {
-    return MclJNI.G1_equals(swigCPtr, this, G1.getCPtr(rhs), rhs);
-  }
+    public G1() {
+        this(MclJNI.new_G1__SWIG_0(), true);
+    }
 
-  public boolean isZero() {
-    return MclJNI.G1_isZero(swigCPtr, this);
-  }
+    public G1(G1 rhs) {
+        this(MclJNI.new_G1__SWIG_1(G1.getCPtr(rhs), rhs), true);
+    }
 
-  public boolean isValidOrder() {
-    return MclJNI.G1_isValidOrder(swigCPtr, this);
-  }
+    public G1(Fp x, Fp y) {
+        this(MclJNI.new_G1__SWIG_2(Fp.getCPtr(x), x, Fp.getCPtr(y), y), true);
+    }
 
-  public void set(Fp x, Fp y) {
-    MclJNI.G1_set(swigCPtr, this, Fp.getCPtr(x), x, Fp.getCPtr(y), y);
-  }
+    public boolean equals(G1 rhs) {
+        return MclJNI.G1_equals(swigCPtr, this, G1.getCPtr(rhs), rhs);
+    }
 
-  public void clear() {
-    MclJNI.G1_clear(swigCPtr, this);
-  }
+    public boolean isZero() {
+        return MclJNI.G1_isZero(swigCPtr, this);
+    }
 
-  public void setStr(String str, int base) {
-    MclJNI.G1_setStr__SWIG_0(swigCPtr, this, str, base);
-  }
+    public boolean isValidOrder() {
+        return MclJNI.G1_isValidOrder(swigCPtr, this);
+    }
 
-  public void setStr(String str) {
-    MclJNI.G1_setStr__SWIG_1(swigCPtr, this, str);
-  }
+    public void set(Fp x, Fp y) {
+        MclJNI.G1_set(swigCPtr, this, Fp.getCPtr(x), x, Fp.getCPtr(y), y);
+    }
 
-  public String toString(int base) {
-    return MclJNI.G1_toString__SWIG_0(swigCPtr, this, base);
-  }
+    public void clear() {
+        MclJNI.G1_clear(swigCPtr, this);
+    }
 
-  public String toString() {
-    return MclJNI.G1_toString__SWIG_1(swigCPtr, this);
-  }
+    public void setStr(String str, int base) {
+        MclJNI.G1_setStr__SWIG_0(swigCPtr, this, str, base);
+    }
 
-  public void deserialize(byte[] cbuf) {
-    MclJNI.G1_deserialize(swigCPtr, this, cbuf);
-  }
+    public void setStr(String str) {
+        MclJNI.G1_setStr__SWIG_1(swigCPtr, this, str);
+    }
 
-  public byte[] serialize() { return MclJNI.G1_serialize(swigCPtr, this); }
+    public String toString(int base) {
+        return MclJNI.G1_toString__SWIG_0(swigCPtr, this, base);
+    }
 
-  public void normalize() {
-    MclJNI.G1_normalize(swigCPtr, this);
-  }
+    public String toString() {
+        return MclJNI.G1_toString__SWIG_1(swigCPtr, this);
+    }
 
-  public void tryAndIncMapTo(Fp x) {
-    MclJNI.G1_tryAndIncMapTo(swigCPtr, this, Fp.getCPtr(x), x);
-  }
+    public void deserialize(byte[] cbuf) {
+        MclJNI.G1_deserialize(swigCPtr, this, cbuf);
+    }
 
-  public Fp getX() {
-    return new Fp(MclJNI.G1_getX(swigCPtr, this), true);
-  }
+    public byte[] serialize() {
+        return MclJNI.G1_serialize(swigCPtr, this);
+    }
 
-  public Fp getY() {
-    return new Fp(MclJNI.G1_getY(swigCPtr, this), true);
-  }
+    public void normalize() {
+        MclJNI.G1_normalize(swigCPtr, this);
+    }
 
-  public Fp getZ() {
-    return new Fp(MclJNI.G1_getZ(swigCPtr, this), true);
-  }
+    public void tryAndIncMapTo(Fp x) {
+        MclJNI.G1_tryAndIncMapTo(swigCPtr, this, Fp.getCPtr(x), x);
+    }
 
+    public Fp getX() {
+        return new Fp(MclJNI.G1_getX(swigCPtr, this), true);
+    }
+
+    public Fp getY() {
+        return new Fp(MclJNI.G1_getY(swigCPtr, this), true);
+    }
+
+    public Fp getZ() {
+        return new Fp(MclJNI.G1_getZ(swigCPtr, this), true);
+    }
 }

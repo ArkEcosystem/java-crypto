@@ -47,6 +47,12 @@ jobs:
             - name: Merge Conflict finder
               uses: olivernybroe/action-conflict-finder@v1.1
 
+            - name: Install & build herumi/mcl
+              run: |
+                git clone https://github.com/herumi/mcl
+                cd mcl
+                make -j4
+
             - name: Install Nix
               uses: cachix/install-nix-action@v27
 

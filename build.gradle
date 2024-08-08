@@ -77,8 +77,6 @@ tasks.register('fatJar', Jar) {
     with jar
 }
 
-compileJava.dependsOn copyNativeLibs
-
 build.dependsOn 'spotlessApply'
 
 wrapper {

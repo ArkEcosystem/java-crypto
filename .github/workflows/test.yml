@@ -55,13 +55,15 @@ jobs:
                 cd build
                 cmake ..
                 make
-            - name: Set LD_LIBRARY_PATH for mcl
-              run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/work/java-crypto/java-crypto/mcl/build/lib" >> $GITHUB_ENV
+
+            - name: Copy mcl library to /usr/local/lib
+              run: |
+                sudo cp /home/runner/work/java-crypto/java-crypto/mcl/build/lib/libmcl.so* /usr/local/lib/
+                sudo cp /home/runner/work/java-crypto/java-crypto/mcl/build/lib/libmclbn*.so* /usr/local/lib/
 
             - name: Build Java FFI
               run: |
                 cd $HOME/work/java-crypto/java-crypto/mcl/ffi/java
-                echo "contents of path"
                 # Fix `Could not find MCL_LIBRARY using the following names: mcl` error
                 awk '{if ($0 ~ /set\(CMAKE_FIND_LIBRARY_SUFFIXES .a .lib\)/) {print "set(CMAKE_FIND_LIBRARY_SUFFIXES .a .so)"} else {print $0}}' CMakeLists.txt > CMakeLists.tmp && mv CMakeLists.tmp CMakeLists.txt
                 # TBD

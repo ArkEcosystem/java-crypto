@@ -51,6 +51,7 @@ jobs:
               run: |
                 git clone https://github.com/herumi/mcl
                 cd mcl
+                pwd
                 make -j4
 
             - name: Build Java FFI

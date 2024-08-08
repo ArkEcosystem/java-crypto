@@ -6,11 +6,6 @@ import com.herumi.mcl.GT;
 import com.herumi.mcl.Mcl;
 import org.arkecosystem.crypto.Schnorr;
 
-/*
- *  BLS API
- *  Now only BLS12-381 supported
- *  created by yuezz 201910
- */
 public class Bls implements BlsConstants {
     static {
         String lib = "mcljava";

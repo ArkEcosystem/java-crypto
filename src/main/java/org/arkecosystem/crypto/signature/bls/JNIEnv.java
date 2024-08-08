@@ -7,10 +7,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-/*
- * JNI env prepare
- * created by yuezz 201910
- */
 public class JNIEnv {
     byte[] cache;
     List<String> sources;

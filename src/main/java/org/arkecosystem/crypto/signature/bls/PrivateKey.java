@@ -1,7 +1,5 @@
 package org.arkecosystem.crypto.signature.bls;
 
-// import org.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
-
 import com.herumi.mcl.Fr;
 import com.herumi.mcl.G1;
 import com.herumi.mcl.G2;

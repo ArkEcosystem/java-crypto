@@ -58,6 +58,9 @@ jobs:
 
             - name: Build Java FFI
               run: |
+                sudo cp /home/runner/work/java-crypto/java-crypto/mcl/build/lib/libmcl.so* /usr/local/lib/
+                sudo cp /home/runner/work/java-crypto/java-crypto/mcl/build/lib/libmclbn*.so* /usr/local/lib/
+
                 cd $HOME/work/java-crypto/java-crypto/mcl/ffi/java
                 echo "contents of path"
                 ls /home/runner/work/java-crypto/java-crypto/mcl/build/lib

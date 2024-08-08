@@ -70,7 +70,7 @@ jobs:
 
             - name: Copy libmcljava.so to /usr/local/lib
               run: |
-                echo "ld librry path: $LD_LIBRARY_PATH"
+                echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib" >> $GITHUB_ENV
                 sudo cp $HOME/work/java-crypto/java-crypto/mcl/ffi/java/build/libmcljava.so /usr/local/lib/
 
             - name: Install Nix

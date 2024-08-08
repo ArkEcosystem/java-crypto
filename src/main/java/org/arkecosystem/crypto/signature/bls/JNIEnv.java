@@ -38,7 +38,7 @@ public class JNIEnv {
         }
         return false;
     }
-    
+
     public void prepare() {
         for (String s : sources) {
             copy(s);
@@ -50,15 +50,22 @@ public class JNIEnv {
             return true;
         } else {
             try {
-                String[] libraryPaths = System.getProperty("java.library.path").split(File.pathSeparator);
-                File f = new File(libraryPaths[0], sourceName); // Using the first path in java.library.path
+                String[] libraryPaths =
+                        System.getProperty("java.library.path").split(File.pathSeparator);
+                File f =
+                        new File(
+                                libraryPaths[0],
+                                sourceName); // Using the first path in java.library.path
                 if (!f.exists()) {
                     f.createNewFile();
                     System.out.println("[JNIDEV]:DEFAULT JNI INITION:" + sourceName);
                 }
                 FileOutputStream os = new FileOutputStream(f);
 
-                InputStream is = getClass().getResourceAsStream("/" + sourceName); // Modified to add leading slash
+                InputStream is =
+                        getClass()
+                                .getResourceAsStream(
+                                        "/" + sourceName); // Modified to add leading slash
                 if (is == null) {
                     os.close();
                     return false;

@@ -53,10 +53,6 @@ class TransferTest {
         assertEquals((Long.valueOf((String) data.get("fee"))), actual.fee);
         assertEquals(data.get("signature").toString(), actual.signature);
         assertEquals(data.get("id").toString(), actual.id);
-
-        System.out.println("AAAA");
-        System.out.println(data.get("vendorField").toString());
-
         assertEquals(data.get("recipientId").toString(), actual.recipientId);
         assertEquals((Long.valueOf((String) data.get("amount"))), actual.amount);
         assertEquals(((Double) data.get("expiration")).intValue(), actual.expiration);

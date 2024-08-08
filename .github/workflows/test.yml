@@ -53,10 +53,11 @@ jobs:
                 cd mcl
                 make -j4
                 cd ffi/java
+                sed -i 's|option(MCL_LINK_DIR "Absolute path where mcl static or dynamic library resides")|option(MCL_LINK_DIR "Absolute path where mcl static or dynamic library resides" "/home/runner/work/java-crypto/java-crypto/mcl/build/lib;/home/runner/work/java-crypto/java-crypto/mcl/lib")|' ./CMakeLists.txt
                 mkdir build
                 cd build
                 cmake ..
-                cmake -DMCL_LINK_DIR=/home/runner/work/java-crypto/java-crypto/mcl/build/lib;/home/runner/work/java-crypto/java-crypto/mcl/lib --build . --config Release
+                cmake --build . --config Release
 
             - name: Install Nix
               uses: cachix/install-nix-action@v27

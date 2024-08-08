@@ -56,7 +56,7 @@ jobs:
                 mkdir build
                 cd build
                 cmake ..
-                cmake -DMCL_LINK_DIR=/home/runner/work/java-crypto/java-crypto/mcl/build/lib --build . --config Release
+                cmake -DMCL_LINK_DIR=/home/runner/work/java-crypto/java-crypto/mcl/build/lib;/home/runner/work/java-crypto/java-crypto/mcl/lib --build . --config Release
 
             - name: Install Nix
               uses: cachix/install-nix-action@v27

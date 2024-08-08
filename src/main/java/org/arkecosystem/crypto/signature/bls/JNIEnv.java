@@ -21,7 +21,7 @@ public class JNIEnv {
         String OS = System.getProperty("os.name").toLowerCase();
         String ARCH = System.getProperty(("os.arch")).toLowerCase();
         System.out.println(OS + " | " + ARCH);
-        if (OS.contains("mac") && ARCH.contains("x86_64")) {
+        if (OS.contains("mac") && (ARCH.contains("x86_64") || ARCH.contains("aarch64"))) {
             sources.add("libmcljava.dylib");
         } else if (OS.contains("linux") && ARCH.contains("amd64")) {
             sources.add("libmcljava.so");

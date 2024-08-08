@@ -70,7 +70,6 @@ jobs:
 
             - name: Copy libmcljava.so to /usr/local/lib
               run: |
-                echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib" >> $GITHUB_ENV
                 sudo cp $HOME/work/java-crypto/java-crypto/mcl/ffi/java/build/libmcljava.so /usr/local/lib/
 
             - name: Install Nix
@@ -99,23 +98,9 @@ jobs:
             - name: Test
               run: gradle test && gradle jacocoTestReport
 
-            - name: Archive test reports if tests fail
+            - name: temporary Show test report if tests fail
               if: failure()
-              run: |
-                zip -r test-reports.zip build/reports/tests/test
-                echo "##[error]Tests failed, see the report"
-              continue-on-error: false
-        
-            - name: Upload Test Reports
-              if: failure()
-              uses: actions/upload-artifact@v3
-              with:
-                name: test-reports
-                path: test-reports.zip
-        
-            - name: Fail the job if tests failed
-              if: failure()
-              run: exit 1
+              run: cat build/reports/tests/test/classes/org.arkecosystem.crypto.transactions.builder.ValidatorRegistrationBuilderTest.html
             
             - name: Codecov
               run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}

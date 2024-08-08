@@ -28,7 +28,7 @@ dependencies {
     implementation files('libs/secp256k1-foreign-0.0.1.jar')
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.google.guava:guava:30.2.0-jre'
-    
+
     testImplementation 'org.slf4j:slf4j-api:2.0.13'
     testRuntimeOnly 'org.slf4j:slf4j-simple:2.0.13'
     testImplementation 'org.hamcrest:hamcrest-library:3.0'
@@ -42,7 +42,6 @@ test {
     useJUnitPlatform()
     testLogging {
         events 'PASSED', 'FAILED', 'SKIPPED'
-        showStandardStreams = true
     }
 }
 
@@ -77,12 +76,6 @@ tasks.register('fatJar', Jar) {
     }
     with jar
 }
-
-task copyNativeLibs(type: Copy) {
-    from file('libs/native')
-    into new File(buildDir, 'libs')
-}
-
 
 compileJava.dependsOn copyNativeLibs
 

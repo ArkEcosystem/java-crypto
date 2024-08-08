@@ -58,7 +58,7 @@ jobs:
 
             - name: Copy mcl library to /usr/local/lib
               run: |
-                sudo cp /home/runner/work/java-crypto/java-crypto/mcl/build/lib/libmcl.a /usr/local/lib/
+                sudo cp $HOME/work/java-crypto/java-crypto/mcl/build/lib/libmcl.a /usr/local/lib/
 
             - name: Build Java FFI
               run: |
@@ -70,7 +70,8 @@ jobs:
 
             - name: Copy libmcljava.so to /usr/local/lib
               run: |
-                sudo cp /home/runner/work/java-crypto/java-crypto/mcl/build/lib/libmcljava.so /usr/local/lib/
+                
+                sudo cp $HOME/work/java-crypto/java-crypto/mcl/ffi/java/build/libmcljava.so /usr/local/lib/
 
             - name: Install Nix
               uses: cachix/install-nix-action@v27

@@ -1,6 +1,8 @@
 package org.arkecosystem.crypto.transactions.builder;
 
 import org.arkecosystem.crypto.enums.Fees;
+import org.arkecosystem.crypto.signature.bls.Bls;
+import org.arkecosystem.crypto.signature.bls.BlsConstants;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.arkecosystem.crypto.transactions.types.ValidatorRegistration;
 
@@ -34,8 +36,8 @@ public class ValidatorRegistrationBuilder
             throw new IllegalArgumentException("Invalid BLS public key length");
         }
 
-        if (!publicKeyHex.matches("^[0-9A-Fa-f]+$")) {
-            throw new IllegalArgumentException("Invalid BLS public key");
-        }
+        Bls bls = new Bls(BlsConstants.BLS12_381);
+
+        bls.validateBlsPublicKey(publicKeyHex);
     }
 }

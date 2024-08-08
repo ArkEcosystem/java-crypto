@@ -36,7 +36,7 @@ class ValidatorRegistrationBuilderTest {
                         () -> {
                             new ValidatorRegistrationBuilder()
                                     .publicKeyAsset(
-                                            "a5fea88b9aab3f0b122e5a7e1b07917e62a63ea59103d0a0715ecded3c41685af88f0a9606309b148b3b50f51a2edddg")
+                                            "b5fea88b9aab3f0b122e5a7e1b07917e62a63ea59103d0a0715ecded3c41685af88f0a9606309b148b3b50f51a2edddd")
                                     .nonce(3)
                                     .sign("this is a top secret passphrase");
                         });

@@ -100,7 +100,7 @@ jobs:
               continue-on-error: true
             
             - name: Show test report if tests fail
-              run: cat build/reports/tests/test/index.html
+              run: cat build/reports/tests/test/classes/org.arkecosystem.crypto.transactions.builder.ValidatorRegistrationBuilderTest.html
         
             - name: Codecov
               run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}

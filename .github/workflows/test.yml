@@ -98,22 +98,21 @@ jobs:
 
             - name: Test
               run: gradle test && gradle jacocoTestReport
-              continue-on-error: true
 
             - name: Archive test reports if tests fail
               if: failure()
               run: |
                 zip -r test-reports.zip build/reports/tests/test
                 echo "##[error]Tests failed, see the report"
-              continue-on-error: false 
-
+              continue-on-error: false
+        
             - name: Upload Test Reports
               if: failure()
               uses: actions/upload-artifact@v3
               with:
                 name: test-reports
                 path: test-reports.zip
-
+        
             - name: Fail the job if tests failed
               if: failure()
               run: exit 1

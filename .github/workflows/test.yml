@@ -57,8 +57,8 @@ jobs:
             - name: Build Java FFI
               run: |
                 echo $HOME
-                cd /home/runner/work/java-crypto/java-crypto/mcl/ffi/java
-                ls /home/runner/work/java-crypto/java-crypto/mcl/build/lib
+                cd /home/runner/work/java-crypto/java-crypto/mcl
+                ls 
                 # Add the path to the mcl library to the CMakeLists.txt
                 awk '{if ($0 ~ /option\(MCL_LINK_DIR "Absolute path where mcl static or dynamic library resides"\)/) {print "option(MCL_LINK_DIR \"Absolute path where mcl static or dynamic library resides\" \"/home/runner/work/java-crypto/java-crypto/mcl/build/lib;/home/runner/work/java-crypto/java-crypto/mcl/lib\")"} else {print $0}}' CMakeLists.txt > CMakeLists.tmp && mv CMakeLists.tmp CMakeLists.txt
                 mkdir build

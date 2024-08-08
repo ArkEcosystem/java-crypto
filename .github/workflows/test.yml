@@ -70,7 +70,7 @@ jobs:
 
             - name: Copy libmcljava.so to /usr/local/lib
               run: |
-                
+                echo "ld librry path: $LD_LIBRARY_PATH"
                 sudo cp $HOME/work/java-crypto/java-crypto/mcl/ffi/java/build/libmcljava.so /usr/local/lib/
 
             - name: Install Nix
@@ -84,6 +84,7 @@ jobs:
 
             - name: Set LD_LIBRARY_PATH
               run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.nix-profile/lib" >> $GITHUB_ENV
+              
 
             - name: Use Java Version 22
               uses: actions/setup-java@v2
@@ -97,10 +98,6 @@ jobs:
 
             - name: Test
               run: gradle test && gradle jacocoTestReport
-              continue-on-error: true
             
-            - name: Show test report if tests fail
-              run: cat build/reports/tests/test/classes/org.arkecosystem.crypto.transactions.builder.ValidatorRegistrationBuilderTest.html
-        
             - name: Codecov
               run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}

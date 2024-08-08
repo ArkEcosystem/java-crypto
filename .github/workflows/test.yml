@@ -52,12 +52,11 @@ jobs:
                 git clone https://github.com/herumi/mcl
                 cd mcl
                 make -j4
-                pwd
                 cd ffi/java
                 mkdir build
                 cd build
                 cmake ..
-                cmake --build . --config Release
+                cmake -DMCL_LINK_DIR=/home/runner/work/java-crypto/java-crypto/mcl/build/lib --build . --config Release
 
             - name: Install Nix
               uses: cachix/install-nix-action@v27

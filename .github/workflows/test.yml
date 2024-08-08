@@ -57,6 +57,10 @@ jobs:
             - name: Build Java FFI
               run: |
                 cd $HOME/work/java-crypto/java-crypto/mcl/ffi/java
+                echo "Test 1"
+                ls /home/runner/work/java-crypto/java-crypto/mcl/lib
+                echo "Test 2"
+                ls /home/runner/work/java-crypto/java-crypto/mcl/build/lib
                 # Add the path to the mcl library to the CMakeLists.txt
                 mkdir build
                 cd build

@@ -7,41 +7,30 @@ import java.util.List;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
 
-public class ValidatorResignationBuilderTest {
+class UsernameRegistrationBuilderTest {
     @Test
     void build() {
         Transaction actual =
-                new ValidatorResignationBuilder()
+                new UsernameRegistrationBuilder()
+                        .usernameAsset("alfonsobries")
                         .nonce(3)
                         .sign("this is a top secret passphrase")
                         .transaction;
 
         HashMap actualHashMap = actual.toHashMap();
-        HashMap actualAsset = (HashMap) actualHashMap.get("asset");
-        assertNull(actualAsset);
+
+        HashMap asset = (HashMap) actualHashMap.get("asset");
+
+        assertEquals(asset.get("username"), "alfonsobries");
 
         assertTrue(actual.verify());
-    }
-
-    @Test
-    void buildSecondSignature() {
-        Transaction actual =
-                new ValidatorResignationBuilder()
-                        .nonce(3)
-                        .sign("this is a top secret passphrase")
-                        .secondSign("this is a top secret second passphrase")
-                        .transaction;
-
-        assertTrue(actual.verify());
-        assertTrue(
-                actual.secondVerify(
-                        "03699e966b2525f9088a6941d8d94f7869964a000efe65783d78ac82e1199fe609"));
     }
 
     @Test
     void buildMultiSignature() {
         Transaction actual =
-                new ValidatorResignationBuilder()
+                new UsernameRegistrationBuilder()
+                        .usernameAsset("alfonsobries")
                         .nonce(3)
                         .multiSign("secret 1", 0)
                         .multiSign("secret 2", 1)

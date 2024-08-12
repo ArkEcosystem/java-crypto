@@ -15,6 +15,8 @@ import org.arkecosystem.crypto.transactions.types.MultiSignatureRegistration;
 import org.arkecosystem.crypto.transactions.types.SecondSignatureRegistration;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.arkecosystem.crypto.transactions.types.Transfer;
+import org.arkecosystem.crypto.transactions.types.UsernameRegistration;
+import org.arkecosystem.crypto.transactions.types.UsernameResignation;
 import org.arkecosystem.crypto.transactions.types.ValidatorRegistration;
 import org.arkecosystem.crypto.transactions.types.ValidatorResignation;
 import org.arkecosystem.crypto.transactions.types.Vote;
@@ -42,6 +44,10 @@ public class Deserializer {
         coreTransactionTypes.put(CoreTransactionTypes.MULTI_PAYMENT.getValue(), new MultiPayment());
         coreTransactionTypes.put(
                 CoreTransactionTypes.VALIDATOR_RESIGNATION.getValue(), new ValidatorResignation());
+        coreTransactionTypes.put(
+                CoreTransactionTypes.USERNAME_RESIGNATION.getValue(), new UsernameResignation());
+        coreTransactionTypes.put(
+                CoreTransactionTypes.USERNAME_REGISTRATION.getValue(), new UsernameRegistration());
 
         transactionGroups.put(TransactionTypeGroup.CORE.getValue(), coreTransactionTypes);
 

@@ -4,7 +4,9 @@ import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
 import org.bouncycastle.math.ec.rfc8032.Ed25519;
 import com.herumi.mcl.G1;
+import com.herumi.mcl.G2;
 import com.herumi.mcl.Mcl;
+import com.herumi.mcl.MclConstants;
 import com.herumi.mcl.Fr;
 
 import org.bouncycastle.crypto.digests.SHA256Digest;
@@ -15,6 +17,7 @@ import org.bouncycastle.util.encoders.Hex;
 import org.nightcode.bip39.Bip39;
 import org.nightcode.bip39.Bip39Exception;
 import org.nightcode.bip39.dictionary.EnglishDictionary;
+import org.arkecosystem.crypto.signature.bls.Bls;
 import org.arkecosystem.crypto.signature.bls.BlsConstants;
 import org.arkecosystem.crypto.signature.bls.JNIEnv;
 import java.math.BigInteger;
@@ -32,7 +35,7 @@ public class KeyPairFactory {
     private static final BigInteger BLS_R = new BigInteger("52435875175126190479447740508185965837690552500527637822603658699938581184513");
 
     public KeyPairFactory() {
-        Mcl.SystemInit(BlsConstants.BLS12_381);
+        Mcl.SystemInit(MclConstants.BLS12_381);
     }
 
     public KeyPair fromPassphrase(String passphrase) {
@@ -189,17 +192,21 @@ public class KeyPairFactory {
     }
 
     public KeyPair fromPrivateKey(byte[] privateKeyBytes) {
+        if (privateKeyBytes.length != 32) {
+            throw new IllegalArgumentException("Invalid private key length");
+        }
+
         // Convertir el array de bytes en un elemento Fr (clave privada)
         Fr privateKey = new Fr();
         privateKey.setLittleEndianMod(privateKeyBytes);
-
-        // Crear un punto en G1 (clave pública) usando el hashAndMapToG1
-        G1 generator = new G1();
-        Mcl.hashAndMapToG1(generator, new byte[]{1}); // Mapea un punto base en la curva
-
-        // Generar la clave pública multiplicando el punto base por la clave privada
+        
+        // Generar la clave pública utilizando directamente el punto base G1 predefinido
         G1 publicKey = new G1();
-        Mcl.mul(publicKey, generator, privateKey);
+
+        G1 Q = new G1();
+        Q.setStr(Bls.BaseG1);
+
+        Mcl.mul(publicKey, Q, privateKey);
 
         // Serializar la clave pública a un array de bytes
         byte[] publicKeyBytes = publicKey.serialize();
@@ -210,10 +217,10 @@ public class KeyPairFactory {
 
         System.out.println("Private key: " + privateKeyHex);
         System.out.println("Public key: " + publicKeyHex);
+        System.out.println("Public key1 b4865127896c3c5286296a7b26e7c8002586a3ecf5832bfb59e689336f1f4c75e10491b9dfaed8dfb2c2fbe22d11fa93");
 
         return new KeyPair(privateKeyHex, publicKeyHex);
     }
-    
 
     public static class KeyPair {
         private final String privateKey;

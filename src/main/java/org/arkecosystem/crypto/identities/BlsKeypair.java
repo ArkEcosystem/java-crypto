@@ -1,22 +1,13 @@
 package org.arkecosystem.crypto.identities;
 
 import com.herumi.mcl.Fr;
-import com.herumi.mcl.G1;
-import com.herumi.mcl.Mcl;
-
-import org.arkecosystem.crypto.signature.bls.Bls;
-import org.arkecosystem.crypto.signature.bls.BlsConstants;
-import org.bitcoinj.core.Sha256Hash;
-import org.bitcoinj.crypto.MnemonicCode;
-import org.bouncycastle.crypto.digests.SHA256Digest;
-import org.bouncycastle.crypto.generators.HKDFBytesGenerator;
-import org.bouncycastle.crypto.params.HKDFParameters;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
-
+import org.arkecosystem.crypto.signature.bls.Bls;
+import org.arkecosystem.crypto.signature.bls.BlsConstants;
+import org.bitcoinj.crypto.MnemonicCode;
 import org.miracl.core.BLS12381.BLS;
 
 public class BlsKeypair {
@@ -40,10 +31,12 @@ public class BlsKeypair {
         // Paso 4: Derivar la clave hija desde la clave maestra (equivalente a deriveChild)
         // Usamos masterKeyBytes como semilla para derivar la clave hija
         // Fr childKeyFr = new Fr();
-        // childKeyFr.setLittleEndianMod(deriveChildKey(masterKeyBytes)); // Deriva la clave hija correctamente
+        // childKeyFr.setLittleEndianMod(deriveChildKey(masterKeyBytes)); // Deriva la clave hija
+        // correctamente
         // byte[] privateKeyBytes = childKeyFr.serialize();
         byte[] privateKeyBytes = deriveMasterKey(seed);
-        System.out.println("Child Key (Private Key): " + bytesToHex(privateKeyBytes)); // Debug output
+        System.out.println(
+                "Child Key (Private Key): " + bytesToHex(privateKeyBytes)); // Debug output
 
         // Generar la clave pública correspondiente
         // G1 publicKeyG1 = new G1();
@@ -54,11 +47,7 @@ public class BlsKeypair {
         // System.out.println("Public Key: " + bytesToHex(publicKeyBytes)); // Debug output
         byte[] publicKeyBytes = deriveMasterKey(seed);
 
-        return new BlsKeyPair(
-                true,
-                bytesToHex(privateKeyBytes),
-                bytesToHex(publicKeyBytes)
-        );
+        return new BlsKeyPair(true, bytesToHex(privateKeyBytes), bytesToHex(publicKeyBytes));
     }
 
     private static byte[] hashPassphrase(String passphrase) {
@@ -101,7 +90,7 @@ public class BlsKeypair {
     private static byte[] deriveChildKey(byte[] masterKeyBytes, int index) {
         // Derivar la clave hija simplemente usando la clave maestra
         Fr childKeyFr = new Fr();
-        childKeyFr.setLittleEndianMod(masterKeyBytes);  // Deriva la clave hija
+        childKeyFr.setLittleEndianMod(masterKeyBytes); // Deriva la clave hija
         return childKeyFr.serialize();
     }
 
@@ -118,11 +107,16 @@ public class BlsKeypair {
 
         @Override
         public String toString() {
-            return "BlsKeyPair{" +
-                    "compressed=" + compressed +
-                    ", privateKey='" + privateKey + '\'' +
-                    ", publicKey='" + publicKey + '\'' +
-                    '}';
+            return "BlsKeyPair{"
+                    + "compressed="
+                    + compressed
+                    + ", privateKey='"
+                    + privateKey
+                    + '\''
+                    + ", publicKey='"
+                    + publicKey
+                    + '\''
+                    + '}';
         }
     }
 }

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
-import org.arkecosystem.crypto.transactions.builder.ValidatorRegistrationBuilder;
 
 class ValidatorRegistrationBuilderTest {
     @Test
@@ -66,9 +65,9 @@ class ValidatorRegistrationBuilderTest {
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
-     }      
-        
-     @Test
+    }
+
+    @Test
     void buildMultiSignature() {
         Transaction actual =
                 new ValidatorRegistrationBuilder()

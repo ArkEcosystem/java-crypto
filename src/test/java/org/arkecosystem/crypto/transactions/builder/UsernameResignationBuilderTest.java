@@ -7,11 +7,11 @@ import java.util.List;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
 
-public class ValidatorResignationBuilderTest {
+public class UsernameResignationBuilderTest {
     @Test
     void build() {
         Transaction actual =
-                new ValidatorResignationBuilder()
+                new UsernameResignationBuilder()
                         .nonce(3)
                         .sign("this is a top secret passphrase")
                         .transaction;
@@ -26,7 +26,7 @@ public class ValidatorResignationBuilderTest {
     @Test
     void buildSecondSignature() {
         Transaction actual =
-                new ValidatorResignationBuilder()
+                new UsernameResignationBuilder()
                         .nonce(3)
                         .sign("this is a top secret passphrase")
                         .secondSign("this is a top secret second passphrase")
@@ -41,7 +41,7 @@ public class ValidatorResignationBuilderTest {
     @Test
     void buildMultiSignature() {
         Transaction actual =
-                new ValidatorResignationBuilder()
+                new UsernameResignationBuilder()
                         .nonce(3)
                         .multiSign("secret 1", 0)
                         .multiSign("secret 2", 1)

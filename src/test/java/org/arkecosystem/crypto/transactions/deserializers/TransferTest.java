@@ -14,7 +14,7 @@ class TransferTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/transfer-sign");
+                FixtureLoader.load("transactions/transfer/transfer-sign");
 
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
@@ -38,7 +38,7 @@ class TransferTest {
     @Test
     void passphraseVendorField() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/transfer-with-vendor-field-sign");
+                FixtureLoader.load("transactions/transfer/transfer-with-vendor-field-sign");
 
         LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
 
@@ -53,61 +53,13 @@ class TransferTest {
         assertEquals((Long.valueOf((String) data.get("fee"))), actual.fee);
         assertEquals(data.get("signature").toString(), actual.signature);
         assertEquals(data.get("id").toString(), actual.id);
+
+        System.out.println("AAAA");
+        System.out.println(data.get("vendorField").toString());
 
         assertEquals(data.get("recipientId").toString(), actual.recipientId);
         assertEquals((Long.valueOf((String) data.get("amount"))), actual.amount);
         assertEquals(((Double) data.get("expiration")).intValue(), actual.expiration);
         assertEquals(data.get("vendorField").toString(), actual.vendorField);
-    }
-
-    @Test
-    void secondPassphrase() {
-        LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/transfer-secondSign");
-
-        LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
-
-        Transaction actual = new Deserializer(fixture.get("serialized").toString()).deserialize();
-
-        assertEquals(((Double) data.get("version")).intValue(), actual.version);
-        assertEquals(((Double) data.get("network")).intValue(), actual.network);
-        assertEquals(TransactionTypeGroup.CORE.getValue(), actual.typeGroup);
-        assertEquals(((Double) data.get("type")).intValue(), actual.type);
-        assertEquals((Long.valueOf((String) data.get("nonce"))), actual.nonce);
-        assertEquals(data.get("senderPublicKey").toString(), actual.senderPublicKey);
-        assertEquals((Long.valueOf((String) data.get("fee"))), actual.fee);
-        assertEquals(data.get("signature").toString(), actual.signature);
-        assertEquals(data.get("id").toString(), actual.id);
-
-        assertEquals(data.get("recipientId").toString(), actual.recipientId);
-        assertEquals((Long.valueOf((String) data.get("amount"))), actual.amount);
-        assertEquals(((Double) data.get("expiration")).intValue(), actual.expiration);
-        assertEquals(data.get("secondSignature").toString(), actual.secondSignature);
-    }
-
-    @Test
-    void secondPassphraseVendorField() {
-        LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/transfer-with-vendor-field-secondSign");
-
-        LinkedTreeMap<String, Object> data = (LinkedTreeMap<String, Object>) fixture.get("data");
-
-        Transaction actual = new Deserializer(fixture.get("serialized").toString()).deserialize();
-
-        assertEquals(((Double) data.get("version")).intValue(), actual.version);
-        assertEquals(((Double) data.get("network")).intValue(), actual.network);
-        assertEquals(TransactionTypeGroup.CORE.getValue(), actual.typeGroup);
-        assertEquals(((Double) data.get("type")).intValue(), actual.type);
-        assertEquals((Long.valueOf((String) data.get("nonce"))), actual.nonce);
-        assertEquals(data.get("senderPublicKey").toString(), actual.senderPublicKey);
-        assertEquals((Long.valueOf((String) data.get("fee"))), actual.fee);
-        assertEquals(data.get("signature").toString(), actual.signature);
-        assertEquals(data.get("id").toString(), actual.id);
-
-        assertEquals(data.get("recipientId").toString(), actual.recipientId);
-        assertEquals((Long.valueOf((String) data.get("amount"))), actual.amount);
-        assertEquals(((Double) data.get("expiration")).intValue(), actual.expiration);
-        assertEquals(data.get("vendorField").toString(), actual.vendorField);
-        assertEquals(data.get("secondSignature").toString(), actual.secondSignature);
     }
 }

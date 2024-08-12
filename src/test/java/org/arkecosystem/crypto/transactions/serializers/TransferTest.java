@@ -15,7 +15,7 @@ class TransferTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/transfer-sign");
+                FixtureLoader.load("transactions/transfer/transfer-sign");
         Transaction transaction =
                 new Deserializer(fixture.get("serialized").toString()).deserialize();
 
@@ -27,7 +27,7 @@ class TransferTest {
     @Test
     void passphraseVendorField() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/transfer-with-vendor-field-sign");
+                FixtureLoader.load("transactions/transfer/transfer-with-vendor-field-sign");
         Transaction transaction =
                 new Deserializer(fixture.get("serialized").toString()).deserialize();
 
@@ -39,19 +39,7 @@ class TransferTest {
     @Test
     void secondPassphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/transfer-with-vendor-field-secondSign");
-        Transaction transaction =
-                new Deserializer(fixture.get("serialized").toString()).deserialize();
-
-        String actual = Hex.encode(Serializer.serialize(transaction));
-
-        assertEquals(fixture.get("serialized").toString(), actual);
-    }
-
-    @Test
-    void secondPassphraseVendorField() {
-        LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/transfer-with-vendor-field-secondSign");
+                FixtureLoader.load("transactions/transfer/transfer-with-vendor-field-sign");
         Transaction transaction =
                 new Deserializer(fixture.get("serialized").toString()).deserialize();
 

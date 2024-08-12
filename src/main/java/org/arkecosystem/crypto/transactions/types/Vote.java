@@ -24,34 +24,48 @@ public class Vote extends Transaction {
     public HashMap<String, Object> assetToHashMap() {
         HashMap<String, Object> asset = new HashMap<>();
         asset.put("votes", this.asset.votes);
+        asset.put("unvotes", this.asset.unvotes);
         return asset;
     }
 
     @Override
     public byte[] serialize() {
-        ByteBuffer buffer = ByteBuffer.allocate(1 + this.asset.votes.size() * 34);
+        ByteBuffer buffer =
+                ByteBuffer.allocate(
+                        (1 + this.asset.votes.size() * 33) + (1 + this.asset.unvotes.size() * 33));
+
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
         List<String> votes = new ArrayList<>(this.asset.votes);
-        for (int i = 0; i < votes.size(); i++) {
-            votes.set(
-                    i, (votes.get(i).startsWith("+") ? "01" : "00") + (votes.get(i).substring(1)));
-        }
+        List<String> unvotes = new ArrayList<>(this.asset.unvotes);
 
         buffer.put((byte) votes.size());
         buffer.put(Hex.decode(String.join("", votes)));
+
+        buffer.put((byte) unvotes.size());
+        buffer.put(Hex.decode(String.join("", unvotes)));
+
         return buffer.array();
     }
 
     @Override
     public void deserialize(ByteBuffer buffer) {
         int voteLength = buffer.get();
+
         for (int i = 0; i < voteLength; i++) {
-            byte[] voteBuffer = new byte[34];
+            byte[] voteBuffer = new byte[33];
             buffer.get(voteBuffer);
             String vote = Hex.encode(voteBuffer);
-            vote = (vote.startsWith("01") ? '+' : '-') + vote.substring(2);
             this.asset.votes.add(vote);
+        }
+
+        int unvoteLength = buffer.get();
+
+        for (int i = 0; i < unvoteLength; i++) {
+            byte[] unvoteBuffer = new byte[33];
+            buffer.get(unvoteBuffer);
+            String unvote = Hex.encode(unvoteBuffer);
+            this.asset.unvotes.add(unvote);
         }
     }
 }

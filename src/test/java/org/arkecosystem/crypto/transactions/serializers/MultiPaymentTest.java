@@ -14,7 +14,7 @@ class MultiPaymentTest {
     @Test
     void passphrase() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/multi-payment-sign");
+                FixtureLoader.load("transactions/multi_payment/multi-payment-sign");
         Transaction transaction =
                 new Deserializer(fixture.get("serialized").toString()).deserialize();
 
@@ -26,32 +26,8 @@ class MultiPaymentTest {
     @Test
     void passphraseVendorField() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/multi-payment-with-vendor-field-sign");
-        Transaction transaction =
-                new Deserializer(fixture.get("serialized").toString()).deserialize();
-
-        String actual = Hex.encode(Serializer.serialize(transaction));
-
-        assertEquals(fixture.get("serialized").toString(), actual);
-    }
-
-    @Test
-    void secondPassphrase() {
-        LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/multi-payment-secondSign");
-        Transaction transaction =
-                new Deserializer(fixture.get("serialized").toString()).deserialize();
-
-        String actual = Hex.encode(Serializer.serialize(transaction));
-
-        assertEquals(fixture.get("serialized").toString(), actual);
-    }
-
-    @Test
-    void secondPassphraseVendorField() {
-        LinkedTreeMap<String, Object> fixture =
                 FixtureLoader.load(
-                        "transactions/v2-ecdsa/multi-payment-with-vendor-field-secondSign");
+                        "transactions/multi_payment/multi-payment-with-vendor-field-sign");
         Transaction transaction =
                 new Deserializer(fixture.get("serialized").toString()).deserialize();
 

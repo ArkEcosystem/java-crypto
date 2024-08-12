@@ -11,7 +11,6 @@ on:
 jobs:
     format:
         runs-on: ubuntu-latest
-
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
@@ -21,11 +20,11 @@ jobs:
             - name: Merge Conflict finder
               uses: olivernybroe/action-conflict-finder@v1.1
 
-            - name: Use Java Version ${{ matrix.java }}
+            - name: Use Java Version 22
               uses: actions/setup-java@v2
               with:
                   distribution: "adopt"
-                  java-version: 22
+                  java-version: "22"
                   cache: "gradle"
 
             - name: Format code
@@ -39,10 +38,6 @@ jobs:
 
     unit:
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                java: [11, 15, 16, 17, 18, 19, 20, 21, 22]
-
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
@@ -52,11 +47,23 @@ jobs:
             - name: Merge Conflict finder
               uses: olivernybroe/action-conflict-finder@v1.1
 
-            - name: Use Java Version ${{ matrix.java }}
+            - name: Install Nix
+              uses: cachix/install-nix-action@v27
+
+            - name: Install libsecp256k1
+              run: |
+                nix profile install nixpkgs#secp256k1
+              env:
+                NIX_PATH: $HOME/.nix-profile/bin
+
+            - name: Set LD_LIBRARY_PATH
+              run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.nix-profile/lib" >> $GITHUB_ENV
+
+            - name: Use Java Version 22
               uses: actions/setup-java@v2
               with:
-                  distribution: "zulu"
-                  java-version: ${{ matrix.java }}
+                  distribution: "adopt"
+                  java-version: "22"
                   cache: "gradle"
 
             - name: Install

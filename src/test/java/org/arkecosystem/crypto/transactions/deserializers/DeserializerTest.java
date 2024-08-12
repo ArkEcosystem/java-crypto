@@ -15,7 +15,7 @@ class DeserializerTest {
     @Test
     void checkNewTransactionType() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/transfer-sign");
+                FixtureLoader.load("transactions/transfer/transfer-sign");
 
         Deserializer deserializer = new Deserializer(fixture.get("serialized").toString());
         deserializer.setNewTransactionType(
@@ -52,7 +52,7 @@ class DeserializerTest {
     @Test
     void checkNewTransactionToCoreGroup() {
         LinkedTreeMap<String, Object> fixture =
-                FixtureLoader.load("transactions/v2-ecdsa/transfer-sign");
+                FixtureLoader.load("transactions/transfer/transfer-sign");
 
         Deserializer deserializer = new Deserializer(fixture.get("serialized").toString());
         deserializer.setNewTransactionType(
@@ -86,7 +86,7 @@ class DeserializerTest {
     @Test
     void duplicateParticipantInMultiSignature() {
         String serialized =
-                "ff0217010000000000010000000000000003fb92a2c3efaa177d8a51fc0cdf41905098d8b2cd900cbac94617492827e5f01580969800000000000000c2eb0b0000000000000000170995750207ecaf0ccf251c1265b92ad84f55366200c01c44bf33bea20a74d5acc12c5d6aafe82240f3571121382b77c871f4b33d6da2b62fdc6ca2cc6bc583abb2a69e7975be29e8d80a59c52bcff8d54514cf999e00c01c44bf33bea20a74d5acc12c5d6aafe82240f3571121382b77c871f4b33d6da2b62fdc6ca2cc6bc583abb2a69e7975be29e8d80a59c52bcff8d54514cf999e0292c299b739f0cb5e36133d85f51fff2fcc7745e8af4d0778908560c0874e3f2303e0436eabce1c09d88efab0004e61c5d6e47768aa8d2ab0cb9f14d523a38308";
+                "ff011e0100000000000100000000000000023efc1da7f315f3c533a4080e491f32cd4219731cef008976c3876539e1f192d3809698000000000000010000000000000000000000b693449adda7efc015d87944eae8b7c37eb1690af25db2b781b79f671b7848284de63f3cb898f9938c0b6203a11cace4aaa4b962eabe9c4a67c207a3f8baea3b4f4cef90a0b67a2bfd84cd61dcc771597f52656d005afa0050c85a2ac9b34accb0f47c6a9cc9eee831ac713e62e846898d1b75d6a33034680bce95f638c6dfabf8056f8afa9ef73a3c35741234faf01d0a346e3e7d005afa0050c85a2ac9b34accb0f47c6a9cc9eee831ac713e62e846898d1b75d6a33034680bce95f638c6dfabf8056f8afa9ef73a3c35741234faf01d0a346e3e7d02d6af0f5a85a7967d677b2f1f86e00b8ca37facb714467e12810a692d5bcbdfcac4e4c2d4b79a70c7366405339bf84a854308d20cb48652816a9cf37fb3e86e00";
 
         Exception thrown =
                 Assertions.assertThrows(

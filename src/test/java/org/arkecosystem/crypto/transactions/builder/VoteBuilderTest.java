@@ -15,7 +15,7 @@ class VoteBuilderTest {
         Transaction actual =
                 new VoteBuilder()
                         .addVote(
-                                "+034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192")
+                                "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192")
                         .version(2)
                         .nonce(3)
                         .sign("this is a top secret passphrase")
@@ -30,7 +30,7 @@ class VoteBuilderTest {
         assertEquals(
                 actualVotes,
                 Arrays.asList(
-                        "+034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"));
+                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"));
     }
 
     @Test
@@ -39,7 +39,7 @@ class VoteBuilderTest {
                 new VoteBuilder()
                         .addVotes(
                                 Arrays.asList(
-                                        "+034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"))
+                                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"))
                         .version(2)
                         .nonce(3)
                         .sign("this is a top secret passphrase")
@@ -54,16 +54,15 @@ class VoteBuilderTest {
         assertEquals(
                 actualVotes,
                 Arrays.asList(
-                        "+034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"));
+                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"));
     }
 
     @Test
     void buildUnvote() {
         Transaction actual =
                 new VoteBuilder()
-                        .addVote(
-                                "-034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193")
-                        .version(2)
+                        .addUnvote(
+                                "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193")
                         .nonce(3)
                         .sign("this is a top secret passphrase")
                         .transaction;
@@ -72,12 +71,12 @@ class VoteBuilderTest {
 
         HashMap actualHashMap = actual.toHashMap();
         HashMap actualAsset = (HashMap) actualHashMap.get("asset");
-        List actualVotes = (List) actualAsset.get("votes");
+        List actualUnvotes = (List) actualAsset.get("unvotes");
 
         assertEquals(
-                actualVotes,
+                actualUnvotes,
                 Arrays.asList(
-                        "-034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193"));
+                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193"));
     }
 
     @Test
@@ -86,9 +85,10 @@ class VoteBuilderTest {
                 new VoteBuilder()
                         .addVotes(
                                 Arrays.asList(
-                                        "-034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193",
-                                        "+034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"))
-                        .version(2)
+                                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"))
+                        .addUnvotes(
+                                Arrays.asList(
+                                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193"))
                         .nonce(3)
                         .sign("this is a top secret passphrase")
                         .transaction;
@@ -98,12 +98,17 @@ class VoteBuilderTest {
         HashMap actualHashMap = actual.toHashMap();
         HashMap actualAsset = (HashMap) actualHashMap.get("asset");
         List actualVotes = (List) actualAsset.get("votes");
+        List actualUnvotes = (List) actualAsset.get("unvotes");
 
         assertEquals(
                 actualVotes,
                 Arrays.asList(
-                        "-034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193",
-                        "+034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"));
+                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"));
+
+        assertEquals(
+                actualUnvotes,
+                Arrays.asList(
+                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193"));
     }
 
     @Test
@@ -111,7 +116,7 @@ class VoteBuilderTest {
         Transaction actual =
                 new VoteBuilder()
                         .addVote(
-                                "+034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192")
+                                "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192")
                         .version(2)
                         .nonce(3)
                         .sign("this is a top secret passphrase")

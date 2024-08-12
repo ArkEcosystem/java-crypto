@@ -4,10 +4,12 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.arkecosystem.crypto.encoding.Base58;
+import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
+import org.arkecosystem.crypto.utils.Address;
+import org.web3j.crypto.Keys;
 
 public class MultiPayment extends Transaction {
 
@@ -42,12 +44,13 @@ public class MultiPayment extends Transaction {
 
     @Override
     public byte[] serialize() {
-        ByteBuffer buffer = ByteBuffer.allocate(2 + this.asset.multiPayment.payments.size() * 29);
+        ByteBuffer buffer = ByteBuffer.allocate(2 + this.asset.multiPayment.payments.size() * 28);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         buffer.putShort((short) this.asset.multiPayment.payments.size());
         for (TransactionAsset.Payment current : this.asset.multiPayment.payments) {
             buffer.putLong(current.amount);
-            buffer.put(Base58.decodeChecked(current.recipientId));
+            byte[] recipientBytes = Hex.decode(Address.toBufferHexString(current.recipientId));
+            buffer.put(recipientBytes);
         }
         return buffer.array();
     }
@@ -55,12 +58,17 @@ public class MultiPayment extends Transaction {
     @Override
     public void deserialize(ByteBuffer buffer) {
         int paymentLength = buffer.getShort() & 0xff;
+
         for (int i = 0; i < paymentLength; i++) {
-            byte[] recipientId = new byte[21];
+            byte[] recipientId = new byte[20];
             long amount = buffer.getLong();
             buffer.get(recipientId);
             this.asset.multiPayment.payments.add(
-                    new TransactionAsset.Payment(amount, Base58.encodeChecked(recipientId)));
+                    new TransactionAsset.Payment(
+                            amount, Keys.toChecksumAddress("0x" + Hex.encode(recipientId))));
         }
+
+        this.asset.amount =
+                this.asset.multiPayment.payments.stream().mapToLong(p -> p.amount).sum();
     }
 }

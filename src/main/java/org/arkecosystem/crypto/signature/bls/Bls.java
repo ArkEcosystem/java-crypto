@@ -1,11 +1,10 @@
 package org.arkecosystem.crypto.signature.bls;
 
-import org.arkecosystem.crypto.utils.Schnorr;
-
 import com.herumi.mcl.G1;
 import com.herumi.mcl.G2;
 import com.herumi.mcl.GT;
 import com.herumi.mcl.Mcl;
+import org.arkecosystem.crypto.utils.Schnorr;
 
 public class Bls implements BlsConstants {
     static {

@@ -1,12 +1,8 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.utils.Schnorr;
 import org.arkecosystem.crypto.enums.Fees;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.arkecosystem.crypto.transactions.types.ValidatorRegistration;
-import org.miracl.core.BLS12381.BIG;
-import org.miracl.core.BLS12381.ECP2;
-import org.miracl.core.BLS12381.FP2;
 
 public class ValidatorRegistrationBuilder
         extends AbstractTransactionBuilder<ValidatorRegistrationBuilder> {
@@ -54,7 +50,8 @@ public class ValidatorRegistrationBuilder
         //     throw new IllegalArgumentException("Invalid BLS public key: point at infinity");
         // }
 
-        // // Verificar que el punto realmente pertenezca a la curva utilizando la ecuación de la curva
+        // // Verificar que el punto realmente pertenezca a la curva utilizando la ecuación de la
+        // curva
         // FP2 rhs = ECP2.RHS(publicKeyPoint.getX()); // Right-hand side: y^2 = x^3 + Ax + B
         // FP2 lhs = new FP2(publicKeyPoint.getY());
         // lhs.sqr(); // Left-hand side: y^2

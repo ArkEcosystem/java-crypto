@@ -3,29 +3,35 @@ package org.arkecosystem.crypto.transactions.builder;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
+import java.util.List;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
 
 class ValidatorRegistrationBuilderTest {
+
     @Test
     void build() {
-        Transaction actual =
-                new ValidatorRegistrationBuilder()
-                        .publicKeyAsset(
-                                "a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118")
-                        .nonce(3)
-                        .sign("this is a top secret passphrase")
-                        .transaction;
+        List<String> publicKeys = List.of(
+            "97f1d3a73197d7942695638c4fa9ac0fc3688c4f9774b905a14e3a3f171bac586c55e83ff97a1aeffb3af00adb22c6bb"
+            // "b4865127896c3c5286296a7b26e7c8002586a3ecf5832bfb59e689336f1f4c75e10491b9dfaed8dfb2c2fbe22d11fa93"
+            // From python
+            // "a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118"
+        );
 
-        HashMap actualHashMap = actual.toHashMap();
+        for (String publicKey : publicKeys) {
+            Transaction actual =
+                    new ValidatorRegistrationBuilder()
+                            .publicKeyAsset(publicKey)
+                            .nonce(3)
+                            .sign("this is a top secret passphrase")
+                            .transaction;
 
-        HashMap asset = (HashMap) actualHashMap.get("asset");
+            HashMap actualHashMap = actual.toHashMap();
+            HashMap asset = (HashMap) actualHashMap.get("asset");
 
-        assertEquals(
-                asset.get("validatorPublicKey"),
-                "a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118");
-
-        assertTrue(actual.verify());
+            assertEquals(asset.get("validatorPublicKey"), publicKey);
+            assertTrue(actual.verify());
+        }
     }
 
     @Test

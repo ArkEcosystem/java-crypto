@@ -26,8 +26,12 @@ dependencies {
     implementation 'org.bitcoinj:bitcoinj-core:0.16.3'
     implementation files('libs/secp256k1-api-0.0.1.jar')
     implementation files('libs/secp256k1-foreign-0.0.1.jar')
+    // @see https://github.com/miracl/core/tree/master/java
+    implementation files('libs/core-4.0-SNAPSHOT.jar')
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.google.guava:guava:30.2.0-jre'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+
 
     testImplementation 'org.slf4j:slf4j-api:2.0.13'
     testRuntimeOnly 'org.slf4j:slf4j-simple:2.0.13'
@@ -42,6 +46,7 @@ test {
     useJUnitPlatform()
     testLogging {
         events 'PASSED', 'FAILED', 'SKIPPED'
+        showStandardStreams = true
     }
 }
 

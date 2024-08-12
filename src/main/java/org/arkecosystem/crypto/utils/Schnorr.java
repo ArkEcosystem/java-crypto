@@ -1,4 +1,4 @@
-package org.arkecosystem.crypto;
+package org.arkecosystem.crypto.utils;
 
 public class Schnorr {
 

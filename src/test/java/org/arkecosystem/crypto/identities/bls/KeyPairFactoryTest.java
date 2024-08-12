@@ -1,10 +1,10 @@
-package org.arkecosystem.crypto.identities;
+package org.arkecosystem.crypto.identities.bls;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class BlsKeypairTest {
+public class KeyPairFactoryTest {
 
     private static final String PASSPHRASE =
             "question measure debris increase false feature journey height fun agent coach office only shell nation skill track upset distance behave easy devote floor shy";
@@ -15,8 +15,11 @@ public class BlsKeypairTest {
 
     @Test
     public void fromPassphrase() {
-        BlsKeypair.BlsKeyPair keyPair = BlsKeypair.fromPassphrase(PASSPHRASE);
-        assertEquals(EXPECTED_PRIVATE_KEY, keyPair.privateKey);
-        assertEquals(EXPECTED_PUBLIC_KEY, keyPair.publicKey);
+        KeyPairFactory factory = new KeyPairFactory();
+
+        KeyPairFactory.KeyPair keyPair = factory.fromPassphrase(PASSPHRASE);
+
+        assertEquals(EXPECTED_PRIVATE_KEY, keyPair.getPrivateKey());
+        assertEquals(EXPECTED_PUBLIC_KEY, keyPair.getPublicKey());
     }
 }

@@ -1,6 +1,6 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.Schnorr;
+import org.arkecosystem.crypto.utils.Schnorr;
 import org.arkecosystem.crypto.enums.Fees;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.arkecosystem.crypto.transactions.types.ValidatorRegistration;
@@ -37,34 +37,34 @@ public class ValidatorRegistrationBuilder
             throw new IllegalArgumentException("Invalid BLS public key length");
         }
 
-        byte[] publicKeyBytes = Schnorr.hexStringToByteArray(publicKeyHex);
+        // byte[] publicKeyBytes = Schnorr.hexStringToByteArray(publicKeyHex);
 
-        // Log para verificar longitud de bytes
-        System.out.println("publicKeyBytes length: " + publicKeyBytes.length);
+        // // Log para verificar longitud de bytes
+        // System.out.println("publicKeyBytes length: " + publicKeyBytes.length);
 
-        // Usar la función de la clase BLS para verificar si la clave pública es válida
-        ECP2 publicKeyPoint = ECP2.fromBytes(publicKeyBytes);
+        // // Usar la función de la clase BLS para verificar si la clave pública es válida
+        // ECP2 publicKeyPoint = ECP2.fromBytes(publicKeyBytes);
 
-        // Descomprimir la clave pública comprimida
-        BIG xBig = BIG.fromBytes(publicKeyBytes);
-        ECP2 publicKeyPoint = new ECP2(xBig, 0); // El segundo argumento es un bit de paridad
+        // // Descomprimir la clave pública comprimida
+        // BIG xBig = BIG.fromBytes(publicKeyBytes);
+        // ECP2 publicKeyPoint = new ECP2(xBig, 0); // El segundo argumento es un bit de paridad
 
-        // Verificar que el punto no esté en el infinito
-        if (publicKeyPoint.is_infinity()) {
-            throw new IllegalArgumentException("Invalid BLS public key: point at infinity");
-        }
+        // // Verificar que el punto no esté en el infinito
+        // if (publicKeyPoint.is_infinity()) {
+        //     throw new IllegalArgumentException("Invalid BLS public key: point at infinity");
+        // }
 
-        // Verificar que el punto realmente pertenezca a la curva utilizando la ecuación de la curva
-        FP2 rhs = ECP2.RHS(publicKeyPoint.getX()); // Right-hand side: y^2 = x^3 + Ax + B
-        FP2 lhs = new FP2(publicKeyPoint.getY());
-        lhs.sqr(); // Left-hand side: y^2
+        // // Verificar que el punto realmente pertenezca a la curva utilizando la ecuación de la curva
+        // FP2 rhs = ECP2.RHS(publicKeyPoint.getX()); // Right-hand side: y^2 = x^3 + Ax + B
+        // FP2 lhs = new FP2(publicKeyPoint.getY());
+        // lhs.sqr(); // Left-hand side: y^2
 
-        if (!lhs.equals(rhs)) {
-            throw new IllegalArgumentException(
-                    "Invalid BLS public key: does not satisfy curve equation");
-        }
+        // if (!lhs.equals(rhs)) {
+        //     throw new IllegalArgumentException(
+        //             "Invalid BLS public key: does not satisfy curve equation");
+        // }
 
-        System.out.println("BLS public key is valid.");
+        // System.out.println("BLS public key is valid.");
 
         // Verificación usando PAIR.G2member
         // boolean isValid = PAIR.G2member(publicKeyPoint);

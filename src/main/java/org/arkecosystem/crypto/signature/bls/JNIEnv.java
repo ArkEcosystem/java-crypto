@@ -24,6 +24,7 @@ public class JNIEnv {
     }
 
     private Boolean sourceExist(String sourceName) {
+        System.out.println("[JNIDEV]:CHECKING JNI LIB:" + System.getProperty("java.library.path"));
         String[] libraryPaths = System.getProperty("java.library.path").split(File.pathSeparator);
         for (String path : libraryPaths) {
             File f = new File(path, sourceName);

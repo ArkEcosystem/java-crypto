@@ -3,6 +3,7 @@ package org.arkecosystem.crypto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.arkecosystem.crypto.encoding.Hex;
+import org.arkecosystem.crypto.utils.Schnorr;
 import org.junit.jupiter.api.Test;
 
 class SchnorrTest {

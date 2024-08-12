@@ -2,8 +2,8 @@ package org.arkecosystem.crypto.signature;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.arkecosystem.crypto.Schnorr;
 import org.arkecosystem.crypto.identities.PrivateKey;
+import org.arkecosystem.crypto.utils.Schnorr;
 import org.bitcoinj.core.ECKey;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

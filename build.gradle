@@ -31,6 +31,14 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.google.guava:guava:30.2.0-jre'
     implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+    // // https://mvnrepository.com/artifact/io.github.novacrypto/BIP39
+    // implementation 'io.github.novacrypto:BIP39:0.1.9'
+    // // https://mvnrepository.com/artifact/com.github.komputing.kethereum/bip39
+    // implementation 'com.github.komputing.kethereum:bip39:0.85.7'
+    // https://mvnrepository.com/artifact/org.nightcode/jbip39
+    implementation 'org.nightcode:jbip39:0.1.1'
+
+
 
 
     testImplementation 'org.slf4j:slf4j-api:2.0.13'

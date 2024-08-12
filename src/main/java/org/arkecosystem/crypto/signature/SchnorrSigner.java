@@ -1,6 +1,6 @@
 package org.arkecosystem.crypto.signature;
 
-import org.arkecosystem.crypto.Schnorr;
+import org.arkecosystem.crypto.utils.Schnorr;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.secp256k1.api.P256K1KeyPair;
 import org.bitcoinj.secp256k1.api.P256k1PrivKey;

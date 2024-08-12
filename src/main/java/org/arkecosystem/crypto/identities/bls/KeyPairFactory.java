@@ -1,28 +1,20 @@
 package org.arkecosystem.crypto.identities.bls;
 
-import org.bouncycastle.math.ec.ECPoint;
-import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
-import org.bouncycastle.math.ec.rfc8032.Ed25519;
+import com.herumi.mcl.Fr;
 import com.herumi.mcl.G1;
-import com.herumi.mcl.G2;
 import com.herumi.mcl.Mcl;
 import com.herumi.mcl.MclConstants;
-import com.herumi.mcl.Fr;
-
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import org.arkecosystem.crypto.signature.bls.Bls;
+import org.arkecosystem.crypto.signature.bls.JNIEnv;
+import org.bitcoinj.core.Sha256Hash;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.generators.HKDFBytesGenerator;
-import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.crypto.params.HKDFParameters;
-import org.bouncycastle.util.encoders.Hex;
 import org.nightcode.bip39.Bip39;
 import org.nightcode.bip39.Bip39Exception;
 import org.nightcode.bip39.dictionary.EnglishDictionary;
-import org.arkecosystem.crypto.signature.bls.Bls;
-import org.arkecosystem.crypto.signature.bls.BlsConstants;
-import org.arkecosystem.crypto.signature.bls.JNIEnv;
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import org.bitcoinj.core.Sha256Hash;
 
 public class KeyPairFactory {
 
@@ -32,7 +24,10 @@ public class KeyPairFactory {
         env.prepare();
         System.loadLibrary(lib);
     }
-    private static final BigInteger BLS_R = new BigInteger("52435875175126190479447740508185965837690552500527637822603658699938581184513");
+
+    private static final BigInteger BLS_R =
+            new BigInteger(
+                    "52435875175126190479447740508185965837690552500527637822603658699938581184513");
 
     public KeyPairFactory() {
         Mcl.SystemInit(MclConstants.BLS12_381);
@@ -76,7 +71,7 @@ public class KeyPairFactory {
         byte[][] lamport1 = ikmToLamportSK(notParentSK, index);
 
         byte[][] hashedParts = new byte[lamport0.length + lamport1.length][32];
-        
+
         for (int i = 0; i < lamport0.length; i++) {
             hashedParts[i] = Sha256Hash.hash(lamport0[i]);
         }
@@ -87,7 +82,7 @@ public class KeyPairFactory {
 
         byte[] concatenated = concatArrays(hashedParts);
 
-        return Sha256Hash.hash(concatenated); 
+        return Sha256Hash.hash(concatenated);
     }
 
     private static byte[][] ikmToLamportSK(byte[] ikm, byte[] salt) {
@@ -108,25 +103,25 @@ public class KeyPairFactory {
     private static byte[] hkdfModR(byte[] ikm) {
         try {
             byte[] salt = "BLS-SIG-KEYGEN-SALT-".getBytes(StandardCharsets.UTF_8);
-            
-            byte[] input = concat(ikm, new byte[]{0x00});
-            
-            byte[] label = new byte[]{0x00, 0x30};
+
+            byte[] input = concat(ikm, new byte[] {0x00});
+
+            byte[] label = new byte[] {0x00, 0x30};
 
             byte[] okm = null;
-            
+
             BigInteger SK = BigInteger.ZERO;
 
             while (SK.equals(BigInteger.ZERO)) {
                 salt = Sha256Hash.hash(salt);
-                
+
                 HKDFParameters hkdfParams = new HKDFParameters(input, salt, label);
                 HKDFBytesGenerator hkdf = new HKDFBytesGenerator(new SHA256Digest());
                 hkdf.init(hkdfParams);
 
                 okm = new byte[48];
                 hkdf.generateBytes(okm, 0, okm.length);
-                
+
                 SK = new BigInteger(1, okm).mod(BLS_R);
             }
 
@@ -157,7 +152,6 @@ public class KeyPairFactory {
         }
         return result;
     }
-
 
     private static byte[] i2osp(BigInteger value, int length) {
         byte[] result = new byte[length];
@@ -199,7 +193,7 @@ public class KeyPairFactory {
         // Convertir el array de bytes en un elemento Fr (clave privada)
         Fr privateKey = new Fr();
         privateKey.setLittleEndianMod(privateKeyBytes);
-        
+
         // Generar la clave pública utilizando directamente el punto base G1 predefinido
         G1 publicKey = new G1();
 
@@ -217,7 +211,8 @@ public class KeyPairFactory {
 
         System.out.println("Private key: " + privateKeyHex);
         System.out.println("Public key: " + publicKeyHex);
-        System.out.println("Public key1 b4865127896c3c5286296a7b26e7c8002586a3ecf5832bfb59e689336f1f4c75e10491b9dfaed8dfb2c2fbe22d11fa93");
+        System.out.println(
+                "Public key1 b4865127896c3c5286296a7b26e7c8002586a3ecf5832bfb59e689336f1f4c75e10491b9dfaed8dfb2c2fbe22d11fa93");
 
         return new KeyPair(privateKeyHex, publicKeyHex);
     }

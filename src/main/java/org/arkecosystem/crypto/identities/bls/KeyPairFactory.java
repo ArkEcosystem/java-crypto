@@ -1,11 +1,17 @@
 package org.arkecosystem.crypto.identities.bls;
 
+import org.bouncycastle.math.ec.ECPoint;
+import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
+import org.bouncycastle.math.ec.rfc8032.Ed25519;
 import com.herumi.mcl.G1;
 import com.herumi.mcl.Mcl;
 import com.herumi.mcl.Fr;
+
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.generators.HKDFBytesGenerator;
+import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.crypto.params.HKDFParameters;
+import org.bouncycastle.util.encoders.Hex;
 import org.nightcode.bip39.Bip39;
 import org.nightcode.bip39.Bip39Exception;
 import org.nightcode.bip39.dictionary.EnglishDictionary;
@@ -13,8 +19,6 @@ import org.arkecosystem.crypto.signature.bls.BlsConstants;
 import org.arkecosystem.crypto.signature.bls.JNIEnv;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import org.bitcoinj.core.Sha256Hash;
 
 public class KeyPairFactory {
@@ -39,9 +43,9 @@ public class KeyPairFactory {
 
             byte[] masterKey = deriveMaster(seed);
 
-            byte[] child = deriveChild(masterKey, BigInteger.ZERO);
+            byte[] privateKey = deriveChild(masterKey, BigInteger.ZERO);
 
-            return fromPrivateKey(child);
+            return fromPrivateKey(privateKey);
         } catch (Bip39Exception e) {
             throw new RuntimeException("Failed to generate seed from passphrase", e);
         }
@@ -185,22 +189,31 @@ public class KeyPairFactory {
     }
 
     public KeyPair fromPrivateKey(byte[] privateKeyBytes) {
-        try {
-            Fr privateKey = new Fr();
-            privateKey.setLittleEndianMod(privateKeyBytes);
+        // Convertir el array de bytes en un elemento Fr (clave privada)
+        Fr privateKey = new Fr();
+        privateKey.setLittleEndianMod(privateKeyBytes);
 
-            G1 publicKey = new G1();
-            Mcl.hashAndMapToG1(publicKey, new byte[]{1});
-            Mcl.mul(publicKey, publicKey, privateKey);
+        // Crear un punto en G1 (clave pública) usando el hashAndMapToG1
+        G1 generator = new G1();
+        Mcl.hashAndMapToG1(generator, new byte[]{1}); // Mapea un punto base en la curva
 
-            String privateKeyHex = privateKey.toString();
-            String publicKeyHex = publicKey.toString();
+        // Generar la clave pública multiplicando el punto base por la clave privada
+        G1 publicKey = new G1();
+        Mcl.mul(publicKey, generator, privateKey);
 
-            return new KeyPair(privateKeyHex, publicKeyHex);
-        } catch (RuntimeException e) {
-            throw new IllegalArgumentException("Invalid private key provided.", e);
-        }
+        // Serializar la clave pública a un array de bytes
+        byte[] publicKeyBytes = publicKey.serialize();
+
+        // Convertir las claves privadas y públicas a cadenas hexadecimales
+        String privateKeyHex = bytesToHex(privateKeyBytes);
+        String publicKeyHex = bytesToHex(publicKeyBytes);
+
+        System.out.println("Private key: " + privateKeyHex);
+        System.out.println("Public key: " + publicKeyHex);
+
+        return new KeyPair(privateKeyHex, publicKeyHex);
     }
+    
 
     public static class KeyPair {
         private final String privateKey;

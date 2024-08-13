@@ -2,11 +2,15 @@ package org.arkecosystem.crypto.identities.bls;
 
 import com.herumi.mcl.Fr;
 import com.herumi.mcl.G1;
+import com.herumi.mcl.G2;
 import com.herumi.mcl.Mcl;
 import com.herumi.mcl.MclConstants;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+
+import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.signature.bls.Bls;
+import org.arkecosystem.crypto.signature.bls.BlsConstants;
 import org.arkecosystem.crypto.signature.bls.JNIEnv;
 import org.bitcoinj.core.Sha256Hash;
 import org.bouncycastle.crypto.digests.SHA256Digest;
@@ -177,43 +181,24 @@ public class KeyPairFactory {
         return result;
     }
 
-    private static String bytesToHex(byte[] bytes) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) {
-            sb.append(String.format("%02x", b));
-        }
-        return sb.toString();
-    }
-
     public KeyPair fromPrivateKey(byte[] privateKeyBytes) {
-        if (privateKeyBytes.length != 32) {
-            throw new IllegalArgumentException("Invalid private key length");
-        }
-
-        // Convertir el array de bytes en un elemento Fr (clave privada)
         Fr privateKey = new Fr();
         privateKey.setLittleEndianMod(privateKeyBytes);
-
-        // Generar la clave pública utilizando directamente el punto base G1 predefinido
+    
+        G1 basePoint = new G1();
+        basePoint.setStr(BlsConstants.BaseG1);
+    
         G1 publicKey = new G1();
-
-        G1 Q = new G1();
-        Q.setStr(Bls.BaseG1);
-
-        Mcl.mul(publicKey, Q, privateKey);
-
-        // Serializar la clave pública a un array de bytes
+        Mcl.mul(publicKey, basePoint, privateKey);
+    
         byte[] publicKeyBytes = publicKey.serialize();
-
-        // Convertir las claves privadas y públicas a cadenas hexadecimales
-        String privateKeyHex = bytesToHex(privateKeyBytes);
-        String publicKeyHex = bytesToHex(publicKeyBytes);
-
+        String privateKeyHex = Hex.encode(privateKeyBytes);
+        String publicKeyHex = Hex.encode(publicKeyBytes);
+    
         System.out.println("Private key: " + privateKeyHex);
         System.out.println("Public key: " + publicKeyHex);
-        System.out.println(
-                "Public key1 b4865127896c3c5286296a7b26e7c8002586a3ecf5832bfb59e689336f1f4c75e10491b9dfaed8dfb2c2fbe22d11fa93");
-
+        System.out.println("Expected Public key: b4865127896c3c5286296a7b26e7c8002586a3ecf5832bfb59e689336f1f4c75e10491b9dfaed8dfb2c2fbe22d11fa93");
+    
         return new KeyPair(privateKeyHex, publicKeyHex);
     }
 

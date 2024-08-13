@@ -2,14 +2,11 @@ package org.arkecosystem.crypto.identities.bls;
 
 import com.herumi.mcl.Fr;
 import com.herumi.mcl.G1;
-import com.herumi.mcl.G2;
 import com.herumi.mcl.Mcl;
 import com.herumi.mcl.MclConstants;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-
 import org.arkecosystem.crypto.encoding.Hex;
-import org.arkecosystem.crypto.signature.bls.Bls;
 import org.arkecosystem.crypto.signature.bls.BlsConstants;
 import org.arkecosystem.crypto.signature.bls.JNIEnv;
 import org.bitcoinj.core.Sha256Hash;
@@ -184,21 +181,22 @@ public class KeyPairFactory {
     public KeyPair fromPrivateKey(byte[] privateKeyBytes) {
         Fr privateKey = new Fr();
         privateKey.setLittleEndianMod(privateKeyBytes);
-    
+
         G1 basePoint = new G1();
         basePoint.setStr(BlsConstants.BaseG1);
-    
+
         G1 publicKey = new G1();
         Mcl.mul(publicKey, basePoint, privateKey);
-    
+
         byte[] publicKeyBytes = publicKey.serialize();
         String privateKeyHex = Hex.encode(privateKeyBytes);
         String publicKeyHex = Hex.encode(publicKeyBytes);
-    
+
         System.out.println("Private key: " + privateKeyHex);
         System.out.println("Public key: " + publicKeyHex);
-        System.out.println("Expected Public key: b4865127896c3c5286296a7b26e7c8002586a3ecf5832bfb59e689336f1f4c75e10491b9dfaed8dfb2c2fbe22d11fa93");
-    
+        System.out.println(
+                "Expected Public key: b4865127896c3c5286296a7b26e7c8002586a3ecf5832bfb59e689336f1f4c75e10491b9dfaed8dfb2c2fbe22d11fa93");
+
         return new KeyPair(privateKeyHex, publicKeyHex);
     }
 

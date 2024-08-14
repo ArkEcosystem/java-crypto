@@ -74,7 +74,6 @@ class ValidatorRegistrationBuilderTest {
     }
 
     @Test
-   
     void buildMultiSignature() {
         Transaction actual =
                 new ValidatorRegistrationBuilder()

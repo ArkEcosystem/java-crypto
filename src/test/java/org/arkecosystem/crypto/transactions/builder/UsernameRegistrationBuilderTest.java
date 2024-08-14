@@ -7,13 +7,12 @@ import java.util.List;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
 
-class ValidatorRegistrationBuilderTest {
+class UsernameRegistrationBuilderTest {
     @Test
     void build() {
         Transaction actual =
-                new ValidatorRegistrationBuilder()
-                        .publicKeyAsset(
-                                "a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118")
+                new UsernameRegistrationBuilder()
+                        .usernameAsset("alfonsobries")
                         .nonce(3)
                         .sign("this is a top secret passphrase")
                         .transaction;
@@ -22,9 +21,7 @@ class ValidatorRegistrationBuilderTest {
 
         HashMap asset = (HashMap) actualHashMap.get("asset");
 
-        assertEquals(
-                asset.get("validatorPublicKey"),
-                "a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118");
+        assertEquals(asset.get("username"), "alfonsobries");
 
         assertTrue(actual.verify());
     }
@@ -32,9 +29,8 @@ class ValidatorRegistrationBuilderTest {
     @Test
     void buildMultiSignature() {
         Transaction actual =
-                new ValidatorRegistrationBuilder()
-                        .publicKeyAsset(
-                                "a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118")
+                new UsernameRegistrationBuilder()
+                        .usernameAsset("alfonsobries")
                         .nonce(3)
                         .multiSign("secret 1", 0)
                         .multiSign("secret 2", 1)

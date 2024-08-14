@@ -4,9 +4,7 @@ import com.google.gson.GsonBuilder;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.arkecosystem.crypto.signature.SchnorrSigner;
@@ -93,7 +91,7 @@ public abstract class Transaction {
         byte[] signature = Hex.decode(this.signature);
         byte[] hash = Sha256Hash.hash(Serializer.serialize(this, true, true, false));
 
-        return verifier(this.signature).verify(hash, keys, signature);
+        return verifier().verify(hash, keys, signature);
     }
 
     public boolean secondVerify(String secondPublicKey) {
@@ -102,48 +100,7 @@ public abstract class Transaction {
         byte[] signature = Hex.decode(this.secondSignature);
         byte[] hash = Sha256Hash.hash(Serializer.serialize(this, false, true, false));
 
-        return verifier(this.secondSignature).verify(hash, keys, signature);
-    }
-
-    public boolean multiVerify(int min, List<String> publicKeys) {
-        if (publicKeys.isEmpty()) {
-            throw new RuntimeException("The multi signature asset is invalid.");
-        }
-
-        byte[] hash = Sha256Hash.hash(Serializer.serialize(this, true, true, true));
-
-        Set<Integer> publicKeyIndexes = new HashSet<>();
-        int verifiedSignatures = 0;
-        boolean verified = false;
-        for (int i = 0; i < this.signatures.size(); i++) {
-            String signature = this.signatures.get(i);
-            int publicKeyIndex = Integer.parseInt(signature.substring(0, 2), 16);
-
-            if (!publicKeyIndexes.contains(publicKeyIndex)) {
-                publicKeyIndexes.add(publicKeyIndex);
-            } else {
-                throw new RuntimeException("Duplicate participant in multi signature");
-            }
-
-            String partialSignature = signature.substring(2);
-            String publicKey = publicKeys.get(publicKeyIndex);
-
-            if (verifier(partialSignature)
-                    .verify(
-                            hash,
-                            ECKey.fromPublicOnly(Hex.decode(publicKey)),
-                            Hex.decode(partialSignature))) {
-                verifiedSignatures++;
-            }
-
-            if (verifiedSignatures == min) {
-                verified = true;
-                break;
-            } else if (signatures.size() - (i + 1 - verifiedSignatures) < min) {
-                break;
-            }
-        }
-        return verified;
+        return verifier().verify(hash, keys, signature);
     }
 
     public String toJson() {
@@ -206,7 +163,7 @@ public abstract class Transaction {
         return new SchnorrSigner();
     }
 
-    private Verifier verifier(String signature) {
+    private Verifier verifier() {
         return new SchnorrVerifier();
     }
 }

@@ -13,6 +13,7 @@ public class TransactionAsset {
     public HashMap<String, Object> customAsset = new HashMap<>();
     public long amount = 0L;
     public String validatorPublicKey;
+    public String username;
 
     public static class Signature {
         public String publicKey;

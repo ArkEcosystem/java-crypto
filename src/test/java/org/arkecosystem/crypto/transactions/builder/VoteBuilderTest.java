@@ -1,6 +1,7 @@
 package org.arkecosystem.crypto.transactions.builder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -127,5 +128,30 @@ class VoteBuilderTest {
         assertTrue(
                 actual.secondVerify(
                         "03699e966b2525f9088a6941d8d94f7869964a000efe65783d78ac82e1199fe609"));
+    }
+
+    @Test
+    void buildMultiSignature() {
+        Transaction actual =
+                new VoteBuilder()
+                        .addVote(
+                                "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192")
+                        .version(2)
+                        .nonce(3)
+                        .multiSign("secret 1", 0)
+                        .multiSign("secret 2", 1)
+                        .multiSign("secret 3", 2)
+                        .sign("this is a top secret passphrase")
+                        .transaction;
+
+        assertTrue(actual.verify());
+
+        HashMap actualHashMap = actual.toHashMap();
+
+        assertNotNull(actualHashMap.get("signatures"));
+
+        List<String> actualSignatures = (List<String>) actualHashMap.get("signatures");
+
+        assertEquals(3, actualSignatures.size());
     }
 }

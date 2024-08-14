@@ -1,9 +1,11 @@
 package org.arkecosystem.crypto.transactions.builder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
+import java.util.List;
 import org.arkecosystem.crypto.enums.Fees;
 import org.arkecosystem.crypto.transactions.types.Transaction;
 import org.junit.jupiter.api.Test;
@@ -61,5 +63,32 @@ class TransferBuilderTest {
 
         HashMap actualHashMap = actual.toHashMap();
         assertEquals(actualHashMap.get("secondSignature"), actual.secondSignature);
+    }
+
+    @Test
+    void buildMultiSignature() {
+        Transaction actual =
+                new TransferBuilder()
+                        .recipient("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A")
+                        .amount(133380000000L)
+                        .expiration(100000)
+                        .vendorField("This is a transaction from Java")
+                        .nonce(3)
+                        .fee(Fees.TRANSFER.getValue())
+                        .multiSign("secret 1", 0)
+                        .multiSign("secret 2", 1)
+                        .multiSign("secret 3", 2)
+                        .sign("secret 1")
+                        .transaction;
+
+        assertTrue(actual.verify());
+
+        HashMap actualHashMap = actual.toHashMap();
+
+        assertNotNull(actualHashMap.get("signatures"));
+
+        List<String> actualSignatures = (List<String>) actualHashMap.get("signatures");
+
+        assertEquals(3, actualSignatures.size());
     }
 }

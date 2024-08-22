@@ -158,7 +158,6 @@ public abstract class Transaction {
         return serialize(skipSignature, false, false);
     }
 
-    // Overloaded method with no parameters, defaulting all to false
     public byte[] serialize() {
         return serialize(false, false, false);
     }

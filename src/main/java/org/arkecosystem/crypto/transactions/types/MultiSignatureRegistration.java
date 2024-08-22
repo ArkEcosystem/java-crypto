@@ -32,7 +32,7 @@ public class MultiSignatureRegistration extends Transaction {
     }
 
     @Override
-    public byte[] serialize() {
+    public byte[] serializeData() {
         ByteBuffer buffer =
                 ByteBuffer.allocate(2 + this.asset.multiSignature.publicKeys.size() * 33);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
@@ -48,7 +48,7 @@ public class MultiSignatureRegistration extends Transaction {
     }
 
     @Override
-    public void deserialize(ByteBuffer buffer) {
+    public void deserializeData(ByteBuffer buffer) {
         this.asset.multiSignature.min = buffer.get();
 
         int publicKeyLength = buffer.get();

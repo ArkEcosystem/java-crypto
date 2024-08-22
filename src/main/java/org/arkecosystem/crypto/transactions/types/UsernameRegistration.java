@@ -27,7 +27,7 @@ public class UsernameRegistration extends Transaction {
     }
 
     @Override
-    public byte[] serialize() {
+    public byte[] serializeData() {
         byte[] username = this.asset.username.getBytes();
 
         ByteBuffer buffer = ByteBuffer.allocate(username.length + 1);
@@ -41,7 +41,7 @@ public class UsernameRegistration extends Transaction {
     }
 
     @Override
-    public void deserialize(ByteBuffer buffer) {
+    public void deserializeData(ByteBuffer buffer) {
         int usernameLength = buffer.get() & 0xff;
 
         byte[] username = new byte[usernameLength];

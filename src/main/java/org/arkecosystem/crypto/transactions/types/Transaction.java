@@ -145,9 +145,9 @@ public abstract class Transaction {
         return map;
     }
 
-    public abstract byte[] serialize();
+    public abstract byte[] serializeData();
 
-    public abstract void deserialize(ByteBuffer buffer);
+    public abstract void deserializeData(ByteBuffer buffer);
 
     public abstract int getTransactionType();
 

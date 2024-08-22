@@ -21,12 +21,12 @@ class DeserializerTest {
         deserializer.setNewTransactionType(
                 new Transaction() {
                     @Override
-                    public byte[] serialize() {
+                    public byte[] serializeData() {
                         return new byte[0];
                     }
 
                     @Override
-                    public void deserialize(ByteBuffer buffer) {}
+                    public void deserializeData(ByteBuffer buffer) {}
 
                     @Override
                     public int getTransactionType() {
@@ -58,12 +58,12 @@ class DeserializerTest {
         deserializer.setNewTransactionType(
                 new Transaction() {
                     @Override
-                    public byte[] serialize() {
+                    public byte[] serializeData() {
                         return new byte[0];
                     }
 
                     @Override
-                    public void deserialize(ByteBuffer buffer) {}
+                    public void deserializeData(ByteBuffer buffer) {}
 
                     @Override
                     public int getTransactionType() {

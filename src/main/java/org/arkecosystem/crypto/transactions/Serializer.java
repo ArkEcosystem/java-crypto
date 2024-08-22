@@ -33,7 +33,7 @@ public class Serializer {
         byte[] common = serializeCommon();
         byte[] vendorField = serializeVendorField();
 
-        byte[] typeBuffer = this.transaction.serialize();
+        byte[] typeBuffer = this.transaction.serializeData();
 
         byte[] signatures =
                 serializeSignatures(skipSignature, skipSecondSignature, skipMultiSignature);

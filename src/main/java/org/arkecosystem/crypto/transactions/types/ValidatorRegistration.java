@@ -28,7 +28,7 @@ public class ValidatorRegistration extends Transaction {
     }
 
     @Override
-    public byte[] serialize() {
+    public byte[] serializeData() {
         ByteBuffer buffer = ByteBuffer.allocate(48);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         buffer.put(Hex.decode(this.asset.validatorPublicKey));
@@ -37,7 +37,7 @@ public class ValidatorRegistration extends Transaction {
     }
 
     @Override
-    public void deserialize(ByteBuffer buffer) {
+    public void deserializeData(ByteBuffer buffer) {
         byte[] validatorPublicKey = new byte[48];
         buffer.get(validatorPublicKey);
         this.asset.validatorPublicKey = Hex.encode(validatorPublicKey);

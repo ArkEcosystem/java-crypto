@@ -29,7 +29,7 @@ public class Vote extends Transaction {
     }
 
     @Override
-    public byte[] serialize() {
+    public byte[] serializeData() {
         ByteBuffer buffer =
                 ByteBuffer.allocate(
                         (1 + this.asset.votes.size() * 33) + (1 + this.asset.unvotes.size() * 33));
@@ -49,7 +49,7 @@ public class Vote extends Transaction {
     }
 
     @Override
-    public void deserialize(ByteBuffer buffer) {
+    public void deserializeData(ByteBuffer buffer) {
         int voteLength = buffer.get();
 
         for (int i = 0; i < voteLength; i++) {

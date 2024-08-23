@@ -22,10 +22,10 @@ public class UsernameResignation extends Transaction {
     }
 
     @Override
-    public byte[] serialize() {
+    public byte[] serializeData() {
         return new byte[0];
     }
 
     @Override
-    public void deserialize(ByteBuffer buffer) {}
+    public void deserializeData(ByteBuffer buffer) {}
 }

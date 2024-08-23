@@ -31,7 +31,7 @@ public class Transfer extends Transaction {
     }
 
     @Override
-    public byte[] serialize() {
+    public byte[] serializeData() {
         ByteBuffer buffer = ByteBuffer.allocate(32);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         buffer.putLong(this.amount);
@@ -45,7 +45,7 @@ public class Transfer extends Transaction {
     }
 
     @Override
-    public void deserialize(ByteBuffer buffer) {
+    public void deserializeData(ByteBuffer buffer) {
         buffer.order(ByteOrder.LITTLE_ENDIAN);
 
         this.amount = buffer.getLong();

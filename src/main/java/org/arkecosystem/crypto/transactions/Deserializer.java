@@ -61,7 +61,7 @@ public class Deserializer {
         deserializeCommon();
         deserializeVendorField();
 
-        this.transaction.deserialize(this.buffer);
+        this.transaction.deserializeData(this.buffer);
 
         deserializeSignatures();
 

@@ -30,7 +30,7 @@ public class SecondSignatureRegistration extends Transaction {
     }
 
     @Override
-    public byte[] serialize() {
+    public byte[] serializeData() {
         ByteBuffer buffer = ByteBuffer.allocate(33);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         buffer.put(Hex.decode(this.asset.signature.publicKey));
@@ -38,7 +38,7 @@ public class SecondSignatureRegistration extends Transaction {
     }
 
     @Override
-    public void deserialize(ByteBuffer buffer) {
+    public void deserializeData(ByteBuffer buffer) {
         byte[] publicKeyBuffer = new byte[33];
         buffer.get(publicKeyBuffer);
         this.asset.signature.publicKey = Hex.encode(publicKeyBuffer);

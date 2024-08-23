@@ -41,14 +41,14 @@ public abstract class Transaction {
     }
 
     public String getId() {
-        return Hex.encode(Sha256Hash.hash(Serializer.serialize(this)));
+        return Hex.encode(Sha256Hash.hash(this.serialize()));
     }
 
     public Transaction sign(String passphrase) {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
 
         this.senderPublicKey = privateKey.getPublicKeyAsHex();
-        Sha256Hash hash = Sha256Hash.of(Serializer.serialize(this, true, true, false));
+        Sha256Hash hash = Sha256Hash.of(this.serialize(true, true, false));
 
         this.signature = Hex.encode(signer().sign(hash.getBytes(), privateKey));
 
@@ -58,7 +58,7 @@ public abstract class Transaction {
     public Transaction secondSign(String passphrase) {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
 
-        Sha256Hash hash = Sha256Hash.of(Serializer.serialize(this, false, true, false));
+        Sha256Hash hash = Sha256Hash.of(this.serialize(false, true));
 
         this.secondSignature = Hex.encode(signer().sign(hash.getBytes(), privateKey));
 
@@ -89,7 +89,7 @@ public abstract class Transaction {
         ECKey keys = ECKey.fromPublicOnly(Hex.decode(this.senderPublicKey));
 
         byte[] signature = Hex.decode(this.signature);
-        byte[] hash = Sha256Hash.hash(Serializer.serialize(this, true, true, false));
+        byte[] hash = Sha256Hash.hash(this.serialize(true, true, false));
 
         return verifier().verify(hash, keys, signature);
     }
@@ -98,7 +98,7 @@ public abstract class Transaction {
         ECKey keys = ECKey.fromPublicOnly(Hex.decode(secondPublicKey));
 
         byte[] signature = Hex.decode(this.secondSignature);
-        byte[] hash = Sha256Hash.hash(Serializer.serialize(this, false, true, false));
+        byte[] hash = Sha256Hash.hash(this.serialize(false, true, false));
 
         return verifier().verify(hash, keys, signature);
     }
@@ -145,9 +145,26 @@ public abstract class Transaction {
         return map;
     }
 
-    public abstract byte[] serialize();
+    public byte[] serialize(
+            boolean skipSignature, boolean skipSecondSignature, boolean skipMultiSignature) {
+        return Serializer.serialize(this, skipSignature, skipSecondSignature, skipMultiSignature);
+    }
 
-    public abstract void deserialize(ByteBuffer buffer);
+    public byte[] serialize(boolean skipSignature, boolean skipSecondSignature) {
+        return serialize(skipSignature, skipSecondSignature, false);
+    }
+
+    public byte[] serialize(boolean skipSignature) {
+        return serialize(skipSignature, false, false);
+    }
+
+    public byte[] serialize() {
+        return serialize(false, false, false);
+    }
+
+    public abstract byte[] serializeData();
+
+    public abstract void deserializeData(ByteBuffer buffer);
 
     public abstract int getTransactionType();
 

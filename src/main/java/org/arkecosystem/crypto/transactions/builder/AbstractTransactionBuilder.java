@@ -1,20 +1,30 @@
 package org.arkecosystem.crypto.transactions.builder;
 
 import org.arkecosystem.crypto.configuration.Network;
-import org.arkecosystem.crypto.transactions.types.Transaction;
+import org.arkecosystem.crypto.enums.CoreTransactionTypes;
+import org.arkecosystem.crypto.enums.Fees;
+import org.arkecosystem.crypto.enums.TransactionTypeGroup;
+import org.arkecosystem.crypto.transactions.TransactionAsset;
+import org.arkecosystem.crypto.transactions.types.AbstractTransaction;
 
 public abstract class AbstractTransactionBuilder<
         TBuilder extends AbstractTransactionBuilder<TBuilder>> {
-    public final Transaction transaction;
+    public final AbstractTransaction transaction;
 
     public AbstractTransactionBuilder() {
         this.transaction = getTransactionInstance();
-        this.transaction.type = this.transaction.getTransactionType();
-        this.transaction.version = 2;
-        this.transaction.network = Network.get().version();
-        this.transaction.typeGroup = this.transaction.getTransactionTypeGroup();
-        this.transaction.nonce = 0;
+        this.transaction.type = CoreTransactionTypes.EVM_CALL.getValue();
+        this.transaction.typeGroup = TransactionTypeGroup.CORE.getValue();
         this.transaction.amount = 0;
+        this.transaction.senderPublicKey = "";
+        this.transaction.fee = Fees.EVM.getValue();
+        this.transaction.version = 1;
+        this.transaction.network = Network.get().version();
+        this.transaction.nonce = 1;
+
+        this.transaction.asset = new TransactionAsset();
+    this.transaction.asset.evmCall.gasLimit = 1000000; // Default gas limit
+    this.transaction.asset.evmCall.payload = ""; 
     }
 
     public TBuilder version(int version) {
@@ -63,7 +73,7 @@ public abstract class AbstractTransactionBuilder<
         return this.instance();
     }
 
-    protected abstract Transaction getTransactionInstance();
+    protected abstract AbstractTransaction getTransactionInstance();
 
     protected abstract TBuilder instance();
 }

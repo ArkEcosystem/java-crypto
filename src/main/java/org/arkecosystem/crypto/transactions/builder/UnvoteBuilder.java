@@ -1,53 +1,17 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import java.util.List;
-import org.arkecosystem.crypto.enums.Fees;
-import org.arkecosystem.crypto.identities.Address;
-import org.arkecosystem.crypto.transactions.types.Transaction;
-import org.arkecosystem.crypto.transactions.types.Vote;
+import org.arkecosystem.crypto.transactions.types.AbstractTransaction;
+import org.arkecosystem.crypto.transactions.types.Unvote;
 
-public class VoteBuilder extends AbstractTransactionBuilder<VoteBuilder> {
+public class UnvoteBuilder extends AbstractTransactionBuilder<UnvoteBuilder> {
 
-    public VoteBuilder() {
-        super();
-        this.transaction.fee = Fees.VOTE.getValue();
-    }
-
-    public VoteBuilder addVotes(List votes) {
-        this.transaction.asset.votes = votes;
-        return this;
-    }
-
-    public VoteBuilder addVote(String vote) {
-        this.transaction.asset.votes.add(vote);
-        return this;
-    }
-
-    public VoteBuilder addUnvotes(List unvotes) {
-        this.transaction.asset.unvotes = unvotes;
-        return this;
-    }
-
-    public VoteBuilder addUnvote(String unvote) {
-        this.transaction.asset.unvotes.add(unvote);
-        return this;
-    }
-
-    public VoteBuilder sign(String passphrase) {
-        this.transaction.recipientId = Address.fromPassphrase(passphrase);
-
-        super.sign(passphrase);
-
-        return this;
+    @Override
+    public AbstractTransaction getTransactionInstance() {
+        return new Unvote();
     }
 
     @Override
-    public Transaction getTransactionInstance() {
-        return new Vote();
-    }
-
-    @Override
-    public VoteBuilder instance() {
+    public UnvoteBuilder instance() {
         return this;
     }
 }

@@ -4,7 +4,8 @@ import java.util.HashMap;
 
 public class TransactionAsset {
     public EvmCall evmCall = new EvmCall();  // Instance of EvmCall
-    public String vote = "";                 // Optional "vote" property in hexadecimal format
+    public String vote = "";
+    public String validatorPublicKey = "";
 
     public static class EvmCall {
         public long gasLimit = 1000000; // Default gas limit
@@ -30,6 +31,11 @@ public class TransactionAsset {
         // Adds "vote" to the map if it's not empty
         if (vote != null && !vote.isEmpty()) {
             map.put("vote", this.vote);
+        }
+
+        // Adds "vote" to the map if it's not empty
+        if (validatorPublicKey != null && !validatorPublicKey.isEmpty()) {
+            map.put("validatorPublicKey", this.validatorPublicKey);
         }
 
         return map;

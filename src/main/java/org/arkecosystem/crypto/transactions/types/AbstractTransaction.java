@@ -16,8 +16,7 @@ import org.arkecosystem.crypto.transactions.TransactionAsset;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
 
-public abstract class Transaction {
-
+public abstract class AbstractTransaction {
     public int version;
     public int network;
     public int typeGroup;
@@ -25,8 +24,6 @@ public abstract class Transaction {
     public long nonce;
     public String senderPublicKey;
     public long fee = 0L;
-    public String vendorField;
-    public String vendorFieldHex;
     public TransactionAsset asset = new TransactionAsset();
     public String signature;
     public String secondSignature;
@@ -44,7 +41,7 @@ public abstract class Transaction {
         return Hex.encode(Sha256Hash.hash(this.serialize()));
     }
 
-    public Transaction sign(String passphrase) {
+    public AbstractTransaction sign(String passphrase) {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
 
         this.senderPublicKey = privateKey.getPublicKeyAsHex();
@@ -55,7 +52,7 @@ public abstract class Transaction {
         return this;
     }
 
-    public Transaction secondSign(String passphrase) {
+    public AbstractTransaction secondSign(String passphrase) {
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
 
         Sha256Hash hash = Sha256Hash.of(this.serialize(false, true));
@@ -65,7 +62,7 @@ public abstract class Transaction {
         return this;
     }
 
-    public Transaction multiSign(String passphrase, int index) {
+    public AbstractTransaction multiSign(String passphrase, int index) {
         if (this.signatures == null) {
             this.signatures = new ArrayList<>();
         }
@@ -130,9 +127,7 @@ public abstract class Transaction {
             map.put("signatures", this.signatures);
         }
 
-        if (this.vendorField != null && !this.vendorField.isEmpty()) {
-            map.put("vendorField", this.vendorField);
-        }
+
 
         if (this.expiration > 0) {
             map.put("expiration", this.expiration);

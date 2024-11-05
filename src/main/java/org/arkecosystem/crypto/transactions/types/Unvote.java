@@ -9,7 +9,7 @@ import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.CoreTransactionTypes;
 import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 
-public class Vote extends AbstractTransaction {
+public class Unvote extends AbstractTransaction {
     @Override
     public int getTransactionType() {
         return CoreTransactionTypes.VOTE.getValue();

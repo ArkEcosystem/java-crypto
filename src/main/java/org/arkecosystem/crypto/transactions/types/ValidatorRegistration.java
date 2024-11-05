@@ -14,12 +14,11 @@ public class ValidatorRegistration extends AbstractTransaction {
             return abiEncoder.encodeFunctionCall("registerValidator", args);
         } catch (Exception e) {
             e.printStackTrace();
-            
         }
 
-        return "";   
+        return "";
     }
-    
+
     @Override
     public HashMap<String, Object> assetToHashMap() {
         return null;

@@ -1,10 +1,9 @@
 package org.arkecosystem.crypto.utils;
 
-import org.web3j.utils.Numeric;
-
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
+import org.web3j.utils.Numeric;
 
 public class AbiDecoder extends AbiBase {
 
@@ -23,7 +22,9 @@ public class AbiDecoder extends AbiBase {
         }
 
         String encodedParams = data.substring(8);
-        List<Object> decodedParams = decodeAbiParameters((List<Map<String, Object>>) abiItem.get("inputs"), encodedParams);
+        List<Object> decodedParams =
+                decodeAbiParameters(
+                        (List<Map<String, Object>>) abiItem.get("inputs"), encodedParams);
 
         Map<String, Object> result = new HashMap<>();
         result.put("functionName", abiItem.get("name"));
@@ -36,7 +37,8 @@ public class AbiDecoder extends AbiBase {
         for (Map<String, Object> item : this.abi) {
             if ("function".equals(item.get("type"))) {
                 String functionSignature = getFunctionSignature(item);
-                String functionSelector = stripHexPrefix(keccak256(functionSignature)).substring(0, 8);
+                String functionSelector =
+                        stripHexPrefix(keccak256(functionSignature)).substring(0, 8);
                 if (functionSelector.equals(selector)) {
                     return item;
                 }
@@ -45,7 +47,8 @@ public class AbiDecoder extends AbiBase {
         return null;
     }
 
-    private List<Object> decodeAbiParameters(List<Map<String, Object>> params, String data) throws Exception {
+    private List<Object> decodeAbiParameters(List<Map<String, Object>> params, String data)
+            throws Exception {
         if ((data == null || data.isEmpty()) && !params.isEmpty()) {
             throw new Exception("No data to decode");
         }
@@ -65,7 +68,8 @@ public class AbiDecoder extends AbiBase {
         return values;
     }
 
-    private Object[] decodeParameter(byte[] bytes, int offset, Map<String, Object> param) throws Exception {
+    private Object[] decodeParameter(byte[] bytes, int offset, Map<String, Object> param)
+            throws Exception {
         String type = (String) param.get("type");
         String[] arrayComponents = getArrayComponents(type);
         if (arrayComponents != null) {
@@ -73,7 +77,8 @@ public class AbiDecoder extends AbiBase {
             String baseType = arrayComponents[1];
             param.put("type", baseType);
 
-            Integer length = lengthStr != null && !lengthStr.isEmpty() ? Integer.parseInt(lengthStr) : null;
+            Integer length =
+                    lengthStr != null && !lengthStr.isEmpty() ? Integer.parseInt(lengthStr) : null;
 
             return decodeArray(bytes, offset, param, length);
         }
@@ -109,14 +114,14 @@ public class AbiDecoder extends AbiBase {
         String address = "0x" + Numeric.toHexStringNoPrefix(addressBytes);
         address = org.web3j.crypto.Keys.toChecksumAddress(address);
 
-        return new Object[]{address, 32};
+        return new Object[] {address, 32};
     }
 
     private Object[] decodeBool(byte[] bytes, int offset) {
         byte[] data = Arrays.copyOfRange(bytes, offset, offset + 32);
         boolean value = new BigInteger(data).compareTo(BigInteger.ZERO) != 0;
 
-        return new Object[]{value, 32};
+        return new Object[] {value, 32};
     }
 
     private Object[] decodeNumber(byte[] bytes, int offset, int bits, boolean signed) {
@@ -126,17 +131,18 @@ public class AbiDecoder extends AbiBase {
             value = value.subtract(BigInteger.ONE.shiftLeft(bits));
         }
 
-        return new Object[]{value.toString(), 32};
+        return new Object[] {value.toString(), 32};
     }
 
     private Object[] decodeString(byte[] bytes, int offset) {
         int dataOffset = readUInt(bytes, offset).intValue();
         int stringOffset = offset + dataOffset;
         int length = readUInt(bytes, stringOffset).intValue();
-        byte[] stringData = Arrays.copyOfRange(bytes, stringOffset + 32, stringOffset + 32 + length);
+        byte[] stringData =
+                Arrays.copyOfRange(bytes, stringOffset + 32, stringOffset + 32 + length);
         String value = new String(stringData);
 
-        return new Object[]{value, 32};
+        return new Object[] {value, 32};
     }
 
     private Object[] decodeDynamicBytes(byte[] bytes, int offset) {
@@ -146,17 +152,18 @@ public class AbiDecoder extends AbiBase {
         byte[] bytesData = Arrays.copyOfRange(bytes, bytesOffset + 32, bytesOffset + 32 + length);
         String value = "0x" + Numeric.toHexStringNoPrefix(bytesData);
 
-        return new Object[]{value, 32};
+        return new Object[] {value, 32};
     }
 
     private Object[] decodeFixedBytes(byte[] bytes, int offset, int size) {
         byte[] data = Arrays.copyOfRange(bytes, offset, offset + 32);
         String value = "0x" + Numeric.toHexStringNoPrefix(Arrays.copyOfRange(data, 0, size));
 
-        return new Object[]{value, 32};
+        return new Object[] {value, 32};
     }
 
-    private Object[] decodeArray(byte[] bytes, int offset, Map<String, Object> param, Integer length) throws Exception {
+    private Object[] decodeArray(
+            byte[] bytes, int offset, Map<String, Object> param, Integer length) throws Exception {
         String baseType = (String) param.get("type");
         Map<String, Object> elementType = new HashMap<>(param);
         elementType.put("type", baseType);
@@ -182,10 +189,11 @@ public class AbiDecoder extends AbiBase {
             values.add(value);
         }
 
-        return new Object[]{values, 32};
+        return new Object[] {values, 32};
     }
 
-    private Object[] decodeTuple(byte[] bytes, int offset, Map<String, Object> param) throws Exception {
+    private Object[] decodeTuple(byte[] bytes, int offset, Map<String, Object> param)
+            throws Exception {
         List<Map<String, Object>> components = (List<Map<String, Object>>) param.get("components");
         Map<String, Object> values = new LinkedHashMap<>();
         int cursor = offset;
@@ -199,7 +207,7 @@ public class AbiDecoder extends AbiBase {
             values.put(name, value);
         }
 
-        return new Object[]{values, 32};
+        return new Object[] {values, 32};
     }
 
     private BigInteger readUInt(byte[] bytes, int offset) {

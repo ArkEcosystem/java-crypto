@@ -1,12 +1,10 @@
 package org.arkecosystem.crypto.transactions.types;
 
 import com.google.gson.GsonBuilder;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.arkecosystem.crypto.signature.SchnorrSigner;
@@ -121,7 +119,7 @@ public abstract class AbstractTransaction {
         map.put("version", this.version);
         map.put("recipientId", this.recipientId);
         map.put("amount", String.valueOf(this.amount));
-        
+
         if (this.secondSignature != null) {
             map.put("secondSignature", this.secondSignature);
         }
@@ -183,7 +181,7 @@ public abstract class AbstractTransaction {
         }
 
         try {
-            AbiDecoder abiDecoder = new AbiDecoder();  // Instantiate AbiDecoder
+            AbiDecoder abiDecoder = new AbiDecoder(); // Instantiate AbiDecoder
             Map<String, Object> decodedData = abiDecoder.decodeFunctionData(payload);
 
             // Check if decodedData contains "args" and is a list

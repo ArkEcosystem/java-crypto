@@ -1,10 +1,9 @@
 package org.arkecosystem.crypto.utils;
 
-import org.web3j.utils.Numeric;
-
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
+import org.web3j.utils.Numeric;
 
 public class AbiEncoder extends AbiBase {
 
@@ -58,17 +57,22 @@ public class AbiEncoder extends AbiBase {
             }
         }
 
-        Map<String, Object> abiItem = getAbiItem(abi, functionName, (List<Object>) params.getOrDefault("args", new ArrayList<>()));
+        Map<String, Object> abiItem =
+                getAbiItem(
+                        abi,
+                        functionName,
+                        (List<Object>) params.getOrDefault("args", new ArrayList<>()));
         if (abiItem == null) {
             throw new Exception("Function not found in ABI: " + functionName);
         }
 
         String signature = toFunctionSelector(abiItem);
 
-        return new Object[]{abiItem, signature};
+        return new Object[] {abiItem, signature};
     }
 
-    private Map<String, Object> getAbiItem(List<Map<String, Object>> abi, String name, List<Object> args) throws Exception {
+    private Map<String, Object> getAbiItem(
+            List<Map<String, Object>> abi, String name, List<Object> args) throws Exception {
         List<Map<String, Object>> matchingItems = new ArrayList<>();
         for (Map<String, Object> item : abi) {
             if ("function".equals(item.get("type")) && name.equals(item.get("name"))) {
@@ -90,7 +94,8 @@ public class AbiEncoder extends AbiBase {
         throw new Exception("Function with matching arguments not found in ABI: " + name);
     }
 
-    private String encodeAbiParameters(List<Map<String, Object>> params, List<Object> values) throws Exception {
+    private String encodeAbiParameters(List<Map<String, Object>> params, List<Object> values)
+            throws Exception {
         if (params.size() != values.size()) {
             throw new Exception("Length of parameters and values do not match");
         }
@@ -101,7 +106,8 @@ public class AbiEncoder extends AbiBase {
         return data != null && !data.isEmpty() ? data : "0x";
     }
 
-    private List<Map<String, Object>> prepareParams(List<Map<String, Object>> params, List<Object> values) throws Exception {
+    private List<Map<String, Object>> prepareParams(
+            List<Map<String, Object>> params, List<Object> values) throws Exception {
         List<Map<String, Object>> preparedParams = new ArrayList<>();
         for (int i = 0; i < params.size(); i++) {
             Map<String, Object> preparedParam = prepareParam(params.get(i), values.get(i));
@@ -110,13 +116,15 @@ public class AbiEncoder extends AbiBase {
         return preparedParams;
     }
 
-    private Map<String, Object> prepareParam(Map<String, Object> param, Object value) throws Exception {
+    private Map<String, Object> prepareParam(Map<String, Object> param, Object value)
+            throws Exception {
         String type = (String) param.get("type");
         String[] arrayComponents = getArrayComponents(type);
         if (arrayComponents != null) {
             String lengthStr = arrayComponents[0];
             String innerType = arrayComponents[1];
-            Integer length = lengthStr != null && !lengthStr.isEmpty() ? Integer.parseInt(lengthStr) : null;
+            Integer length =
+                    lengthStr != null && !lengthStr.isEmpty() ? Integer.parseInt(lengthStr) : null;
             Map<String, Object> innerParam = new HashMap<>();
             innerParam.put("name", param.get("name"));
             innerParam.put("type", innerType);
@@ -145,7 +153,8 @@ public class AbiEncoder extends AbiBase {
         }
     }
 
-    private Map<String, Object> encodeArray(Object value, Integer length, Map<String, Object> param) throws Exception {
+    private Map<String, Object> encodeArray(Object value, Integer length, Map<String, Object> param)
+            throws Exception {
         boolean dynamic = length == null;
 
         if (!(value instanceof List)) {
@@ -170,16 +179,10 @@ public class AbiEncoder extends AbiBase {
             String data = encodeParams(preparedParams);
             if (dynamic) {
                 String lengthHex = String.format("%064x", valueList.size());
-                return Map.of(
-                        "dynamic", true,
-                        "encoded", "0x" + lengthHex + data.substring(2)
-                );
+                return Map.of("dynamic", true, "encoded", "0x" + lengthHex + data.substring(2));
             }
             if (dynamicChild) {
-                return Map.of(
-                        "dynamic", true,
-                        "encoded", data
-                );
+                return Map.of("dynamic", true, "encoded", data);
             }
         }
         StringBuilder encoded = new StringBuilder();
@@ -187,10 +190,7 @@ public class AbiEncoder extends AbiBase {
             encoded.append(stripHexPrefix((String) p.get("encoded")));
         }
 
-        return Map.of(
-                "dynamic", false,
-                "encoded", "0x" + encoded.toString()
-        );
+        return Map.of("dynamic", false, "encoded", "0x" + encoded.toString());
     }
 
     private String encodeParams(List<Map<String, Object>> preparedParams) {
@@ -228,19 +228,13 @@ public class AbiEncoder extends AbiBase {
         }
         value = stripHexPrefix(value).toLowerCase();
 
-        return Map.of(
-                "dynamic", false,
-                "encoded", "0x" + String.format("%064s", value)
-        );
+        return Map.of("dynamic", false, "encoded", "0x" + String.format("%064s", value));
     }
 
     private Map<String, Object> encodeBool(Boolean value) {
         String encoded = String.format("%064x", value ? 1 : 0);
 
-        return Map.of(
-                "dynamic", false,
-                "encoded", "0x" + encoded
-        );
+        return Map.of("dynamic", false, "encoded", "0x" + encoded);
     }
 
     private Map<String, Object> encodeNumber(Object value, boolean signed) throws Exception {
@@ -267,13 +261,11 @@ public class AbiEncoder extends AbiBase {
         String hex = bigValue.toString(16);
         String encoded = String.format("%064s", hex);
 
-        return Map.of(
-                "dynamic", false,
-                "encoded", "0x" + encoded
-        );
+        return Map.of("dynamic", false, "encoded", "0x" + encoded);
     }
 
-    private Map<String, Object> encodeBytes(String value, Map<String, Object> param) throws Exception {
+    private Map<String, Object> encodeBytes(String value, Map<String, Object> param)
+            throws Exception {
         int bytesSize = (stripHexPrefix(value).length()) / 2;
         String paramType = (String) param.get("type");
         String paramSizeStr = paramType.substring(5);
@@ -285,21 +277,16 @@ public class AbiEncoder extends AbiBase {
                 valuePadded = valuePadded + "0".repeat(padding * 2);
             }
 
-            return Map.of(
-                    "dynamic", true,
-                    "encoded", "0x" + lengthHex + valuePadded
-            );
+            return Map.of("dynamic", true, "encoded", "0x" + lengthHex + valuePadded);
         }
         int paramSize = Integer.parseInt(paramSizeStr);
         if (bytesSize != paramSize) {
-            throw new Exception("Bytes size mismatch: expected " + paramSize + ", got " + bytesSize);
+            throw new Exception(
+                    "Bytes size mismatch: expected " + paramSize + ", got " + bytesSize);
         }
         String valuePadded = String.format("%-64s", stripHexPrefix(value)).replace(' ', '0');
 
-        return Map.of(
-                "dynamic", false,
-                "encoded", "0x" + valuePadded
-        );
+        return Map.of("dynamic", false, "encoded", "0x" + valuePadded);
     }
 
     private Map<String, Object> encodeString(String value) {
@@ -311,13 +298,11 @@ public class AbiEncoder extends AbiBase {
             valuePadded = valuePadded + "00".repeat(padding);
         }
 
-        return Map.of(
-                "dynamic", true,
-                "encoded", "0x" + lengthHex + valuePadded
-        );
+        return Map.of("dynamic", true, "encoded", "0x" + lengthHex + valuePadded);
     }
 
-    private Map<String, Object> encodeTuple(Object value, Map<String, Object> param) throws Exception {
+    private Map<String, Object> encodeTuple(Object value, Map<String, Object> param)
+            throws Exception {
         boolean dynamic = false;
         List<Map<String, Object>> preparedParams = new ArrayList<>();
 
@@ -343,10 +328,7 @@ public class AbiEncoder extends AbiBase {
 
         if (dynamic) {
             String encoded = encodeParams(preparedParams);
-            return Map.of(
-                    "dynamic", true,
-                    "encoded", encoded
-            );
+            return Map.of("dynamic", true, "encoded", encoded);
         }
 
         StringBuilder encoded = new StringBuilder("0x");
@@ -354,9 +336,6 @@ public class AbiEncoder extends AbiBase {
             encoded.append(stripHexPrefix((String) p.get("encoded")));
         }
 
-        return Map.of(
-                "dynamic", false,
-                "encoded", encoded.toString()
-        );
+        return Map.of("dynamic", false, "encoded", encoded.toString());
     }
 }

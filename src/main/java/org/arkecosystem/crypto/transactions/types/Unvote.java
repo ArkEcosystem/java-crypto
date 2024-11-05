@@ -12,12 +12,11 @@ public class Unvote extends AbstractTransaction {
             return abiEncoder.encodeFunctionCall("vote", new ArrayList<>());
         } catch (Exception e) {
             e.printStackTrace();
-            
         }
 
-        return "";   
+        return "";
     }
-    
+
     @Override
     public HashMap<String, Object> assetToHashMap() {
         return null;

@@ -3,13 +3,13 @@ package org.arkecosystem.crypto.transactions;
 import java.util.HashMap;
 
 public class TransactionAsset {
-    public EvmCall evmCall = new EvmCall();  // Instance of EvmCall
+    public EvmCall evmCall = new EvmCall(); // Instance of EvmCall
     public String vote = "";
     public String validatorPublicKey = "";
 
     public static class EvmCall {
         public long gasLimit = 1000000; // Default gas limit
-        public String payload = "";     // EVM code in hexadecimal format
+        public String payload = ""; // EVM code in hexadecimal format
 
         // Converts the EvmCall object to a HashMap for serialization
         public HashMap<String, Object> toHashMap() {
@@ -22,7 +22,7 @@ public class TransactionAsset {
 
     public HashMap<String, Object> toHashMap() {
         HashMap<String, Object> map = new HashMap<>();
-        
+
         // Adds "evmCall" to the map if it's defined
         if (evmCall != null) {
             map.put("evmCall", evmCall.toHashMap());

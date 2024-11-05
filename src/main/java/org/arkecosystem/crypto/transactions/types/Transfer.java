@@ -7,7 +7,7 @@ public class Transfer extends AbstractTransaction {
     public String getPayload() {
         return "";
     }
-    
+
     @Override
     public HashMap<String, Object> assetToHashMap() {
         return null;

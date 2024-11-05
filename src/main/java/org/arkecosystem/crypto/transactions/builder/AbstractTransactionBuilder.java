@@ -7,7 +7,8 @@ import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 import org.arkecosystem.crypto.transactions.TransactionAsset;
 import org.arkecosystem.crypto.transactions.types.AbstractTransaction;
 
-public abstract class AbstractTransactionBuilder<TBuilder extends AbstractTransactionBuilder<TBuilder>> {
+public abstract class AbstractTransactionBuilder<
+        TBuilder extends AbstractTransactionBuilder<TBuilder>> {
     public final AbstractTransaction transaction;
 
     public AbstractTransactionBuilder() {

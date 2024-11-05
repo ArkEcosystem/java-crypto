@@ -1,14 +1,13 @@
 package org.arkecosystem.crypto.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.web3j.crypto.Hash;
-import org.web3j.utils.Numeric;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.web3j.crypto.Hash;
+import org.web3j.utils.Numeric;
 
 public abstract class AbiBase {
 
@@ -29,7 +28,7 @@ public abstract class AbiBase {
         if (matcher.find()) {
             String innerType = matcher.group(1);
             String lengthStr = matcher.group(2);
-            return new String[]{lengthStr, innerType};
+            return new String[] {lengthStr, innerType};
         }
         return null;
     }

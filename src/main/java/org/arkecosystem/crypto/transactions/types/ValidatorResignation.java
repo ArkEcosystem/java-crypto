@@ -12,12 +12,11 @@ public class ValidatorResignation extends AbstractTransaction {
             return abiEncoder.encodeFunctionCall("resignValidator", new ArrayList<>());
         } catch (Exception e) {
             e.printStackTrace();
-            
         }
 
-        return "";   
+        return "";
     }
-    
+
     @Override
     public HashMap<String, Object> assetToHashMap() {
         return null;

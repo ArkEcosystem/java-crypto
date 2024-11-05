@@ -1,31 +1,25 @@
 package org.arkecosystem.crypto.transactions.types;
 
-import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
-import org.arkecosystem.crypto.enums.CoreTransactionTypes;
-import org.arkecosystem.crypto.enums.TransactionTypeGroup;
+import org.arkecosystem.crypto.utils.AbiEncoder;
 
-public class ValidatorResignation extends Transaction {
+public class ValidatorResignation extends AbstractTransaction {
     @Override
-    public int getTransactionType() {
-        return CoreTransactionTypes.VALIDATOR_RESIGNATION.getValue();
-    }
+    public String getPayload() {
+        try {
+            AbiEncoder abiEncoder = new AbiEncoder();
+            return abiEncoder.encodeFunctionCall("resignValidator", new ArrayList<>());
+        } catch (Exception e) {
+            e.printStackTrace();
+            
+        }
 
-    @Override
-    public int getTransactionTypeGroup() {
-        return TransactionTypeGroup.CORE.getValue();
+        return "";   
     }
-
+    
     @Override
     public HashMap<String, Object> assetToHashMap() {
         return null;
     }
-
-    @Override
-    public byte[] serializeData() {
-        return new byte[0];
-    }
-
-    @Override
-    public void deserializeData(ByteBuffer buffer) {}
 }

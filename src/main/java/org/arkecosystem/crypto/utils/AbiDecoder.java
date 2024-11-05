@@ -5,7 +5,6 @@ import org.web3j.utils.Numeric;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AbiDecoder extends AbiBase {
 

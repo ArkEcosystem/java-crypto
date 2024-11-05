@@ -1,45 +1,27 @@
 package org.arkecosystem.crypto.transactions.types;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.HashMap;
-import org.arkecosystem.crypto.encoding.Hex;
-import org.arkecosystem.crypto.enums.CoreTransactionTypes;
-import org.arkecosystem.crypto.enums.TransactionTypeGroup;
+import org.arkecosystem.crypto.utils.AbiEncoder;
 
-public class ValidatorRegistration extends Transaction {
+public class ValidatorRegistration extends AbstractTransaction {
     @Override
-    public int getTransactionType() {
-        return CoreTransactionTypes.VALIDATOR_REGISTRATION.getValue();
-    }
+    public String getPayload() {
+        try {
+            AbiEncoder abiEncoder = new AbiEncoder();
+            ArrayList<Object> args = new ArrayList<>();
+            args.add(this.asset.validatorPublicKey);
+            return abiEncoder.encodeFunctionCall("registerValidator", args);
+        } catch (Exception e) {
+            e.printStackTrace();
+            
+        }
 
-    @Override
-    public int getTransactionTypeGroup() {
-        return TransactionTypeGroup.CORE.getValue();
+        return "";   
     }
-
+    
     @Override
     public HashMap<String, Object> assetToHashMap() {
-        HashMap<String, Object> asset = new HashMap<>();
-
-        asset.put("validatorPublicKey", this.asset.validatorPublicKey);
-
-        return asset;
-    }
-
-    @Override
-    public byte[] serializeData() {
-        ByteBuffer buffer = ByteBuffer.allocate(48);
-        buffer.order(ByteOrder.LITTLE_ENDIAN);
-        buffer.put(Hex.decode(this.asset.validatorPublicKey));
-
-        return buffer.array();
-    }
-
-    @Override
-    public void deserializeData(ByteBuffer buffer) {
-        byte[] validatorPublicKey = new byte[48];
-        buffer.get(validatorPublicKey);
-        this.asset.validatorPublicKey = Hex.encode(validatorPublicKey);
+        return null;
     }
 }

@@ -7,7 +7,8 @@ public class ValidatorResignation extends AbstractTransaction {
     @Override
     public String getPayload() {
         try {
-            return new AbiEncoder().encodeFunctionCall(AbiFunction.VALIDATOR_RESIGNATION.toString());
+            return new AbiEncoder()
+                    .encodeFunctionCall(AbiFunction.VALIDATOR_RESIGNATION.toString());
         } catch (Exception e) {
             throw new RuntimeException("Error encoding function call", e);
         }

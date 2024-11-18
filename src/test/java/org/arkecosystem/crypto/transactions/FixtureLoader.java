@@ -9,7 +9,10 @@ import java.nio.charset.StandardCharsets;
 public class FixtureLoader {
 
     private static String readFile(String path) throws IOException {
-        InputStream inputStream = FixtureLoader.class.getClassLoader().getResourceAsStream(String.format("%s.json", path));
+        InputStream inputStream =
+                FixtureLoader.class
+                        .getClassLoader()
+                        .getResourceAsStream(String.format("%s.json", path));
         if (inputStream == null) {
             throw new IOException("Resource not found: " + path);
         }

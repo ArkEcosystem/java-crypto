@@ -1,11 +1,10 @@
 package org.arkecosystem.crypto.transactions.types;
 
-import org.arkecosystem.crypto.enums.AbiFunction;
-import org.arkecosystem.crypto.utils.AbiEncoder;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.arkecosystem.crypto.enums.AbiFunction;
+import org.arkecosystem.crypto.utils.AbiEncoder;
 
 public class Vote extends AbstractTransaction {
     public Vote() {

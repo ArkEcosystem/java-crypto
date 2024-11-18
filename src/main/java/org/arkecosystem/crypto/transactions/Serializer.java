@@ -56,7 +56,8 @@ public class Serializer {
         // Write recipient marker and address
         if (transaction.recipientAddress != null && !transaction.recipientAddress.isEmpty()) {
             buffer.put((byte) 1);
-            byte[] recipientBytes = Hex.decode(transaction.recipientAddress.replaceFirst("^0x", "").toLowerCase());
+            byte[] recipientBytes =
+                    Hex.decode(transaction.recipientAddress.replaceFirst("^0x", "").toLowerCase());
 
             buffer.put(recipientBytes);
         } else {
@@ -64,7 +65,8 @@ public class Serializer {
         }
 
         // Write payload length as UInt32 and the payload itself if present
-        String payloadHex = transaction.data != null ? transaction.data.replaceFirst("^0x", "") : "";
+        String payloadHex =
+                transaction.data != null ? transaction.data.replaceFirst("^0x", "") : "";
         int payloadLength = payloadHex.length() / 2;
         buffer.putInt(payloadLength);
         if (payloadLength > 0) {

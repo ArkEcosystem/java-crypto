@@ -1,20 +1,19 @@
 package org.arkecosystem.crypto.utils;
 
-import org.arkecosystem.crypto.encoding.Hex;
-import org.bitcoinj.core.Sha256Hash;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import org.arkecosystem.crypto.encoding.Hex;
+import org.bitcoinj.core.Sha256Hash;
 
 public class TransactionHasher {
 
     /**
      * Generates the transaction hash.
      *
-     * @param transaction   The transaction data.
+     * @param transaction The transaction data.
      * @param skipSignature Whether to skip the signature fields.
      * @return The hash of the transaction.
      */
@@ -32,12 +31,19 @@ public class TransactionHasher {
         List<Object> fields = new ArrayList<>();
         fields.add(toBeArray(new BigInteger(transaction.get("network").toString())));
         fields.add(toBeArray(new BigInteger(transaction.get("nonce").toString())));
-        fields.add(toBeArray(new BigInteger(transaction.get("gasPrice").toString()))); // maxPriorityFeePerGas
-        fields.add(toBeArray(new BigInteger(transaction.get("gasPrice").toString()))); // maxFeePerGas
+        fields.add(
+                toBeArray(
+                        new BigInteger(
+                                transaction.get("gasPrice").toString()))); // maxPriorityFeePerGas
+        fields.add(
+                toBeArray(new BigInteger(transaction.get("gasPrice").toString()))); // maxFeePerGas
         fields.add(toBeArray(new BigInteger(transaction.get("gasLimit").toString())));
         fields.add(recipientAddress);
         fields.add(toBeArray(new BigInteger(transaction.get("value").toString())));
-        String dataHex = transaction.get("data") != null ? ((String) transaction.get("data")).replaceFirst("^0x", "") : "";
+        String dataHex =
+                transaction.get("data") != null
+                        ? ((String) transaction.get("data")).replaceFirst("^0x", "")
+                        : "";
         byte[] data = Hex.decode(dataHex);
         fields.add(data);
         fields.add(new ArrayList<>()); // Access list is unused

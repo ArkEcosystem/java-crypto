@@ -17,7 +17,7 @@ public abstract class AbiBase {
         String abiFilePath = "Abi.Consensus.json";
 
         InputStream abiInputStream = getClass().getClassLoader().getResourceAsStream(abiFilePath);
-        
+
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> abiJson = mapper.readValue(abiInputStream, Map.class);
         this.abi = (List<Map<String, Object>>) abiJson.get("abi");

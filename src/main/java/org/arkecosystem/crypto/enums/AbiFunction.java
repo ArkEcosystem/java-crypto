@@ -1,6 +1,5 @@
 package org.arkecosystem.crypto.enums;
 
-
 public enum AbiFunction {
     VOTE("vote"),
     UNVOTE("unvote"),

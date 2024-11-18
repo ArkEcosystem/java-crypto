@@ -2,7 +2,6 @@ package org.arkecosystem.crypto.signature;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.arkecosystem.crypto.Schnorr;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.bitcoinj.core.ECKey;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,10 +23,9 @@ class ECDSASignerTest {
         String signature =
                 "304402207856D22D9C1E146492117B61D83F0A8D2E046C5A75F471172689A0A0C26907C6022035A1368F38EC63BC9B7BEEC7BCE49BD2C1AE28179EE83EBE7FD9C17824E2514B";
 
-        
         assertEquals("", "");
-                // assertEquals(
-                // signature,
-                // Schnorr.bytesToHex(signer.sign(Schnorr.hexStringToByteArray(message), privateKey)));
+        // assertEquals(
+        // signature,
+        // Schnorr.bytesToHex(signer.sign(Schnorr.hexStringToByteArray(message), privateKey)));
     }
 }

@@ -2,10 +2,8 @@ package org.arkecosystem.crypto.transactions.builder;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Test;
-import org.arkecosystem.crypto.encoding.Hex;
-
 import java.util.Map;
+import org.junit.jupiter.api.Test;
 
 public class EvmCallBuilderTest extends AbstractTransactionBuilderTest {
 
@@ -15,14 +13,15 @@ public class EvmCallBuilderTest extends AbstractTransactionBuilderTest {
 
         Map<String, Object> data = (Map<String, Object>) fixture.get("data");
 
-        EvmCallBuilder builder = new EvmCallBuilder()
-                .gasPrice(((Number) data.get("gasPrice")).intValue())
-                .nonce(Long.parseLong(data.get("nonce").toString()))
-                .network(((Number) data.get("network")).intValue())
-                .payload((String) data.get("data"))
-                .gasLimit(((Number) data.get("gasLimit")).intValue())
-                .recipientAddress("0xE536720791A7DaDBeBdBCD8c8546fb0791a11901")
-                .sign(this.passphrase);
+        EvmCallBuilder builder =
+                new EvmCallBuilder()
+                        .gasPrice(((Number) data.get("gasPrice")).intValue())
+                        .nonce(Long.parseLong(data.get("nonce").toString()))
+                        .network(((Number) data.get("network")).intValue())
+                        .payload((String) data.get("data"))
+                        .gasLimit(((Number) data.get("gasLimit")).intValue())
+                        .recipientAddress("0xE536720791A7DaDBeBdBCD8c8546fb0791a11901")
+                        .sign(this.passphrase);
 
         assertTrue(builder.verify());
     }

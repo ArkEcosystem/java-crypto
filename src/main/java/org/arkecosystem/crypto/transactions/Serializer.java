@@ -28,9 +28,9 @@ public class Serializer {
         serializeCommon(buffer);
 
         serializeData(buffer);
-        
+
         serializeSignatures(buffer, skipSignature);
-        
+
         byte[] result = new byte[buffer.position()];
         buffer.flip();
         buffer.get(result);

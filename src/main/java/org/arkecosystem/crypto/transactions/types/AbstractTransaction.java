@@ -30,7 +30,6 @@ public abstract class AbstractTransaction {
     public String validatorPublicKey;
     public String vote;
 
-
     public String getPayload() {
         return this.data != null ? this.data : "";
     }

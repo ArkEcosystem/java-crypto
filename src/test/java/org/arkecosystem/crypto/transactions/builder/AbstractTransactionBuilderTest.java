@@ -1,11 +1,10 @@
 package org.arkecosystem.crypto.transactions.builder;
 
 import com.google.gson.Gson;
-import org.junit.jupiter.api.BeforeEach;
-
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractTransactionBuilderTest {
     protected String passphrase;

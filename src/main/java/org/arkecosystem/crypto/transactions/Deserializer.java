@@ -41,14 +41,15 @@ public class Deserializer {
         deserializeData(transaction);
         deserializeSignatures(transaction);
 
-        transaction.recoverSender();
+        // @TODO
+        // transaction.recoverSender();
         transaction.id = Hex.encode(transaction.hash(false));
 
         return transaction;
     }
 
     private AbstractTransaction guessTransactionFromData(AbstractTransaction data) {
-        if (data.value != 0) {
+        if (data.value != "0") {
             return new Transfer();
         }
 
@@ -90,14 +91,14 @@ public class Deserializer {
         transaction.nonce = buffer.getLong();
         transaction.gasPrice = buffer.getInt();
         transaction.gasLimit = buffer.getInt();
-        transaction.value = 0L;
+        transaction.value = "0";
     }
 
     private void deserializeData(AbstractTransaction transaction) {
         byte[] valueBytes = new byte[32];
         buffer.get(valueBytes);
-        BigInteger value = new BigInteger(1, valueBytes);
-        transaction.value = value.longValue();
+        String value = new BigInteger(1, valueBytes).toString();
+        transaction.value = value;
 
         int recipientMarker = Byte.toUnsignedInt(buffer.get());
         if (recipientMarker == 1) {

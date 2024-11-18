@@ -4,7 +4,7 @@ import org.arkecosystem.crypto.transactions.types.AbstractTransaction;
 import org.arkecosystem.crypto.transactions.types.Transfer;
 
 public class TransferBuilder extends AbstractTransactionBuilder<TransferBuilder> {
-    public TransferBuilder value(long value) {
+    public TransferBuilder value(String value) {
         this.transaction.value = value;
 
         this.transaction.refreshPayloadData();

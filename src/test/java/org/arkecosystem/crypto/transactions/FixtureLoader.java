@@ -3,25 +3,23 @@ package org.arkecosystem.crypto.transactions;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import org.arkecosystem.crypto.transactions.types.Transaction;
 
 public class FixtureLoader {
 
     private static String readFile(String path) throws IOException {
-        ClassLoader classLoader = Transaction.class.getClassLoader();
-        URL resource = classLoader.getResource(String.format("%s.json", path));
-        return new String(
-                Files.readAllBytes(Paths.get(resource.getPath())), StandardCharsets.UTF_8);
+        InputStream inputStream = FixtureLoader.class.getClassLoader().getResourceAsStream(String.format("%s.json", path));
+        if (inputStream == null) {
+            throw new IOException("Resource not found: " + path);
+        }
+        byte[] bytes = inputStream.readAllBytes();
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     public static LinkedTreeMap<String, Object> load(String path) {
         try {
-            return new Gson()
-                    .fromJson(readFile(path), new LinkedTreeMap<String, Object>().getClass());
+            return new Gson().fromJson(readFile(path), LinkedTreeMap.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

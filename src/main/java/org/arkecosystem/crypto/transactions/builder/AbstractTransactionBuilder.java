@@ -14,7 +14,7 @@ public abstract class AbstractTransactionBuilder<
     }
 
     private void initializeTransactionDefaults() {
-        this.transaction.value = 0;
+        this.transaction.value = "0";
         this.transaction.senderPublicKey = "";
         this.transaction.fee = '5';
         this.transaction.nonce = 1;

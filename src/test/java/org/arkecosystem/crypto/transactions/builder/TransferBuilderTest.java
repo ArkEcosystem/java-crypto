@@ -1,94 +1,45 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.HashMap;
-import java.util.List;
-import org.arkecosystem.crypto.enums.Fees;
-import org.arkecosystem.crypto.transactions.types.Transaction;
+import com.google.gson.Gson;
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-class TransferBuilderTest {
+public class TransferBuilderTest {
 
     @Test
-    void build() {
-        Transaction actual =
-                new TransferBuilder()
-                        .recipient("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A")
-                        .amount(133380000000L)
-                        .expiration(100000)
-                        .vendorField("This is a transaction from Java")
-                        .version(2)
-                        .nonce(3)
-                        .network(23)
-                        .fee(Fees.TRANSFER.getValue())
-                        .sign("this is a top secret passphrase")
-                        .transaction;
+    public void it_should_sign_it_with_a_passphrase() throws Exception {
+        Map<String, Object> fixture = loadFixture("transfer");
 
-        assertTrue(actual.verify());
+        Map<String, Object> data = (Map<String, Object>) fixture.get("data");
 
-        HashMap actualHashMap = actual.toHashMap();
-        assertEquals(
-                actualHashMap.get("recipientId"), "0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A");
-        assertEquals(actualHashMap.get("amount"), "133380000000");
-        assertEquals(actualHashMap.get("expiration"), 100000);
-        assertEquals(actualHashMap.get("vendorField"), "This is a transaction from Java");
-        assertEquals(actualHashMap.get("version"), 2);
-        assertEquals(actualHashMap.get("nonce"), "3");
-        assertEquals(actualHashMap.get("network"), 23);
-        assertEquals(actualHashMap.get("fee"), Fees.TRANSFER.getValue().toString());
-        assertEquals(actualHashMap.get("id"), actual.id);
+        // Updated to use BigInteger for large values
+        TransferBuilder builder = new TransferBuilder()
+                .gasPrice(((Number) data.get("gasPrice")).intValue())
+                .nonce(Long.parseLong(data.get("nonce").toString()))
+                .network(((Number) data.get("network")).intValue())
+                .gasLimit(((Number) data.get("gasLimit")).intValue())
+                .recipientAddress((String) data.get("recipientAddress"))
+                .value((String) data.get("value"))
+                .sign("my super secret passphrase");
+
+        String serialized = builder.transaction.serialize(false).toString();
+        assertEquals(fixture.get("serialized"), serialized);
+        assertEquals(data.get("id"), builder.transaction.getId());
+        assertTrue(builder.verify());
     }
 
-    @Test
-    void buildSecondSignature() {
-        Transaction actual =
-                new TransferBuilder()
-                        .recipient("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A")
-                        .amount(133380000000L)
-                        .expiration(100000)
-                        .vendorField("This is a transaction from Java")
-                        .version(2)
-                        .nonce(3)
-                        .sign("this is a top secret passphrase")
-                        .secondSign("this is a top secret second passphrase")
-                        .transaction;
-
-        assertTrue(actual.verify());
-        assertTrue(
-                actual.secondVerify(
-                        "03699e966b2525f9088a6941d8d94f7869964a000efe65783d78ac82e1199fe609"));
-
-        HashMap actualHashMap = actual.toHashMap();
-        assertEquals(actualHashMap.get("secondSignature"), actual.secondSignature);
-    }
-
-    @Test
-    void buildMultiSignature() {
-        Transaction actual =
-                new TransferBuilder()
-                        .recipient("0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A")
-                        .amount(133380000000L)
-                        .expiration(100000)
-                        .vendorField("This is a transaction from Java")
-                        .nonce(3)
-                        .fee(Fees.TRANSFER.getValue())
-                        .multiSign("secret 1", 0)
-                        .multiSign("secret 2", 1)
-                        .multiSign("secret 3", 2)
-                        .sign("secret 1")
-                        .transaction;
-
-        assertTrue(actual.verify());
-
-        HashMap actualHashMap = actual.toHashMap();
-
-        assertNotNull(actualHashMap.get("signatures"));
-
-        List<String> actualSignatures = (List<String>) actualHashMap.get("signatures");
-
-        assertEquals(3, actualSignatures.size());
+    private Map<String, Object> loadFixture(String path) throws Exception {
+        String resourcePath = "/transactions/" + path + ".json";
+        InputStream inputStream = getClass().getResourceAsStream(resourcePath);
+        if (inputStream == null) {
+            throw new Exception("Fixture not found: " + resourcePath);
+        }
+        String json = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        return new Gson().fromJson(json, Map.class);
     }
 }

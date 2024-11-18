@@ -21,10 +21,12 @@ public class TransactionHasher {
     public static byte[] toHash(Map<String, Object> transaction, boolean skipSignature) {
         // Process recipientAddress
         String hex = ((String) transaction.get("recipientAddress")).replaceFirst("^0x", "");
+
+        // @TODO: see if this is necessary
         if (hex.length() % 2 != 0) {
             hex = "0" + hex;
         }
-        byte[] recipientAddress = Hex.decode(hex);
+        byte[] recipientAddress = Hex.decode(hex.toLowerCase());
 
         // Build the fields array
         List<Object> fields = new ArrayList<>();

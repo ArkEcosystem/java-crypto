@@ -28,7 +28,7 @@ public abstract class AbstractTransaction {
     public String data;
     public long fee = 0L;
     public String signature;
-    public long value = 0L;
+    public String value = "0";
     public String recipientAddress;
     public String id;
     public int gasLimit;
@@ -60,6 +60,7 @@ public abstract class AbstractTransaction {
     public byte[] hash(boolean skipSignature) {
 
         HashMap<String, Object> map = new HashMap<>();
+        
         map.put("gasPrice", this.gasPrice);
         map.put("network", this.network);
         map.put("nonce", this.nonce);
@@ -73,7 +74,10 @@ public abstract class AbstractTransaction {
     }
 
     public AbstractTransaction sign(String passphrase) {
+
         byte[] bytes = this.hash(true);
+
+        System.out.println("Hashed transaction: " + Hex.encode(bytes));
         
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
 

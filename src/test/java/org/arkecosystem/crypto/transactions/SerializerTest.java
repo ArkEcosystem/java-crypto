@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.arkecosystem.crypto.AbstractTest;
 import org.arkecosystem.crypto.encoding.Hex;
-import org.arkecosystem.crypto.transactions.builder.TransferBuilder;
 import org.arkecosystem.crypto.transactions.types.*;
 import org.junit.jupiter.api.Test;
 

@@ -7,20 +7,19 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-public class ValidatorRegistrationBuilderTest extends AbstractTransactionBuilderTest {
+public class UnvoteBuilderTest extends AbstractTransactionBuilderTest {
 
     @Test
     public void it_should_sign_it_with_a_passphrase() throws Exception {
-        Map<String, Object> fixture = loadFixture("validator-registration");
+        Map<String, Object> fixture = loadFixture("unvote");
 
         Map<String, Object> data = (Map<String, Object>) fixture.get("data");
 
-        ValidatorRegistrationBuilder builder = new ValidatorRegistrationBuilder()
+        UnvoteBuilder builder = new UnvoteBuilder()
                 .gasPrice(((Number) data.get("gasPrice")).intValue())
                 .nonce(Long.parseLong(data.get("nonce").toString()))
                 .network(((Number) data.get("network")).intValue())
                 .gasLimit(((Number) data.get("gasLimit")).intValue())
-                .validatorPublicKey("a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118")
                 .recipientAddress((String) data.get("recipientAddress"))
                 .sign(this.passphrase);
 

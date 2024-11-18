@@ -1,14 +1,13 @@
 package org.arkecosystem.crypto.transactions;
 
-import org.arkecosystem.crypto.encoding.Hex;
-import org.arkecosystem.crypto.transactions.types.*;
-import org.arkecosystem.crypto.enums.AbiFunction;
-import org.arkecosystem.crypto.utils.AbiDecoder;
-
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Map;
+import org.arkecosystem.crypto.encoding.Hex;
+import org.arkecosystem.crypto.enums.AbiFunction;
+import org.arkecosystem.crypto.transactions.types.*;
+import org.arkecosystem.crypto.utils.AbiDecoder;
 
 public class Deserializer {
     private static final int SIGNATURE_SIZE = 64;

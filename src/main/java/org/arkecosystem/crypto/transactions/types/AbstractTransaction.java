@@ -2,6 +2,11 @@
 package org.arkecosystem.crypto.transactions.types;
 
 import com.google.gson.GsonBuilder;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.arkecosystem.crypto.transactions.Serializer;
@@ -9,12 +14,6 @@ import org.arkecosystem.crypto.utils.AbiDecoder;
 import org.arkecosystem.crypto.utils.TransactionHasher;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
-
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public abstract class AbstractTransaction {
     public int network;
@@ -134,7 +133,8 @@ public abstract class AbstractTransaction {
 
         byte[] hash = this.hash(true);
 
-        ECKey recoveredKey = ECKey.recoverFromSignature(recId, signature, Sha256Hash.wrap(hash), true);
+        ECKey recoveredKey =
+                ECKey.recoverFromSignature(recId, signature, Sha256Hash.wrap(hash), true);
         if (recoveredKey == null) {
             return false;
         }

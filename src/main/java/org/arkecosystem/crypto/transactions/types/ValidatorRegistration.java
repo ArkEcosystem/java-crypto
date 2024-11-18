@@ -1,11 +1,10 @@
 package org.arkecosystem.crypto.transactions.types;
 
-import org.arkecosystem.crypto.enums.AbiFunction;
-import org.arkecosystem.crypto.utils.AbiEncoder;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.arkecosystem.crypto.enums.AbiFunction;
+import org.arkecosystem.crypto.utils.AbiEncoder;
 
 public class ValidatorRegistration extends AbstractTransaction {
     public ValidatorRegistration() {
@@ -35,7 +34,8 @@ public class ValidatorRegistration extends AbstractTransaction {
         args.add(validatorPublicKeyHex);
 
         try {
-            return new AbiEncoder().encodeFunctionCall(AbiFunction.VALIDATOR_REGISTRATION.toString(), args);
+            return new AbiEncoder()
+                    .encodeFunctionCall(AbiFunction.VALIDATOR_REGISTRATION.toString(), args);
         } catch (Exception e) {
             throw new RuntimeException("Error encoding function call", e);
         }

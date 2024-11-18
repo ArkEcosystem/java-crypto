@@ -9,7 +9,7 @@ public abstract class AbstractTransactionBuilder<
 
     public AbstractTransactionBuilder() {
         this.transaction = getTransactionInstance();
-        
+
         initializeTransactionDefaults();
     }
 

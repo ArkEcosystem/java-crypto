@@ -3,7 +3,8 @@ package org.arkecosystem.crypto.transactions.builder;
 import org.arkecosystem.crypto.transactions.types.AbstractTransaction;
 import org.arkecosystem.crypto.transactions.types.ValidatorRegistration;
 
-public class ValidatorRegistrationBuilder extends AbstractTransactionBuilder<ValidatorRegistrationBuilder> {
+public class ValidatorRegistrationBuilder
+        extends AbstractTransactionBuilder<ValidatorRegistrationBuilder> {
     public ValidatorRegistrationBuilder validatorPublicKey(String validatorPublicKey) {
         this.transaction.validatorPublicKey = validatorPublicKey;
 

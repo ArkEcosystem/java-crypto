@@ -4,10 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.google.gson.Gson;
 import java.io.InputStream;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-
 import org.arkecosystem.crypto.encoding.Hex;
 import org.junit.jupiter.api.Test;
 
@@ -20,18 +18,19 @@ public class TransferBuilderTest {
         Map<String, Object> data = (Map<String, Object>) fixture.get("data");
 
         // Updated to use BigInteger for large values
-        TransferBuilder builder = new TransferBuilder()
-                .gasPrice(((Number) data.get("gasPrice")).intValue())
-                .nonce(Long.parseLong(data.get("nonce").toString()))
-                .network(((Number) data.get("network")).intValue())
-                .gasLimit(((Number) data.get("gasLimit")).intValue())
-                .recipientAddress((String) data.get("recipientAddress"))
-                .value((String) data.get("value"))
-                .sign("my super secret passphrase");
+        TransferBuilder builder =
+                new TransferBuilder()
+                        .gasPrice(((Number) data.get("gasPrice")).intValue())
+                        .nonce(Long.parseLong(data.get("nonce").toString()))
+                        .network(((Number) data.get("network")).intValue())
+                        .gasLimit(((Number) data.get("gasLimit")).intValue())
+                        .recipientAddress((String) data.get("recipientAddress"))
+                        .value((String) data.get("value"))
+                        .sign("my super secret passphrase");
 
         byte[] serializedBytes = builder.transaction.serialize(false);
         String serializedHex = Hex.encode(serializedBytes);
-        
+
         // Compare the serialized transaction
         assertEquals(fixture.get("serialized"), serializedHex);
         assertEquals(data.get("id"), builder.transaction.getId());

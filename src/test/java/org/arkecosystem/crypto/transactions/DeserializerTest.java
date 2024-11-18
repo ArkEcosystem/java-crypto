@@ -2,12 +2,11 @@ package org.arkecosystem.crypto.transactions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Map;
 import org.arkecosystem.crypto.AbstractTest;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.transactions.types.*;
 import org.junit.jupiter.api.Test;
-
-import java.util.Map;
 
 public class DeserializerTest extends AbstractTest {
 
@@ -30,7 +29,8 @@ public class DeserializerTest extends AbstractTest {
 
         assertEquals("0x512F366D524157BcF734546eB29a6d687B762255", transaction.vote);
 
-        assertEquals("749744e0d689c46e37ff2993a984599eac4989a9ef0028337b335c9d43abf936", transaction.id);
+        assertEquals(
+                "749744e0d689c46e37ff2993a984599eac4989a9ef0028337b335c9d43abf936", transaction.id);
 
         assertTrue(transaction instanceof Vote);
     }
@@ -45,7 +45,8 @@ public class DeserializerTest extends AbstractTest {
     }
 
     @Test
-    public void it_should_deserialize_a_validator_registration_signed_with_a_passphrase() throws Exception {
+    public void it_should_deserialize_a_validator_registration_signed_with_a_passphrase()
+            throws Exception {
         Map<String, Object> fixture = loadFixture("validator-registration");
 
         AbstractTransaction transaction = assertTransaction(fixture);
@@ -54,7 +55,8 @@ public class DeserializerTest extends AbstractTest {
     }
 
     @Test
-    public void it_should_deserialize_a_validator_resignation_signed_with_a_passphrase() throws Exception {
+    public void it_should_deserialize_a_validator_resignation_signed_with_a_passphrase()
+            throws Exception {
         Map<String, Object> fixture = loadFixture("validator-resignation");
 
         AbstractTransaction transaction = assertTransaction(fixture);
@@ -63,20 +65,20 @@ public class DeserializerTest extends AbstractTest {
     }
 
     private AbstractTransaction assertTransaction(Map<String, Object> fixture) throws Exception {
-        AbstractTransaction transaction = assertDeserialized(fixture, new String[]{
-                "id",
-                "nonce",
-                "gasPrice",
-                "gasLimit",
-                "signature",
-        });
+        AbstractTransaction transaction =
+                assertDeserialized(
+                        fixture,
+                        new String[] {
+                            "id", "nonce", "gasPrice", "gasLimit", "signature",
+                        });
 
         assertTrue(transaction.verify());
 
         return transaction;
     }
 
-    private AbstractTransaction assertDeserialized(Map<String, Object> fixture, String[] keys) throws Exception {
+    private AbstractTransaction assertDeserialized(Map<String, Object> fixture, String[] keys)
+            throws Exception {
         String serializedHex = (String) fixture.get("serialized");
         byte[] serializedBytes = Hex.decode(serializedHex);
 
@@ -96,11 +98,16 @@ public class DeserializerTest extends AbstractTest {
 
             if (expectedValue != null) {
                 if (expectedValue instanceof Number) {
-                    assertEquals(((Number) expectedValue).intValue(), ((Number) actualValue).intValue(), "Field " + key + " does not match");
+                    assertEquals(
+                            ((Number) expectedValue).intValue(),
+                            ((Number) actualValue).intValue(),
+                            "Field " + key + " does not match");
                 } else {
 
-                    assertEquals(expectedValue.toString(), actualValue.toString(), "Field " + key + " does not match");
-
+                    assertEquals(
+                            expectedValue.toString(),
+                            actualValue.toString(),
+                            "Field " + key + " does not match");
                 }
             } else {
                 assertNull(actualValue, "Field " + key + " should be null");

@@ -6,14 +6,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.Address;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.arkecosystem.crypto.transactions.Serializer;
 import org.arkecosystem.crypto.utils.AbiDecoder;
 import org.arkecosystem.crypto.utils.TransactionHasher;
-
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
 
@@ -175,7 +173,8 @@ public abstract class AbstractTransaction {
 
         byte[] hash = this.hash(true);
 
-        ECKey recoveredKey = ECKey.recoverFromSignature(recId, signature, Sha256Hash.wrap(hash), true);
+        ECKey recoveredKey =
+                ECKey.recoverFromSignature(recId, signature, Sha256Hash.wrap(hash), true);
         if (recoveredKey == null) {
             throw new RuntimeException("Could not recover public key from signature");
         }
@@ -209,7 +208,8 @@ public abstract class AbstractTransaction {
 
             byte[] hash = this.hash(true);
 
-            ECKey recoveredKey = ECKey.recoverFromSignature(recId, signature, Sha256Hash.wrap(hash), true);
+            ECKey recoveredKey =
+                    ECKey.recoverFromSignature(recId, signature, Sha256Hash.wrap(hash), true);
             if (recoveredKey == null) {
                 return false;
             }

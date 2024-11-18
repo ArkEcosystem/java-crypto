@@ -8,7 +8,6 @@ import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.AbiFunction;
 import org.arkecosystem.crypto.transactions.types.*;
 import org.arkecosystem.crypto.utils.AbiDecoder;
-import org.bitcoinj.core.Sha256Hash;
 
 public class Deserializer {
     private static final int SIGNATURE_SIZE = 64;
@@ -48,7 +47,8 @@ public class Deserializer {
         return transaction;
     }
 
-    private AbstractTransaction guessTransactionFromTransactionData(AbstractTransaction transactionData) {
+    private AbstractTransaction guessTransactionFromTransactionData(
+            AbstractTransaction transactionData) {
         if (!"0".equals(transactionData.value)) {
             return new Transfer();
         }

@@ -23,7 +23,7 @@ public class Serializer {
 
     public byte[] serialize(boolean skipSignature) {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
-        buffer.order(ByteOrder.BIG_ENDIAN);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
 
         serializeCommon(buffer);
         serializeData(buffer);
@@ -55,6 +55,7 @@ public class Serializer {
         if (transaction.recipientAddress != null && !transaction.recipientAddress.isEmpty()) {
             buffer.put((byte) 1);
             byte[] recipientBytes = Hex.decode(transaction.recipientAddress.replaceFirst("^0x", "").toLowerCase());
+
             buffer.put(recipientBytes);
         } else {
             buffer.put((byte) 0);

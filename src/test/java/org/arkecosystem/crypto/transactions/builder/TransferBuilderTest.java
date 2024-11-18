@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+
+import org.arkecosystem.crypto.encoding.Hex;
 import org.junit.jupiter.api.Test;
 
 public class TransferBuilderTest {
@@ -27,8 +29,11 @@ public class TransferBuilderTest {
                 .value((String) data.get("value"))
                 .sign("my super secret passphrase");
 
-        String serialized = builder.transaction.serialize(false).toString();
-        assertEquals(fixture.get("serialized"), serialized);
+        byte[] serializedBytes = builder.transaction.serialize(false);
+        String serializedHex = Hex.encode(serializedBytes);
+        
+        // Compare the serialized transaction
+        assertEquals(fixture.get("serialized"), serializedHex);
         assertEquals(data.get("id"), builder.transaction.getId());
         assertTrue(builder.verify());
     }

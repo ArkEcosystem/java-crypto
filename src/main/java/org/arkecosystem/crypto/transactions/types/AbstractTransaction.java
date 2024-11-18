@@ -1,22 +1,17 @@
+// AbstractTransaction.java
 package org.arkecosystem.crypto.transactions.types;
 
 import com.google.gson.GsonBuilder;
-
-// import jnr.ffi.Struct.pid_t;
-
 import org.arkecosystem.crypto.encoding.Hex;
-// import org.arkecosystem.crypto.identities.Address;
 import org.arkecosystem.crypto.identities.PrivateKey;
-import org.arkecosystem.crypto.signature.ECDSAVerifier;
-import org.arkecosystem.crypto.signature.ECDSASigner;
-import org.arkecosystem.crypto.signature.Signer;
-import org.arkecosystem.crypto.signature.Verifier;
 import org.arkecosystem.crypto.transactions.Serializer;
 import org.arkecosystem.crypto.utils.AbiDecoder;
 import org.arkecosystem.crypto.utils.TransactionHasher;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
-// import org.bitcoinj.crypto.ECKey.ECDSASignature;
+
+import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,9 +53,8 @@ public abstract class AbstractTransaction {
     }
 
     public byte[] hash(boolean skipSignature) {
-
         HashMap<String, Object> map = new HashMap<>();
-        
+
         map.put("gasPrice", this.gasPrice);
         map.put("network", this.network);
         map.put("nonce", this.nonce);
@@ -68,40 +62,84 @@ public abstract class AbstractTransaction {
         map.put("gasLimit", this.gasLimit);
         map.put("data", this.data);
         map.put("recipientAddress", this.recipientAddress);
-        map.put("signature", this.signature);
+        if (!skipSignature && this.signature != null) {
+            map.put("signature", this.signature);
+        }
 
-        return TransactionHasher.toHash(map, true);
+        return TransactionHasher.toHash(map, skipSignature);
     }
 
     public AbstractTransaction sign(String passphrase) {
+        byte[] hash = this.hash(true);
 
-        byte[] bytes = this.hash(true);
-
-        System.out.println("Hashed transaction: " + Hex.encode(bytes));
-        
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
+        this.senderPublicKey = privateKey.getPublicKeyAsHex();
 
-        
+        ECKey.ECDSASignature signature = privateKey.sign(Sha256Hash.wrap(hash));
 
-        // this.senderPublicKey = privateKey.getPublicKeyAsHex();
-        // Sha256Hash hash = Sha256Hash.of(this.serialize(true, true, false));
+        int recId = -1;
+        for (int i = 0; i < 4; i++) {
+            ECKey k = ECKey.recoverFromSignature(i, signature, Sha256Hash.wrap(hash), true);
+            if (k != null && k.getPubKeyPoint().equals(privateKey.getPubKeyPoint())) {
+                recId = i;
+                break;
+            }
+        }
+        if (recId == -1) {
+            throw new RuntimeException("Could not find recId");
+        }
 
-        // @TODO: update this
-        this.signature = getId();
+        byte[] rBytes = bigIntegerToBytes(signature.r, 32);
+        byte[] sBytes = bigIntegerToBytes(signature.s, 32);
+
+        byte[] signatureBytes = new byte[64];
+        System.arraycopy(rBytes, 0, signatureBytes, 0, 32);
+        System.arraycopy(sBytes, 0, signatureBytes, 32, 32);
+
+        byte[] signatureWithRecId = new byte[65];
+        System.arraycopy(signatureBytes, 0, signatureWithRecId, 0, 64);
+        signatureWithRecId[64] = (byte) recId;
+
+        this.signature = Hex.encode(signatureWithRecId);
 
         return this;
     }
 
-
+    private static byte[] bigIntegerToBytes(BigInteger b, int numBytes) {
+        byte[] src = b.toByteArray();
+        byte[] dest = new byte[numBytes];
+        int srcPos = Math.max(0, src.length - numBytes);
+        int destPos = Math.max(0, numBytes - src.length);
+        int length = Math.min(src.length, numBytes);
+        System.arraycopy(src, srcPos, dest, destPos, length);
+        return dest;
+    }
 
     public boolean verify() {
         ECKey keys = ECKey.fromPublicOnly(Hex.decode(this.senderPublicKey));
 
-        byte[] signatureBytes = Hex.decode(this.signature);
-        // @todo checke if skipSignature is true or false
-        byte[] hash = Sha256Hash.hash(this.serialize(true));
+        byte[] signatureWithRecId = Hex.decode(this.signature);
+        if (signatureWithRecId.length != 65) {
+            return false;
+        }
 
-        return verifier().verify(hash, keys, signatureBytes);
+        byte recId = signatureWithRecId[64];
+        byte[] signatureBytes = new byte[64];
+        System.arraycopy(signatureWithRecId, 0, signatureBytes, 0, 64);
+
+        BigInteger r = new BigInteger(1, Arrays.copyOfRange(signatureBytes, 0, 32));
+        BigInteger s = new BigInteger(1, Arrays.copyOfRange(signatureBytes, 32, 64));
+
+        ECKey.ECDSASignature signature = new ECKey.ECDSASignature(r, s);
+
+        byte[] hash = this.hash(true);
+
+        ECKey recoveredKey = ECKey.recoverFromSignature(recId, signature, Sha256Hash.wrap(hash), true);
+        if (recoveredKey == null) {
+            return false;
+        }
+
+        return recoveredKey.getPubKeyPoint().equals(keys.getPubKeyPoint());
     }
 
     public byte[] serialize(boolean skipSignature) {
@@ -129,10 +167,10 @@ public abstract class AbstractTransaction {
 
     public List<Object> decodePayload(Map<String, Object> data) {
         if (data == null || !data.containsKey("data")) return null;
-    
+
         String payload = (String) data.get("data");
         if (payload == null || payload.isEmpty()) return null;
-    
+
         try {
             AbiDecoder abiDecoder = new AbiDecoder();
             Map<String, Object> decodedData = abiDecoder.decodeFunctionData(payload);
@@ -140,16 +178,7 @@ public abstract class AbstractTransaction {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    
+
         return null;
-    }
-    
-
-    private Signer signer() {
-        return new ECDSASigner();
-    }
-
-    private Verifier verifier() {
-        return new ECDSAVerifier();
     }
 }

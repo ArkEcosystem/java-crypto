@@ -1,10 +1,6 @@
 package org.arkecosystem.crypto.transactions.builder;
 
 import org.arkecosystem.crypto.configuration.Network;
-import org.arkecosystem.crypto.enums.CoreTransactionTypes;
-import org.arkecosystem.crypto.enums.Fees;
-import org.arkecosystem.crypto.enums.TransactionTypeGroup;
-import org.arkecosystem.crypto.transactions.TransactionAsset;
 import org.arkecosystem.crypto.transactions.types.AbstractTransaction;
 
 public abstract class AbstractTransactionBuilder<
@@ -13,36 +9,32 @@ public abstract class AbstractTransactionBuilder<
 
     public AbstractTransactionBuilder() {
         this.transaction = getTransactionInstance();
+        
         initializeTransactionDefaults();
     }
 
     private void initializeTransactionDefaults() {
-        this.transaction.type = CoreTransactionTypes.EVM_CALL.getValue();
-        this.transaction.typeGroup = TransactionTypeGroup.CORE.getValue();
-        this.transaction.amount = 0;
+        this.transaction.value = 0;
         this.transaction.senderPublicKey = "";
-        this.transaction.fee = Fees.EVM.getValue();
-        this.transaction.version = 1;
-        this.transaction.network = Network.get().version();
+        this.transaction.fee = '5';
         this.transaction.nonce = 1;
-
-        this.transaction.asset = new TransactionAsset();
-        this.transaction.asset.evmCall.gasLimit = 1000000;
-        this.transaction.asset.evmCall.payload = "";
+        this.transaction.network = Network.get().version();
+        this.transaction.gasLimit = 1_000_000;
+        this.transaction.data = "";
     }
 
     public TBuilder gasLimit(int gasLimit) {
-        this.transaction.asset.evmCall.gasLimit = gasLimit;
+        this.transaction.gasLimit = gasLimit;
         return this.instance();
     }
 
-    public TBuilder recipient(String recipientId) {
-        this.transaction.recipientId = recipientId;
+    public TBuilder recipientAddress(String recipientAddressId) {
+        this.transaction.recipientAddress = recipientAddressId;
         return this.instance();
     }
 
-    public TBuilder fee(long fee) {
-        this.transaction.fee = fee;
+    public TBuilder gasPrice(int gasPrice) {
+        this.transaction.gasPrice = gasPrice;
         return this.instance();
     }
 
@@ -62,24 +54,8 @@ public abstract class AbstractTransactionBuilder<
         return this.instance();
     }
 
-    public TBuilder multiSign(String passphrase, int index) {
-        this.transaction.multiSign(passphrase, index);
-        this.transaction.computeId();
-        return this.instance();
-    }
-
-    public TBuilder secondSign(String secondPassphrase) {
-        this.transaction.secondSign(secondPassphrase);
-        this.transaction.computeId();
-        return this.instance();
-    }
-
     public boolean verify() {
         return this.transaction.verify();
-    }
-
-    public boolean secondVerify(String secondPublicKey) {
-        return this.transaction.secondVerify(secondPublicKey);
     }
 
     public String toJson() {

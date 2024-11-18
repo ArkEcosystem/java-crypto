@@ -11,6 +11,10 @@ public class AbiEncoder extends AbiBase {
         super();
     }
 
+    public String encodeFunctionCall(String functionName) throws Exception {
+        return encodeFunctionCall(functionName, Collections.emptyList());
+    }
+
     public String encodeFunctionCall(String functionName, List<Object> args) throws Exception {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("abi", this.abi);
@@ -20,6 +24,7 @@ public class AbiEncoder extends AbiBase {
         return encodeFunctionData(parameters);
     }
 
+    
     private String encodeFunctionData(Map<String, Object> parameters) throws Exception {
         List<Object> args = (List<Object>) parameters.getOrDefault("args", new ArrayList<>());
 

@@ -1,29 +1,24 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import org.arkecosystem.crypto.enums.Fees;
 import org.arkecosystem.crypto.transactions.types.AbstractTransaction;
 import org.arkecosystem.crypto.transactions.types.ValidatorRegistration;
 
-public class ValidatorRegistrationBuilder
-        extends AbstractTransactionBuilder<ValidatorRegistrationBuilder> {
-    public ValidatorRegistrationBuilder() {
-        super();
-        this.transaction.fee = Fees.VALIDATOR_REGISTRATION.getValue();
-    }
-
+public class ValidatorRegistrationBuilder extends AbstractTransactionBuilder<ValidatorRegistrationBuilder> {
     public ValidatorRegistrationBuilder validatorPublicKey(String validatorPublicKey) {
-        this.transaction.asset.validatorPublicKey = validatorPublicKey;
+        this.transaction.validatorPublicKey = validatorPublicKey;
 
-        return this;
+        this.transaction.refreshPayloadData();
+
+        return this.instance();
     }
 
     @Override
-    public AbstractTransaction getTransactionInstance() {
+    protected AbstractTransaction getTransactionInstance() {
         return new ValidatorRegistration();
     }
 
     @Override
-    public ValidatorRegistrationBuilder instance() {
+    protected ValidatorRegistrationBuilder instance() {
         return this;
     }
 }

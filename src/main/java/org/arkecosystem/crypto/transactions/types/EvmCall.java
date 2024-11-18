@@ -1,8 +1,8 @@
 package org.arkecosystem.crypto.transactions.types;
 
-public class Transfer extends AbstractTransaction {
+public class EvmCall extends AbstractTransaction {
     @Override
     public String getPayload() {
-        return "";
+        return this.data != null ? this.data : "";
     }
 }

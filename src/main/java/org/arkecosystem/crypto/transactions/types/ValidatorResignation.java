@@ -1,24 +1,15 @@
 package org.arkecosystem.crypto.transactions.types;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.arkecosystem.crypto.enums.AbiFunction;
 import org.arkecosystem.crypto.utils.AbiEncoder;
 
 public class ValidatorResignation extends AbstractTransaction {
     @Override
     public String getPayload() {
         try {
-            AbiEncoder abiEncoder = new AbiEncoder();
-            return abiEncoder.encodeFunctionCall("resignValidator", new ArrayList<>());
+            return new AbiEncoder().encodeFunctionCall(AbiFunction.VALIDATOR_RESIGNATION.toString());
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error encoding function call", e);
         }
-
-        return "";
-    }
-
-    @Override
-    public HashMap<String, Object> assetToHashMap() {
-        return null;
     }
 }

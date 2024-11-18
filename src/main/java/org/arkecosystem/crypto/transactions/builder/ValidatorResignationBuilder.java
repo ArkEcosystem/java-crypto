@@ -3,16 +3,15 @@ package org.arkecosystem.crypto.transactions.builder;
 import org.arkecosystem.crypto.transactions.types.AbstractTransaction;
 import org.arkecosystem.crypto.transactions.types.ValidatorResignation;
 
-public class ValidatorResignationBuilder
-        extends AbstractTransactionBuilder<ValidatorResignationBuilder> {
+public class ValidatorResignationBuilder extends AbstractTransactionBuilder<ValidatorResignationBuilder> {
 
     @Override
-    public AbstractTransaction getTransactionInstance() {
+    protected AbstractTransaction getTransactionInstance() {
         return new ValidatorResignation();
     }
 
     @Override
-    public ValidatorResignationBuilder instance() {
+    protected ValidatorResignationBuilder instance() {
         return this;
     }
 }

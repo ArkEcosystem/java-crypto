@@ -4,18 +4,21 @@ import org.arkecosystem.crypto.transactions.types.AbstractTransaction;
 import org.arkecosystem.crypto.transactions.types.Transfer;
 
 public class TransferBuilder extends AbstractTransactionBuilder<TransferBuilder> {
-    public TransferBuilder amount(long amount) {
-        this.transaction.amount = amount;
-        return this;
+    public TransferBuilder value(long value) {
+        this.transaction.value = value;
+
+        this.transaction.refreshPayloadData();
+
+        return this.instance();
     }
 
     @Override
-    public AbstractTransaction getTransactionInstance() {
+    protected AbstractTransaction getTransactionInstance() {
         return new Transfer();
     }
 
     @Override
-    public TransferBuilder instance() {
+    protected TransferBuilder instance() {
         return this;
     }
 }

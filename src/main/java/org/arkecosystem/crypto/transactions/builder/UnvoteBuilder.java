@@ -6,12 +6,12 @@ import org.arkecosystem.crypto.transactions.types.Unvote;
 public class UnvoteBuilder extends AbstractTransactionBuilder<UnvoteBuilder> {
 
     @Override
-    public AbstractTransaction getTransactionInstance() {
+    protected AbstractTransaction getTransactionInstance() {
         return new Unvote();
     }
 
     @Override
-    public UnvoteBuilder instance() {
+    protected UnvoteBuilder instance() {
         return this;
     }
 }

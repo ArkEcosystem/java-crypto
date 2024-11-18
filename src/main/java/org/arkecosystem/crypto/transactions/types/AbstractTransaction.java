@@ -1,201 +1,145 @@
 package org.arkecosystem.crypto.transactions.types;
 
 import com.google.gson.GsonBuilder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+// import jnr.ffi.Struct.pid_t;
+
 import org.arkecosystem.crypto.encoding.Hex;
+// import org.arkecosystem.crypto.identities.Address;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.arkecosystem.crypto.signature.ECDSAVerifier;
 import org.arkecosystem.crypto.signature.ECDSASigner;
-import org.arkecosystem.crypto.signature.SchnorrSigner;
-import org.arkecosystem.crypto.signature.SchnorrVerifier;
 import org.arkecosystem.crypto.signature.Signer;
 import org.arkecosystem.crypto.signature.Verifier;
 import org.arkecosystem.crypto.transactions.Serializer;
-import org.arkecosystem.crypto.transactions.TransactionAsset;
 import org.arkecosystem.crypto.utils.AbiDecoder;
+import org.arkecosystem.crypto.utils.TransactionHasher;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
+// import org.bitcoinj.crypto.ECKey.ECDSASignature;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractTransaction {
-    public int version;
     public int network;
-    public int typeGroup;
-    public int type;
     public long nonce;
     public String senderPublicKey;
+    public String data;
     public long fee = 0L;
-    public TransactionAsset asset = new TransactionAsset();
     public String signature;
-    public String secondSignature;
-    public List<String> signatures;
-    public long amount = 0L;
-    public int expiration;
-    public String recipientId;
+    public long value = 0L;
+    public String recipientAddress;
     public String id;
+    public int gasLimit;
+    public int gasPrice;
+    public String validatorPublicKey;
+    public String vote;
+
+    public AbstractTransaction() {
+        this.data = "";
+    }
+
+    public String getPayload() {
+        return this.data != null ? this.data : "";
+    }
+
+    public AbstractTransaction refreshPayloadData() {
+        this.data = getPayload().replaceFirst("^0x", "");
+        return this;
+    }
 
     public void computeId() {
         this.id = this.getId();
     }
 
     public String getId() {
-        return Hex.encode(Sha256Hash.hash(this.serialize()));
+        return Hex.encode(hash(false));
+    }
+
+    public byte[] hash(boolean skipSignature) {
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("gasPrice", this.gasPrice);
+        map.put("network", this.network);
+        map.put("nonce", this.nonce);
+        map.put("value", this.value);
+        map.put("gasLimit", this.gasLimit);
+        map.put("data", this.data);
+        map.put("recipientAddress", this.recipientAddress);
+        map.put("signature", this.signature);
+
+        return TransactionHasher.toHash(map, true);
     }
 
     public AbstractTransaction sign(String passphrase) {
+        byte[] bytes = this.hash(true);
+        
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
 
-        this.senderPublicKey = privateKey.getPublicKeyAsHex();
-        Sha256Hash hash = Sha256Hash.of(this.serialize(true, true, false));
+        
 
-        this.signature = Hex.encode(signer().sign(hash.getBytes(), privateKey));
+        // this.senderPublicKey = privateKey.getPublicKeyAsHex();
+        // Sha256Hash hash = Sha256Hash.of(this.serialize(true, true, false));
+
+        // @TODO: update this
+        this.signature = getId();
 
         return this;
     }
 
-    public AbstractTransaction secondSign(String passphrase) {
-        ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
 
-        Sha256Hash hash = Sha256Hash.of(this.serialize(false, true));
-
-        this.secondSignature = Hex.encode(signer().sign(hash.getBytes(), privateKey));
-
-        return this;
-    }
-
-    public AbstractTransaction multiSign(String passphrase, int index) {
-        if (this.signatures == null) {
-            this.signatures = new ArrayList<>();
-        }
-
-        ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
-
-        // This is needed given as no method senderPublicKey() is exposed in the builder
-        if (this.senderPublicKey == null) {
-            this.senderPublicKey = privateKey.getPublicKeyAsHex();
-        }
-
-        byte[] hash = Sha256Hash.hash(Serializer.serialize(this, true, true, true));
-        String signature = Hex.encode(signer().sign(hash, privateKey));
-        String indexedSignature = Hex.encode(new byte[] {(byte) index}) + signature;
-        this.signatures.add(indexedSignature);
-
-        return this;
-    }
 
     public boolean verify() {
         ECKey keys = ECKey.fromPublicOnly(Hex.decode(this.senderPublicKey));
 
-        byte[] signature = Hex.decode(this.signature);
-        byte[] hash = Sha256Hash.hash(this.serialize(true, true, false));
+        byte[] signatureBytes = Hex.decode(this.signature);
+        // @todo checke if skipSignature is true or false
+        byte[] hash = Sha256Hash.hash(this.serialize(true));
 
-        return verifier().verify(hash, keys, signature);
+        return verifier().verify(hash, keys, signatureBytes);
     }
 
-    public boolean secondVerify(String secondPublicKey) {
-        ECKey keys = ECKey.fromPublicOnly(Hex.decode(secondPublicKey));
-
-        byte[] signature = Hex.decode(this.secondSignature);
-        byte[] hash = Sha256Hash.hash(this.serialize(false, true, false));
-
-        return verifier().verify(hash, keys, signature);
+    public byte[] serialize(boolean skipSignature) {
+        return Serializer.newSerializer(this).serialize(skipSignature);
     }
 
     public String toJson() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        return gsonBuilder.create().toJson(this.toHashMap());
+        return new GsonBuilder().create().toJson(this.toHashMap());
     }
 
     public HashMap<String, Object> toHashMap() {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("fee", String.valueOf(this.fee));
-        map.put("id", this.id);
+        map.put("gasPrice", this.gasPrice);
         map.put("network", this.network);
-        map.put("nonce", String.valueOf(this.nonce));
+        map.put("id", this.id);
+        map.put("gasLimit", this.gasLimit);
+        map.put("nonce", this.nonce);
         map.put("senderPublicKey", this.senderPublicKey);
         map.put("signature", this.signature);
-        map.put("type", this.type);
-        map.put("typeGroup", this.typeGroup);
-        map.put("version", this.version);
-        map.put("recipientId", this.recipientId);
-        map.put("amount", String.valueOf(this.amount));
-
-        if (this.secondSignature != null) {
-            map.put("secondSignature", this.secondSignature);
-        }
-
-        if (this.signatures != null) {
-            map.put("signatures", this.signatures);
-        }
-
-        if (this.expiration > 0) {
-            map.put("expiration", this.expiration);
-        }
-
-        HashMap<String, Object> asset = this.assetToHashMap();
-        if (asset != null && !asset.isEmpty()) {
-            map.put("asset", asset);
-        }
+        map.put("recipientAddress", this.recipientAddress);
+        map.put("value", this.value);
+        map.put("data", this.data);
         return map;
     }
 
-    public byte[] serialize(
-            boolean skipSignature, boolean skipSecondSignature, boolean skipMultiSignature) {
-        return Serializer.serialize(this, skipSignature, skipSecondSignature, skipMultiSignature);
-    }
-
-    public byte[] serialize(boolean skipSignature, boolean skipSecondSignature) {
-        return serialize(skipSignature, skipSecondSignature, false);
-    }
-
-    public byte[] serialize(boolean skipSignature) {
-        return serialize(skipSignature, false, false);
-    }
-
-    public byte[] serialize() {
-        return serialize(false, false, false);
-    }
-
-    public abstract String getPayload();
-
-    public abstract HashMap<String, Object> assetToHashMap();
-
-    public List<Object> decodePayload(HashMap<String, Object> data) {
-        if (!data.containsKey("asset") || !(data.get("asset") instanceof HashMap)) {
-            return null;
-        }
-
-        HashMap<String, Object> asset = (HashMap<String, Object>) data.get("asset");
-        if (!asset.containsKey("evmCall") || !(asset.get("evmCall") instanceof HashMap)) {
-            return null;
-        }
-
-        HashMap<String, Object> evmCall = (HashMap<String, Object>) asset.get("evmCall");
-        if (!evmCall.containsKey("payload") || evmCall.get("payload") == null) {
-            return null;
-        }
-
-        String payload = (String) evmCall.get("payload");
-        if (payload.isEmpty()) {
-            return null;
-        }
-
+    public List<Object> decodePayload(Map<String, Object> data) {
+        if (data == null || !data.containsKey("data")) return null;
+    
+        String payload = (String) data.get("data");
+        if (payload == null || payload.isEmpty()) return null;
+    
         try {
-            AbiDecoder abiDecoder = new AbiDecoder(); // Instantiate AbiDecoder
+            AbiDecoder abiDecoder = new AbiDecoder();
             Map<String, Object> decodedData = abiDecoder.decodeFunctionData(payload);
-
-            // Check if decodedData contains "args" and is a list
-            if (decodedData.containsKey("args") && decodedData.get("args") instanceof List) {
-                return (List<Object>) decodedData.get("args");
-            }
+            return (List<Object>) decodedData.get("args");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+    
         return null;
     }
+    
 
     private Signer signer() {
         return new ECDSASigner();

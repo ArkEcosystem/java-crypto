@@ -3,7 +3,6 @@ package org.arkecosystem.crypto.transactions.builder;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Map;
-
 import org.arkecosystem.crypto.AbstractTest;
 import org.junit.jupiter.api.Test;
 

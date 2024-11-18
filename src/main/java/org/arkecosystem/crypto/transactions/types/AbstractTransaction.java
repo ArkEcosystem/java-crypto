@@ -30,9 +30,7 @@ public abstract class AbstractTransaction {
     public String validatorPublicKey;
     public String vote;
 
-    public AbstractTransaction() {
-        
-    }
+    public AbstractTransaction() {}
 
     public AbstractTransaction(Map<String, Object> data) {
         if (data.containsKey("network")) {
@@ -71,7 +69,6 @@ public abstract class AbstractTransaction {
         if (data.containsKey("vote")) {
             this.vote = (String) data.get("vote");
         }
-        
     }
 
     public String getPayload() {

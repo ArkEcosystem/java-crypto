@@ -1,7 +1,6 @@
 package org.arkecosystem.crypto.transactions.types;
 
 import java.util.Map;
-
 import org.arkecosystem.crypto.enums.AbiFunction;
 import org.arkecosystem.crypto.utils.AbiEncoder;
 

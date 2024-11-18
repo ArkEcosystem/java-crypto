@@ -13,7 +13,7 @@ public class ValidatorRegistration extends AbstractTransaction {
 
     public ValidatorRegistration(Map<String, Object> data) {
         super(data);
-        
+
         // Use a local decodePayload method since we can't rely on AbstractTransaction's data field
         List<Object> payload = decodePayload(data);
         if (payload != null && !payload.isEmpty()) {

@@ -2,12 +2,11 @@ package org.arkecosystem.crypto.transactions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Map;
 import org.arkecosystem.crypto.AbstractTest;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.transactions.types.*;
 import org.junit.jupiter.api.Test;
-
-import java.util.Map;
 
 public class SerializerTest extends AbstractTest {
 
@@ -18,7 +17,7 @@ public class SerializerTest extends AbstractTest {
         Map<String, Object> data = (Map<String, Object>) fixture.get("data");
 
         Transfer transaction = new Transfer(data);
-                
+
         byte[] serializedBytes = transaction.serialize(false);
         String serializedHex = Hex.encode(serializedBytes);
 

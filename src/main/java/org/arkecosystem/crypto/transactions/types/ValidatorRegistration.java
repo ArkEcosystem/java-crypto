@@ -12,9 +12,8 @@ public class ValidatorRegistration extends AbstractTransaction {
     }
 
     public ValidatorRegistration(Map<String, Object> data) {
-        super(); // Call the default constructor of AbstractTransaction
-        // Handle 'data' within this class
-
+        super(data);
+        
         // Use a local decodePayload method since we can't rely on AbstractTransaction's data field
         List<Object> payload = decodePayload(data);
         if (payload != null && !payload.isEmpty()) {

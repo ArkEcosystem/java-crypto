@@ -30,6 +30,50 @@ public abstract class AbstractTransaction {
     public String validatorPublicKey;
     public String vote;
 
+    public AbstractTransaction() {
+        
+    }
+
+    public AbstractTransaction(Map<String, Object> data) {
+        if (data.containsKey("network")) {
+            this.network = ((Number) data.get("network")).intValue();
+        }
+        if (data.containsKey("nonce")) {
+            this.nonce = Long.parseLong(data.get("nonce").toString());
+        }
+        if (data.containsKey("gasPrice")) {
+            this.gasPrice = ((Number) data.get("gasPrice")).intValue();
+        }
+        if (data.containsKey("gasLimit")) {
+            this.gasLimit = ((Number) data.get("gasLimit")).intValue();
+        }
+        if (data.containsKey("recipientAddress")) {
+            this.recipientAddress = (String) data.get("recipientAddress");
+        }
+        if (data.containsKey("value")) {
+            this.value = data.get("value").toString();
+        }
+        if (data.containsKey("data")) {
+            this.data = (String) data.get("data");
+        }
+        if (data.containsKey("signature")) {
+            this.signature = (String) data.get("signature");
+        }
+        if (data.containsKey("senderPublicKey")) {
+            this.senderPublicKey = (String) data.get("senderPublicKey");
+        }
+        if (data.containsKey("id")) {
+            this.id = (String) data.get("id");
+        }
+        if (data.containsKey("validatorPublicKey")) {
+            this.validatorPublicKey = (String) data.get("validatorPublicKey");
+        }
+        if (data.containsKey("vote")) {
+            this.vote = (String) data.get("vote");
+        }
+        
+    }
+
     public String getPayload() {
         return this.data != null ? this.data : "";
     }

@@ -12,7 +12,7 @@ public class Vote extends AbstractTransaction {
     }
 
     public Vote(Map<String, Object> data) {
-        super();
+        super(data);
 
         List<Object> payload = decodePayload(data);
 

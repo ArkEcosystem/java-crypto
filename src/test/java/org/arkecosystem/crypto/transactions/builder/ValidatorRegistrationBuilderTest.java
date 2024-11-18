@@ -3,10 +3,12 @@ package org.arkecosystem.crypto.transactions.builder;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Map;
+
+import org.arkecosystem.crypto.AbstractTest;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.junit.jupiter.api.Test;
 
-public class ValidatorRegistrationBuilderTest extends AbstractTransactionBuilderTest {
+public class ValidatorRegistrationBuilderTest extends AbstractTest {
 
     @Test
     public void it_should_sign_it_with_a_passphrase() throws Exception {

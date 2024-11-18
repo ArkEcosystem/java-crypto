@@ -1,4 +1,4 @@
-package org.arkecosystem.crypto.transactions.builder;
+package org.arkecosystem.crypto;
 
 import com.google.gson.Gson;
 import java.io.InputStream;
@@ -6,8 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 
-public abstract class AbstractTransactionBuilderTest {
-    protected String passphrase;
+public abstract class AbstractTest {
+    public String passphrase;
 
     @BeforeEach
     public void setUp() {
@@ -15,6 +15,7 @@ public abstract class AbstractTransactionBuilderTest {
     }
 
     protected Map<String, Object> loadFixture(String name) throws Exception {
+
         String resourcePath = "/transactions/" + name + ".json";
         InputStream inputStream = getClass().getResourceAsStream(resourcePath);
         if (inputStream == null) {

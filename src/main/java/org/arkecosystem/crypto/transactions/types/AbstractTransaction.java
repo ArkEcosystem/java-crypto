@@ -31,16 +31,14 @@ public abstract class AbstractTransaction {
     public String validatorPublicKey;
     public String vote;
 
-    public AbstractTransaction() {
-        this.data = "";
-    }
 
     public String getPayload() {
         return this.data != null ? this.data : "";
     }
 
     public AbstractTransaction refreshPayloadData() {
-        this.data = getPayload().replaceFirst("^0x", "");
+        this.data = getPayload();
+
         return this;
     }
 

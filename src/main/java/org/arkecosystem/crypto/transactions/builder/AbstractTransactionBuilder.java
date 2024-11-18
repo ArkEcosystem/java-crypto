@@ -20,7 +20,8 @@ public abstract class AbstractTransactionBuilder<
         this.transaction.nonce = 1;
         this.transaction.network = Network.get().version();
         this.transaction.gasLimit = 1_000_000;
-        this.transaction.data = "";
+        // Set the default data for the transaction
+        this.transaction.refreshPayloadData();
     }
 
     public TBuilder gasLimit(int gasLimit) {

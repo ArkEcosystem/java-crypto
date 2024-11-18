@@ -17,7 +17,7 @@ public enum AbiFunction {
         this.functionName = functionName;
     }
 
-    public String getFunctionName() {
+    public String toString() {
         return functionName;
     }
 

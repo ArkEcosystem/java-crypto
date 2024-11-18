@@ -4,6 +4,7 @@ import org.arkecosystem.crypto.enums.AbiFunction;
 import org.arkecosystem.crypto.utils.AbiEncoder;
 
 public class Unvote extends AbstractTransaction {
+    
     @Override
     public String getPayload() {
         try {

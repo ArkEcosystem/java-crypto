@@ -14,7 +14,9 @@ public class Vote extends AbstractTransaction {
 
     public Vote(Map<String, Object> data) {
         super();
+        
         List<Object> payload = decodePayload(data);
+        
         if (payload != null && !payload.isEmpty()) {
             Object arg = payload.get(0);
             this.vote = arg.toString();

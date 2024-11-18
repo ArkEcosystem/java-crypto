@@ -4,6 +4,7 @@ import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.transactions.types.*;
 import org.arkecosystem.crypto.enums.AbiFunction;
 import org.arkecosystem.crypto.utils.AbiDecoder;
+import org.bitcoinj.core.Sha256Hash;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -43,7 +44,7 @@ public class Deserializer {
 
         // @TODO
         // transaction.recoverSender();
-        transaction.id = Hex.encode(transaction.hash(false));
+        transaction.id = Hex.encode(Sha256Hash.hash(transaction.hash(false)));
 
         return transaction;
     }

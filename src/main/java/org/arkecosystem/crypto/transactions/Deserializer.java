@@ -19,7 +19,7 @@ public class Deserializer {
     public Deserializer(String serialized) {
         byte[] bytes = serialized.contains("\0") ? serialized.getBytes() : Hex.decode(serialized);
         this.buffer = ByteBuffer.wrap(bytes);
-        this.buffer.order(ByteOrder.BIG_ENDIAN);
+        this.buffer.order(ByteOrder.LITTLE_ENDIAN);
     }
 
     public static Deserializer newDeserializer(String serialized) {
@@ -33,7 +33,7 @@ public class Deserializer {
         deserializeCommon(tempTransaction);
         deserializeData(tempTransaction);
 
-        AbstractTransaction transaction = guessTransactionFromData(tempTransaction);
+        AbstractTransaction transaction = guessTransactionFromTransactionData(tempTransaction);
 
         buffer.position(startPosition);
 
@@ -41,32 +41,33 @@ public class Deserializer {
         deserializeData(transaction);
         deserializeSignatures(transaction);
 
-        // @TODO
-        // transaction.recoverSender();
-        transaction.id = Hex.encode(Sha256Hash.hash(transaction.hash(false)));
+        transaction.recoverSender();
+
+        transaction.computeId();
 
         return transaction;
     }
 
-    private AbstractTransaction guessTransactionFromData(AbstractTransaction data) {
-        if (data.value != "0") {
+    private AbstractTransaction guessTransactionFromTransactionData(AbstractTransaction transactionData) {
+        if (!"0".equals(transactionData.value)) {
             return new Transfer();
         }
 
-        Map<String, Object> payloadData = decodePayload(data);
+        Map<String, Object> payloadData = decodePayload(transactionData);
         if (payloadData == null) {
             return new EvmCall();
         }
 
         String functionName = (String) payloadData.get("functionName");
+
         if (functionName.equals(AbiFunction.VOTE.toString())) {
-            return new Vote();
+            return new Vote(transactionData.toHashMap());
         } else if (functionName.equals(AbiFunction.UNVOTE.toString())) {
-            return new Unvote();
+            return new Unvote(transactionData.toHashMap());
         } else if (functionName.equals(AbiFunction.VALIDATOR_REGISTRATION.toString())) {
-            return new ValidatorRegistration();
+            return new ValidatorRegistration(transactionData.toHashMap());
         } else if (functionName.equals(AbiFunction.VALIDATOR_RESIGNATION.toString())) {
-            return new ValidatorResignation();
+            return new ValidatorResignation(transactionData.toHashMap());
         }
 
         return new EvmCall();
@@ -91,14 +92,12 @@ public class Deserializer {
         transaction.nonce = buffer.getLong();
         transaction.gasPrice = buffer.getInt();
         transaction.gasLimit = buffer.getInt();
-        transaction.value = "0";
     }
 
     private void deserializeData(AbstractTransaction transaction) {
         byte[] valueBytes = new byte[32];
         buffer.get(valueBytes);
-        String value = new BigInteger(1, valueBytes).toString();
-        transaction.value = value;
+        transaction.value = new BigInteger(1, valueBytes).toString();
 
         int recipientMarker = Byte.toUnsignedInt(buffer.get());
         if (recipientMarker == 1) {
@@ -108,9 +107,13 @@ public class Deserializer {
         }
 
         int payloadLength = buffer.getInt();
-        byte[] payloadBytes = new byte[payloadLength];
-        buffer.get(payloadBytes);
-        transaction.data = Hex.encode(payloadBytes);
+        if (payloadLength > 0) {
+            byte[] payloadBytes = new byte[payloadLength];
+            buffer.get(payloadBytes);
+            transaction.data = Hex.encode(payloadBytes);
+        } else {
+            transaction.data = "";
+        }
     }
 
     private void deserializeSignatures(AbstractTransaction transaction) {

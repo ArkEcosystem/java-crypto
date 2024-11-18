@@ -1,4 +1,3 @@
-// AbstractTransaction.java
 package org.arkecosystem.crypto.transactions.types;
 
 import com.google.gson.GsonBuilder;
@@ -7,11 +6,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.arkecosystem.crypto.encoding.Hex;
+import org.arkecosystem.crypto.identities.Address;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.arkecosystem.crypto.transactions.Serializer;
 import org.arkecosystem.crypto.utils.AbiDecoder;
 import org.arkecosystem.crypto.utils.TransactionHasher;
+
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
 
@@ -19,6 +21,7 @@ public abstract class AbstractTransaction {
     public int network;
     public long nonce;
     public String senderPublicKey;
+    public String senderAddress;
     public String data;
     public long fee = 0L;
     public String signature;
@@ -69,6 +72,9 @@ public abstract class AbstractTransaction {
         if (data.containsKey("vote")) {
             this.vote = (String) data.get("vote");
         }
+        if (data.containsKey("senderAddress")) {
+            this.senderAddress = (String) data.get("senderAddress");
+        }
     }
 
     public String getPayload() {
@@ -77,7 +83,6 @@ public abstract class AbstractTransaction {
 
     public AbstractTransaction refreshPayloadData() {
         this.data = getPayload();
-
         return this;
     }
 
@@ -91,7 +96,6 @@ public abstract class AbstractTransaction {
 
     public byte[] hash(boolean skipSignature) {
         HashMap<String, Object> map = new HashMap<>();
-
         map.put("gasPrice", this.gasPrice);
         map.put("network", this.network);
         map.put("nonce", this.nonce);
@@ -102,7 +106,6 @@ public abstract class AbstractTransaction {
         if (!skipSignature && this.signature != null) {
             map.put("signature", this.signature);
         }
-
         return TransactionHasher.toHash(map, skipSignature);
     }
 
@@ -152,17 +155,18 @@ public abstract class AbstractTransaction {
         return dest;
     }
 
-    public boolean verify() {
-        ECKey keys = ECKey.fromPublicOnly(Hex.decode(this.senderPublicKey));
+    public void recoverSender() {
+        if (this.signature == null || this.signature.length() != 130) {
+            throw new RuntimeException("Invalid signature");
+        }
 
         byte[] signatureWithRecId = Hex.decode(this.signature);
         if (signatureWithRecId.length != 65) {
-            return false;
+            throw new RuntimeException("Invalid signature length");
         }
 
         byte recId = signatureWithRecId[64];
-        byte[] signatureBytes = new byte[64];
-        System.arraycopy(signatureWithRecId, 0, signatureBytes, 0, 64);
+        byte[] signatureBytes = Arrays.copyOfRange(signatureWithRecId, 0, 64);
 
         BigInteger r = new BigInteger(1, Arrays.copyOfRange(signatureBytes, 0, 32));
         BigInteger s = new BigInteger(1, Arrays.copyOfRange(signatureBytes, 32, 64));
@@ -171,13 +175,49 @@ public abstract class AbstractTransaction {
 
         byte[] hash = this.hash(true);
 
-        ECKey recoveredKey =
-                ECKey.recoverFromSignature(recId, signature, Sha256Hash.wrap(hash), true);
+        ECKey recoveredKey = ECKey.recoverFromSignature(recId, signature, Sha256Hash.wrap(hash), true);
         if (recoveredKey == null) {
-            return false;
+            throw new RuntimeException("Could not recover public key from signature");
         }
 
-        return recoveredKey.getPubKeyPoint().equals(keys.getPubKeyPoint());
+        this.senderPublicKey = recoveredKey.getPublicKeyAsHex();
+
+        // Compute the sender's address (EVM address)
+        this.senderAddress = Address.fromPublicKey(this.senderPublicKey);
+    }
+
+    public boolean verify() {
+        try {
+            if (this.senderPublicKey == null) {
+                this.recoverSender();
+            }
+
+            ECKey keys = ECKey.fromPublicOnly(Hex.decode(this.senderPublicKey));
+
+            byte[] signatureWithRecId = Hex.decode(this.signature);
+            if (signatureWithRecId.length != 65) {
+                return false;
+            }
+
+            byte recId = signatureWithRecId[64];
+            byte[] signatureBytes = Arrays.copyOfRange(signatureWithRecId, 0, 64);
+
+            BigInteger r = new BigInteger(1, Arrays.copyOfRange(signatureBytes, 0, 32));
+            BigInteger s = new BigInteger(1, Arrays.copyOfRange(signatureBytes, 32, 64));
+
+            ECKey.ECDSASignature signature = new ECKey.ECDSASignature(r, s);
+
+            byte[] hash = this.hash(true);
+
+            ECKey recoveredKey = ECKey.recoverFromSignature(recId, signature, Sha256Hash.wrap(hash), true);
+            if (recoveredKey == null) {
+                return false;
+            }
+
+            return recoveredKey.getPubKeyPoint().equals(keys.getPubKeyPoint());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public byte[] serialize(boolean skipSignature) {
@@ -196,6 +236,7 @@ public abstract class AbstractTransaction {
         map.put("gasLimit", this.gasLimit);
         map.put("nonce", this.nonce);
         map.put("senderPublicKey", this.senderPublicKey);
+        map.put("senderAddress", this.senderAddress);
         map.put("signature", this.signature);
         map.put("recipientAddress", this.recipientAddress);
         map.put("value", this.value);

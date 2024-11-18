@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.PrivateKey;
+import org.arkecosystem.crypto.signature.ECDSAVerifier;
+import org.arkecosystem.crypto.signature.ECDSASigner;
 import org.arkecosystem.crypto.signature.SchnorrSigner;
 import org.arkecosystem.crypto.signature.SchnorrVerifier;
 import org.arkecosystem.crypto.signature.Signer;
@@ -196,10 +198,10 @@ public abstract class AbstractTransaction {
     }
 
     private Signer signer() {
-        return new SchnorrSigner();
+        return new ECDSASigner();
     }
 
     private Verifier verifier() {
-        return new SchnorrVerifier();
+        return new ECDSAVerifier();
     }
 }

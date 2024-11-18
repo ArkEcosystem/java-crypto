@@ -3,6 +3,7 @@ package org.arkecosystem.crypto.utils;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +26,10 @@ class AbiDecoderTest {
 
         Map<String, Object> decodedData = decoder.decodeFunctionData(data);
 
-        assertEquals(functionName, decodedData.get("functionName"));
-        assertEquals(args, decodedData.get("args"));
+        Map<String, Object> expectedData = new HashMap<>();
+        expectedData.put("functionName", functionName);
+        expectedData.put("args", args);
+
+        assertEquals(expectedData, decodedData);
     }
 }

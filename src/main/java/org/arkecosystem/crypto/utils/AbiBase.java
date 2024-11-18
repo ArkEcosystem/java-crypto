@@ -14,10 +14,11 @@ public abstract class AbiBase {
     protected List<Map<String, Object>> abi;
 
     public AbiBase() throws IOException {
-        String abiFilePath = "/Abi.Consensus.json";
+        String abiFilePath = "Abi.Consensus.json";
 
+        InputStream abiInputStream = getClass().getClassLoader().getResourceAsStream(abiFilePath);
+        
         ObjectMapper mapper = new ObjectMapper();
-        InputStream abiInputStream = getClass().getResourceAsStream(abiFilePath);
         Map<String, Object> abiJson = mapper.readValue(abiInputStream, Map.class);
         this.abi = (List<Map<String, Object>>) abiJson.get("abi");
     }

@@ -232,9 +232,13 @@ public class AbiEncoder extends AbiBase {
             throw new Exception("Invalid address: " + value);
         }
         value = stripHexPrefix(value).toLowerCase();
-
-        return Map.of("dynamic", false, "encoded", "0x" + String.format("%064s", value));
+    
+        // Pad the string to 64 characters with leading zeros
+        String paddedValue = String.format("%64s", value).replace(' ', '0');
+    
+        return Map.of("dynamic", false, "encoded", "0x" + paddedValue);
     }
+    
 
     private Map<String, Object> encodeBool(Boolean value) {
         String encoded = String.format("%064x", value ? 1 : 0);

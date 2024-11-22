@@ -220,6 +220,10 @@ public abstract class AbstractTransaction {
         }
     }
 
+    public byte[] serialize() {
+        return serialize(false);
+    }
+
     public byte[] serialize(boolean skipSignature) {
         return Serializer.newSerializer(this).serialize(skipSignature);
     }

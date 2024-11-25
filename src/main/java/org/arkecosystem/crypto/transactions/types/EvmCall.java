@@ -2,17 +2,17 @@ package org.arkecosystem.crypto.transactions.types;
 
 import java.util.Map;
 
-public class Transfer extends AbstractTransaction {
-    public Transfer() {
+public class EvmCall extends AbstractTransaction {
+    public EvmCall() {
         super();
     }
 
-    public Transfer(Map<String, Object> data) {
+    public EvmCall(Map<String, Object> data) {
         super(data);
     }
 
     @Override
     public String getPayload() {
-        return "";
+        return this.data != null ? this.data : "";
     }
 }

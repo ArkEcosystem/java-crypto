@@ -1,157 +1,35 @@
 package org.arkecosystem.crypto.transactions.builder;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import org.arkecosystem.crypto.transactions.types.Transaction;
+import java.util.Map;
+import org.arkecosystem.crypto.AbstractTest;
+import org.arkecosystem.crypto.encoding.Hex;
 import org.junit.jupiter.api.Test;
 
-class VoteBuilderTest {
-    @Test
-    void buildVote() {
-        Transaction actual =
-                new VoteBuilder()
-                        .addVote(
-                                "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192")
-                        .version(2)
-                        .nonce(3)
-                        .sign("this is a top secret passphrase")
-                        .transaction;
-
-        assertTrue(actual.verify());
-
-        HashMap actualHashMap = actual.toHashMap();
-        HashMap actualAsset = (HashMap) actualHashMap.get("asset");
-        List actualVotes = (List) actualAsset.get("votes");
-
-        assertEquals(
-                actualVotes,
-                Arrays.asList(
-                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"));
-    }
+public class VoteBuilderTest extends AbstractTest {
 
     @Test
-    void buildVotes() {
-        Transaction actual =
+    public void it_should_sign_it_with_a_passphrase() throws Exception {
+        Map<String, Object> fixture = loadFixture("vote");
+
+        Map<String, Object> data = (Map<String, Object>) fixture.get("data");
+
+        VoteBuilder builder =
                 new VoteBuilder()
-                        .addVotes(
-                                Arrays.asList(
-                                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"))
-                        .version(2)
-                        .nonce(3)
-                        .sign("this is a top secret passphrase")
-                        .transaction;
+                        .gasPrice(((Number) data.get("gasPrice")).intValue())
+                        .nonce(Long.parseLong(data.get("nonce").toString()))
+                        .network(((Number) data.get("network")).intValue())
+                        .vote("0x512F366D524157BcF734546eB29a6d687B762255")
+                        .gasLimit(((Number) data.get("gasLimit")).intValue())
+                        .recipientAddress((String) data.get("recipientAddress"))
+                        .sign(this.passphrase);
 
-        assertTrue(actual.verify());
+        byte[] serializedBytes = builder.transaction.serialize(false);
+        String serializedHex = Hex.encode(serializedBytes);
 
-        HashMap actualHashMap = actual.toHashMap();
-        HashMap actualAsset = (HashMap) actualHashMap.get("asset");
-        List actualVotes = (List) actualAsset.get("votes");
-
-        assertEquals(
-                actualVotes,
-                Arrays.asList(
-                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"));
-    }
-
-    @Test
-    void buildUnvote() {
-        Transaction actual =
-                new VoteBuilder()
-                        .addUnvote(
-                                "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193")
-                        .nonce(3)
-                        .sign("this is a top secret passphrase")
-                        .transaction;
-
-        assertTrue(actual.verify());
-
-        HashMap actualHashMap = actual.toHashMap();
-        HashMap actualAsset = (HashMap) actualHashMap.get("asset");
-        List actualUnvotes = (List) actualAsset.get("unvotes");
-
-        assertEquals(
-                actualUnvotes,
-                Arrays.asList(
-                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193"));
-    }
-
-    @Test
-    void buildUnvoteVote() {
-        Transaction actual =
-                new VoteBuilder()
-                        .addVotes(
-                                Arrays.asList(
-                                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"))
-                        .addUnvotes(
-                                Arrays.asList(
-                                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193"))
-                        .nonce(3)
-                        .sign("this is a top secret passphrase")
-                        .transaction;
-
-        assertTrue(actual.verify());
-
-        HashMap actualHashMap = actual.toHashMap();
-        HashMap actualAsset = (HashMap) actualHashMap.get("asset");
-        List actualVotes = (List) actualAsset.get("votes");
-        List actualUnvotes = (List) actualAsset.get("unvotes");
-
-        assertEquals(
-                actualVotes,
-                Arrays.asList(
-                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192"));
-
-        assertEquals(
-                actualUnvotes,
-                Arrays.asList(
-                        "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed193"));
-    }
-
-    @Test
-    void buildVoteSecondSignature() {
-        Transaction actual =
-                new VoteBuilder()
-                        .addVote(
-                                "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192")
-                        .version(2)
-                        .nonce(3)
-                        .sign("this is a top secret passphrase")
-                        .secondSign("this is a top secret second passphrase")
-                        .transaction;
-
-        assertTrue(actual.verify());
-        assertTrue(
-                actual.secondVerify(
-                        "03699e966b2525f9088a6941d8d94f7869964a000efe65783d78ac82e1199fe609"));
-    }
-
-    @Test
-    void buildMultiSignature() {
-        Transaction actual =
-                new VoteBuilder()
-                        .addVote(
-                                "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192")
-                        .version(2)
-                        .nonce(3)
-                        .multiSign("secret 1", 0)
-                        .multiSign("secret 2", 1)
-                        .multiSign("secret 3", 2)
-                        .sign("this is a top secret passphrase")
-                        .transaction;
-
-        assertTrue(actual.verify());
-
-        HashMap actualHashMap = actual.toHashMap();
-
-        assertNotNull(actualHashMap.get("signatures"));
-
-        List<String> actualSignatures = (List<String>) actualHashMap.get("signatures");
-
-        assertEquals(3, actualSignatures.size());
+        assertEquals(fixture.get("serialized"), serializedHex);
+        assertEquals(data.get("id"), builder.transaction.getId());
+        assertTrue(builder.verify());
     }
 }

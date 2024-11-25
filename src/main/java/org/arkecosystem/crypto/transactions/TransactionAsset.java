@@ -1,40 +1,43 @@
 package org.arkecosystem.crypto.transactions;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class TransactionAsset {
-    public Signature signature = new Signature();
-    public List<String> votes = new ArrayList<>();
-    public List<String> unvotes = new ArrayList<>();
-    public MultiSignature multiSignature = new MultiSignature();
-    public MultiPayment multiPayment = new MultiPayment();
-    public HashMap<String, Object> customAsset = new HashMap<>();
-    public long amount = 0L;
-    public String validatorPublicKey;
-    public String username;
+    public EvmCall evmCall = new EvmCall(); // Instance of EvmCall
+    public String vote = "";
+    public String validatorPublicKey = "";
 
-    public static class Signature {
-        public String publicKey;
-    }
+    public static class EvmCall {
+        public long gasLimit = 1000000; // Default gas limit
+        public String payload = ""; // EVM code in hexadecimal format
 
-    public static class MultiSignature {
-        public byte min;
-        public List<String> publicKeys = new ArrayList<>();
-    }
-
-    public static class MultiPayment {
-        public List<Payment> payments = new ArrayList<>();
-    }
-
-    public static class Payment {
-        public long amount;
-        public String recipientId;
-
-        public Payment(long amount, String recipientId) {
-            this.amount = amount;
-            this.recipientId = recipientId;
+        // Converts the EvmCall object to a HashMap for serialization
+        public HashMap<String, Object> toHashMap() {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("gasLimit", this.gasLimit);
+            map.put("payload", this.payload);
+            return map;
         }
+    }
+
+    public HashMap<String, Object> toHashMap() {
+        HashMap<String, Object> map = new HashMap<>();
+
+        // Adds "evmCall" to the map if it's defined
+        if (evmCall != null) {
+            map.put("evmCall", evmCall.toHashMap());
+        }
+
+        // Adds "vote" to the map if it's not empty
+        if (vote != null && !vote.isEmpty()) {
+            map.put("vote", this.vote);
+        }
+
+        // Adds "vote" to the map if it's not empty
+        if (validatorPublicKey != null && !validatorPublicKey.isEmpty()) {
+            map.put("validatorPublicKey", this.validatorPublicKey);
+        }
+
+        return map;
     }
 }

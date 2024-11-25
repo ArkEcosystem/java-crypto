@@ -7,11 +7,11 @@ plugins {
 }
 
 group = 'org.arkecosystem'
-version = '2.0.0'
+version = '2.0.0-mainsail'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
     withJavadocJar()
     withSourcesJar()
 }
@@ -22,15 +22,13 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.web3j:core:4.8.7' 
+    // Core dependencies
     implementation 'org.bitcoinj:bitcoinj-core:0.16.3'
-    implementation files('libs/secp256k1-api-0.0.1.jar')
-    implementation files('libs/secp256k1-foreign-0.0.1.jar')
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+    implementation 'org.web3j:core:4.8.7'
     implementation 'com.google.code.gson:gson:2.11.0'
-    implementation 'com.google.guava:guava:30.2.0-jre'
 
-    testImplementation 'org.slf4j:slf4j-api:2.0.13'
-    testRuntimeOnly 'org.slf4j:slf4j-simple:2.0.13'
+    // Test dependencies
     testImplementation 'org.hamcrest:hamcrest-library:3.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.3'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.3'
@@ -42,7 +40,6 @@ test {
     useJUnitPlatform()
     testLogging {
         events 'PASSED', 'FAILED', 'SKIPPED'
-      showStandardStreams = true
     }
 }
 
@@ -155,8 +152,13 @@ publishing {
 }
 
 signing {
+    // Only sign when publishing to remote repository
+    required { gradle.taskGraph.hasTask("publish") && !gradle.taskGraph.hasTask("publishToMavenLocal") }
+
     def signingKey = findProperty("signingKey")
     def signingPassword = findProperty("signingPassword")
-    useInMemoryPgpKeys(signingKey as String, signingPassword as String)
-    sign publishing.publications.mavenJava
+    if (signingKey && signingPassword) {
+        useInMemoryPgpKeys(signingKey as String, signingPassword as String)
+        sign publishing.publications.mavenJava
+    }
 }

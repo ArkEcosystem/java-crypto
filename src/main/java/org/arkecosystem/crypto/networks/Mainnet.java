@@ -2,6 +2,10 @@ package org.arkecosystem.crypto.networks;
 
 public class Mainnet implements INetwork {
 
+    public int chainId() {
+        return 11811;
+    }
+
     public int version() {
         return 23;
     }

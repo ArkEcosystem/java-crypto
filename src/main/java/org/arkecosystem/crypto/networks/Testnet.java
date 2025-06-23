@@ -2,6 +2,10 @@ package org.arkecosystem.crypto.networks;
 
 public class Testnet implements INetwork {
 
+    public int chainId() {
+        return 11812;
+    }
+
     public int version() {
         return 23;
     }

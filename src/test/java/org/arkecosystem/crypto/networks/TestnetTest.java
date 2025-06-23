@@ -7,6 +7,11 @@ import org.junit.jupiter.api.Test;
 class TestnetTest {
 
     @Test
+    void chainId() {
+        assertEquals(11812, new Testnet().chainId());
+    }
+
+    @Test
     void version() {
         assertEquals(0x17, new Testnet().version());
     }

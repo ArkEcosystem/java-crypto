@@ -13,6 +13,14 @@ public class ValidatorRegistrationBuilder
         return this.instance();
     }
 
+    public ValidatorRegistrationBuilder value(String value) {
+        this.transaction.value = value;
+
+        this.transaction.refreshPayloadData();
+
+        return this.instance();
+    }
+
     @Override
     protected AbstractTransaction getTransactionInstance() {
         return new ValidatorRegistration();

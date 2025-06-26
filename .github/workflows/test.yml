@@ -1,101 +1,104 @@
 name: Test
 
 on:
-    push:
-        branches:
-            - "master"
-            - "develop"
-    pull_request:
-        types: [ready_for_review, synchronize, opened]
+  push:
+    branches:
+      - "master"
+      - "develop"
+  pull_request:
+    types: [ready_for_review, synchronize, opened]
 
 jobs:
-    format:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
-              with:
-                  ref: ${{ github.head_ref }}
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-            - name: Merge Conflict finder
-              uses: olivernybroe/action-conflict-finder@v1.1
+      - name: Set up Java 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
 
-            - name: Use Java Version 22
-              uses: actions/setup-java@v2
-              with:
-                  distribution: "adopt"
-                  java-version: "22"
-                  cache: "gradle"
+      - name: Install Dependencies
+        run: ./gradlew dependencies
 
-            - name: Format code
-              run: gradle format
+      - name: Run Tests
+        run: ./gradlew test jacocoTestReport
 
-            - name: Commit fixed code
-              uses: stefanzweifel/git-auto-commit-action@v4
-              with:
-                  commit_message: "style: resolve style guide violations"
-                  branch: ${{ github.head_ref }}
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: build/reports/tests/test
 
-    unit:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
-              with:
-                  ref: ${{ github.head_ref }}
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-report
+          path: build/reports/jacoco/test/html
 
-            - name: Merge Conflict finder
-              uses: olivernybroe/action-conflict-finder@v1.1
+      - name: Upload Jacoco XML Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-xml-report
+          path: build/reports/jacoco/test/jacocoTestReport.xml
 
-            - name: Install & build herumi/mcl
-              run: |
-                git clone https://github.com/herumi/mcl
-                cd mcl
-                mkdir build
-                cd build
-                cmake ..
-                make
+      - name: Install & build herumi/mcl
+        run: |
+        git clone https://github.com/herumi/mcl
+        cd mcl
+        mkdir build
+        cd build
+        cmake ..
+        make
 
-            - name: Copy mcl library to /usr/local/lib
-              run: |
-                sudo cp $HOME/work/java-crypto/java-crypto/mcl/build/lib/libmcl.a /usr/local/lib/
+      - name: Copy mcl library to /usr/local/lib
+        run: |
+        sudo cp $HOME/work/java-crypto/java-crypto/mcl/build/lib/libmcl.a /usr/local/lib/
 
-            - name: Build Java FFI
-              run: |
-                cd $HOME/work/java-crypto/java-crypto/mcl/ffi/java
-                mkdir build
-                cd build
-                cmake ..
-                cmake --build . --config Release
+      - name: Build Java FFI
+        run: |
+        cd $HOME/work/java-crypto/java-crypto/mcl/ffi/java
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build . --config Release
 
-            - name: Copy libmcljava.so to /usr/local/lib
-              run: |
-                sudo cp $HOME/work/java-crypto/java-crypto/mcl/ffi/java/build/libmcljava.so /usr/local/lib/
+      - name: Copy libmcljava.so to /usr/local/lib
+        run: |
+        sudo cp $HOME/work/java-crypto/java-crypto/mcl/ffi/java/build/libmcljava.so /usr/local/lib/
 
-            - name: Install Nix
-              uses: cachix/install-nix-action@v27
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
 
-            - name: Install libsecp256k1
-              run: |
-                nix profile install nixpkgs#secp256k1
-              env:
-                NIX_PATH: $HOME/.nix-profile/bin
+      - name: Install libsecp256k1
+        run: |
+        nix profile install nixpkgs#secp256k1
+        env:
+        NIX_PATH: $HOME/.nix-profile/bin
 
-            - name: Set LD_LIBRARY_PATH
-              run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOME/.nix-profile/lib" >> $GITHUB_ENV
+      - name: Set LD_LIBRARY_PATH
+        run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:$HOME/.nix-profile/lib" >> $GITHUB_ENV
 
-            - name: Use Java Version 22
-              uses: actions/setup-java@v2
-              with:
-                  distribution: "adopt"
-                  java-version: "22"
-                  cache: "gradle"
+      - name: Use Java Version 22
+        uses: actions/setup-java@v2
+        with:
+            distribution: "adopt"
+            java-version: "22"
+            cache: "gradle"
 
-            - name: Install
-              run: gradle dependencies
+      - name: Install
+        run: gradle dependencies
 
-            - name: Test
-              run: gradle test && gradle jacocoTestReport
+      - name: Test
+        run: gradle test && gradle jacocoTestReport
 
-            - name: Codecov
-              run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}
+      - name: Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build/reports/jacoco/test/jacocoTestReport.xml
+          fail_ci_if_error: true

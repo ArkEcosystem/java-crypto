@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.google.gson.internal.LinkedTreeMap;
-import org.arkecosystem.crypto.enums.TransactionTypeGroup;
 import org.arkecosystem.crypto.transactions.Deserializer;
 import org.arkecosystem.crypto.transactions.FixtureLoader;
 import org.arkecosystem.crypto.transactions.types.Transaction;
@@ -23,7 +22,6 @@ class UsernameResignationTest {
 
         assertEquals(((Double) data.get("version")).intValue(), actual.version);
         assertEquals(((Double) data.get("network")).intValue(), actual.network);
-        assertEquals(TransactionTypeGroup.CORE.getValue(), actual.typeGroup);
         assertEquals(((Double) data.get("type")).intValue(), actual.type);
         assertEquals((Long.valueOf((String) data.get("nonce"))), actual.nonce);
         assertEquals(data.get("senderPublicKey").toString(), actual.senderPublicKey);

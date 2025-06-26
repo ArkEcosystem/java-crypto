@@ -2,52 +2,44 @@ package org.arkecosystem.crypto.transactions.types;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.HashMap;
-import org.arkecosystem.crypto.enums.CoreTransactionTypes;
-import org.arkecosystem.crypto.enums.TransactionTypeGroup;
+import java.util.List;
+import java.util.Map;
 
-public class UsernameRegistration extends Transaction {
-    @Override
-    public int getTransactionType() {
-        return CoreTransactionTypes.USERNAME_REGISTRATION.getValue();
+import org.arkecosystem.crypto.enums.AbiFunction;
+import org.arkecosystem.crypto.utils.AbiEncoder;
+
+public class UsernameRegistration extends AbstractTransaction {
+    public UsernameRegistration() {
+        super(); // Call the default constructor of AbstractTransaction
+    }
+
+    public UsernameRegistration(Map<String, Object> data) {
+        super(data);
+
+        // Use a local decodePayload method since we can't rely on AbstractTransaction's data field
+        List<Object> payload = decodePayload(data);
+        if (payload != null && !payload.isEmpty()) {
+            Object arg = payload.get(0);
+            this.username = arg.toString();
+        }
     }
 
     @Override
-    public int getTransactionTypeGroup() {
-        return TransactionTypeGroup.CORE.getValue();
-    }
+    public String getPayload() {
+        if (this.username == null || this.username.isEmpty()) {
+            return "";
+        }
 
-    @Override
-    public HashMap<String, Object> assetToHashMap() {
-        HashMap<String, Object> asset = new HashMap<>();
+        List<Object> args = new ArrayList<>();
+        args.add(this.username);
 
-        asset.put("username", this.asset.username);
-
-        return asset;
-    }
-
-    @Override
-    public byte[] serialize() {
-        byte[] username = this.asset.username.getBytes();
-
-        ByteBuffer buffer = ByteBuffer.allocate(username.length + 1);
-
-        buffer.order(ByteOrder.LITTLE_ENDIAN);
-
-        buffer.put((byte) username.length);
-        buffer.put(username);
-
-        return buffer.array();
-    }
-
-    @Override
-    public void deserialize(ByteBuffer buffer) {
-        int usernameLength = buffer.get() & 0xff;
-
-        byte[] username = new byte[usernameLength];
-        buffer.get(username);
-
-        String utf8Username = new String(username);
-        this.asset.username = utf8Username;
+        try {
+            return new AbiEncoder()
+                    .encodeFunctionCall(AbiFunction.USERNAME_REGISTRATION.toString(), args);
+        } catch (Exception e) {
+            throw new RuntimeException("Error encoding function call", e);
+        }
     }
 }

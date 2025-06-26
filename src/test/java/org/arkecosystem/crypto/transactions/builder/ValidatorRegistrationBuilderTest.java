@@ -5,28 +5,36 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.HashMap;
 import java.util.List;
 import org.arkecosystem.crypto.transactions.types.Transaction;
+import java.util.Map;
+import org.arkecosystem.crypto.AbstractTest;
+import org.arkecosystem.crypto.encoding.Hex;
 import org.junit.jupiter.api.Test;
 
-class ValidatorRegistrationBuilderTest {
+public class ValidatorRegistrationBuilderTest extends AbstractTest {
+
     @Test
-    void build() {
-        Transaction actual =
+    public void it_should_sign_it_with_a_passphrase() throws Exception {
+        Map<String, Object> fixture = loadFixture("validator-registration");
+
+        Map<String, Object> data = (Map<String, Object>) fixture.get("data");
+
+        ValidatorRegistrationBuilder builder =
                 new ValidatorRegistrationBuilder()
-                        .publicKeyAsset(
+                        .gasPrice(((Number) data.get("gasPrice")).intValue())
+                        .nonce(Long.parseLong(data.get("nonce").toString()))
+                        .network(((Number) data.get("network")).intValue())
+                        .gasLimit(((Number) data.get("gasLimit")).intValue())
+                        .validatorPublicKey(
                                 "a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118")
-                        .nonce(3)
-                        .sign("this is a top secret passphrase")
-                        .transaction;
+                        .recipientAddress((String) data.get("recipientAddress"))
+                        .sign(this.passphrase);
 
-        HashMap actualHashMap = actual.toHashMap();
+        byte[] serializedBytes = builder.transaction.serialize(false);
+        String serializedHex = Hex.encode(serializedBytes);
 
-        HashMap asset = (HashMap) actualHashMap.get("asset");
-
-        assertEquals(
-                asset.get("validatorPublicKey"),
-                "a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118");
-
-        assertTrue(actual.verify());
+        assertEquals(fixture.get("serialized"), serializedHex);
+        assertEquals(data.get("id"), builder.transaction.getId());
+        assertTrue(builder.verify());
     }
 
     @Test

@@ -1,165 +1,127 @@
 package org.arkecosystem.crypto.transactions;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import org.arkecosystem.crypto.encoding.Hex;
-import org.arkecosystem.crypto.enums.CoreTransactionTypes;
-import org.arkecosystem.crypto.enums.TransactionTypeGroup;
-import org.arkecosystem.crypto.transactions.types.MultiPayment;
-import org.arkecosystem.crypto.transactions.types.MultiSignatureRegistration;
-import org.arkecosystem.crypto.transactions.types.SecondSignatureRegistration;
-import org.arkecosystem.crypto.transactions.types.Transaction;
-import org.arkecosystem.crypto.transactions.types.Transfer;
-import org.arkecosystem.crypto.transactions.types.UsernameRegistration;
-import org.arkecosystem.crypto.transactions.types.UsernameResignation;
-import org.arkecosystem.crypto.transactions.types.ValidatorRegistration;
-import org.arkecosystem.crypto.transactions.types.ValidatorResignation;
-import org.arkecosystem.crypto.transactions.types.Vote;
+import org.arkecosystem.crypto.enums.AbiFunction;
+import org.arkecosystem.crypto.transactions.types.*;
+import org.arkecosystem.crypto.utils.AbiDecoder;
 
 public class Deserializer {
+    private static final int SIGNATURE_SIZE = 64;
+    private static final int RECOVERY_SIZE = 1;
 
     private final ByteBuffer buffer;
-    private Transaction transaction;
-
-    private final Map<Integer, Map<Integer, Transaction>> transactionGroups = new HashMap<>();
 
     public Deserializer(String serialized) {
-        Map<Integer, Transaction> coreTransactionTypes = new HashMap<>();
-        coreTransactionTypes.put(CoreTransactionTypes.TRANSFER.getValue(), new Transfer());
-        coreTransactionTypes.put(
-                CoreTransactionTypes.SECOND_SIGNATURE_REGISTRATION.getValue(),
-                new SecondSignatureRegistration());
-        coreTransactionTypes.put(
-                CoreTransactionTypes.VALIDATOR_REGISTRATION.getValue(),
-                new ValidatorRegistration());
-        coreTransactionTypes.put(CoreTransactionTypes.VOTE.getValue(), new Vote());
-        coreTransactionTypes.put(
-                CoreTransactionTypes.MULTI_SIGNATURE_REGISTRATION.getValue(),
-                new MultiSignatureRegistration());
-        coreTransactionTypes.put(CoreTransactionTypes.MULTI_PAYMENT.getValue(), new MultiPayment());
-        coreTransactionTypes.put(
-                CoreTransactionTypes.VALIDATOR_RESIGNATION.getValue(), new ValidatorResignation());
-        coreTransactionTypes.put(
-                CoreTransactionTypes.USERNAME_RESIGNATION.getValue(), new UsernameResignation());
-        coreTransactionTypes.put(
-                CoreTransactionTypes.USERNAME_REGISTRATION.getValue(), new UsernameRegistration());
-
-        transactionGroups.put(TransactionTypeGroup.CORE.getValue(), coreTransactionTypes);
-
-        this.buffer = ByteBuffer.wrap(Hex.decode(serialized)).slice();
+        byte[] bytes = serialized.contains("\0") ? serialized.getBytes() : Hex.decode(serialized);
+        this.buffer = ByteBuffer.wrap(bytes);
         this.buffer.order(ByteOrder.LITTLE_ENDIAN);
     }
 
-    public Transaction deserialize() {
-        this.buffer.get();
-
-        deserializeCommon();
-        deserializeVendorField();
-
-        this.transaction.deserialize(this.buffer);
-
-        deserializeSignatures();
-
-        this.transaction.computeId();
-
-        return this.transaction;
+    public static Deserializer newDeserializer(String serialized) {
+        return new Deserializer(serialized);
     }
 
-    private void deserializeCommon() {
-        int version = this.buffer.get();
-        int network = this.buffer.get();
-        int typeGroup = this.buffer.getInt();
-        int type = this.buffer.getShort();
-        long nonce = this.buffer.getLong();
+    public AbstractTransaction deserialize() {
+        int startPosition = buffer.position();
 
-        this.transaction = this.transactionGroups.get(typeGroup).get(type);
-        this.transaction.version = version;
-        this.transaction.network = network;
-        this.transaction.typeGroup = typeGroup;
-        this.transaction.type = type;
-        this.transaction.nonce = nonce;
+        AbstractTransaction tempTransaction = new EvmCall();
+        deserializeCommon(tempTransaction);
+        deserializeData(tempTransaction);
 
-        byte[] senderPublicKey = new byte[33];
-        this.buffer.get(senderPublicKey);
-        this.transaction.senderPublicKey = Hex.encode(senderPublicKey);
+        AbstractTransaction transaction = guessTransactionFromTransactionData(tempTransaction);
 
-        this.transaction.fee = this.buffer.getLong();
+        buffer.position(startPosition);
+
+        deserializeCommon(transaction);
+        deserializeData(transaction);
+        deserializeSignatures(transaction);
+
+        transaction.recoverSender();
+
+        transaction.computeId();
+
+        return transaction;
     }
 
-    private void deserializeVendorField() {
-        int vendorFieldLength = this.buffer.get();
-        if (vendorFieldLength > 0) {
-            byte[] vendorField = new byte[vendorFieldLength];
-            this.buffer.get(vendorField);
-            transaction.vendorField = new String(vendorField);
+    private AbstractTransaction guessTransactionFromTransactionData(
+            AbstractTransaction transactionData) {
+        if (!"0".equals(transactionData.value)) {
+            return new Transfer();
+        }
+
+        Map<String, Object> payloadData = decodePayload(transactionData);
+        if (payloadData == null) {
+            return new EvmCall();
+        }
+
+        String functionName = (String) payloadData.get("functionName");
+
+        if (functionName.equals(AbiFunction.VOTE.toString())) {
+            return new Vote(transactionData.toHashMap());
+        } else if (functionName.equals(AbiFunction.UNVOTE.toString())) {
+            return new Unvote(transactionData.toHashMap());
+        } else if (functionName.equals(AbiFunction.VALIDATOR_REGISTRATION.toString())) {
+            return new ValidatorRegistration(transactionData.toHashMap());
+        } else if (functionName.equals(AbiFunction.VALIDATOR_RESIGNATION.toString())) {
+            return new ValidatorResignation(transactionData.toHashMap());
+        }
+
+        return new EvmCall();
+    }
+
+    private Map<String, Object> decodePayload(AbstractTransaction transaction) {
+        String payload = transaction.data != null ? transaction.data : "";
+        if (payload.isEmpty()) {
+            return null;
+        }
+
+        try {
+            AbiDecoder abiDecoder = new AbiDecoder();
+            return abiDecoder.decodeFunctionData(payload);
+        } catch (Exception e) {
+            return null;
         }
     }
 
-    private void deserializeSignatures() {
-        if (canReadNonMultiSignature()) {
-            byte[] signatureBuffer = new byte[64];
-            buffer.get(signatureBuffer);
-            transaction.signature = Hex.encode(signatureBuffer);
-        }
-
-        if (canReadNonMultiSignature()) {
-            byte[] signatureBuffer = new byte[64];
-            buffer.get(signatureBuffer);
-            transaction.secondSignature = Hex.encode(signatureBuffer);
-        }
-
-        if (buffer.hasRemaining()) {
-            if (buffer.remaining() % 65 == 0) {
-                transaction.signatures = new ArrayList<>();
-
-                int count = buffer.remaining() / 65;
-                Set<Integer> publicKeyIndexes = new HashSet<>();
-                for (int i = 0; i < count; i++) {
-                    byte[] signatureBuffer = new byte[65];
-                    buffer.get(signatureBuffer);
-                    String multiSignaturePart = Hex.encode(signatureBuffer);
-                    int publicKeyIndex = Integer.parseInt(multiSignaturePart.substring(0, 2), 16);
-
-                    if (!publicKeyIndexes.contains(publicKeyIndex)) {
-                        publicKeyIndexes.add(publicKeyIndex);
-                    } else {
-                        throw new RuntimeException("Duplicate participant in multi signature");
-                    }
-
-                    transaction.signatures.add(multiSignaturePart);
-                }
-            } else {
-                throw new RuntimeException("signature buffer not exhausted");
-            }
-        }
+    private void deserializeCommon(AbstractTransaction transaction) {
+        transaction.network = Byte.toUnsignedInt(buffer.get());
+        transaction.nonce = buffer.getLong();
+        transaction.gasPrice = buffer.getInt();
+        transaction.gasLimit = buffer.getInt();
     }
 
-    private boolean canReadNonMultiSignature() {
-        return buffer.hasRemaining()
-                && (buffer.remaining() % 64 == 0 || buffer.remaining() % 65 != 0);
-    }
+    private void deserializeData(AbstractTransaction transaction) {
+        byte[] valueBytes = new byte[32];
+        buffer.get(valueBytes);
+        transaction.value = new BigInteger(1, valueBytes).toString();
 
-    public void setNewTransactionType(Transaction transaction) {
-        if (this.transactionGroups.containsKey(transaction.getTransactionTypeGroup())) {
-            this.transactionGroups
-                    .get(transaction.getTransactionTypeGroup())
-                    .put(transaction.getTransactionType(), transaction);
+        int recipientMarker = Byte.toUnsignedInt(buffer.get());
+        if (recipientMarker == 1) {
+            byte[] recipientBytes = new byte[20];
+            buffer.get(recipientBytes);
+            transaction.recipientAddress = "0x" + Hex.encode(recipientBytes);
+        }
+
+        int payloadLength = buffer.getInt();
+        if (payloadLength > 0) {
+            byte[] payloadBytes = new byte[payloadLength];
+            buffer.get(payloadBytes);
+            transaction.data = Hex.encode(payloadBytes);
         } else {
-            Map<Integer, Transaction> newTransactionGroup = new HashMap<>();
-            newTransactionGroup.put(transaction.getTransactionType(), transaction);
-            this.transactionGroups.put(transaction.getTransactionTypeGroup(), newTransactionGroup);
+            transaction.data = "";
         }
     }
 
-    public boolean hasTransactionType(int typeGroup, int type) {
-        if (!this.transactionGroups.containsKey(typeGroup)) {
-            return false;
+    private void deserializeSignatures(AbstractTransaction transaction) {
+        int signatureLength = SIGNATURE_SIZE + RECOVERY_SIZE;
+        if (buffer.remaining() >= signatureLength) {
+            byte[] signatureBytes = new byte[signatureLength];
+            buffer.get(signatureBytes);
+            transaction.signature = Hex.encode(signatureBytes);
         }
-        return this.transactionGroups.get(typeGroup).containsKey(type);
     }
 }

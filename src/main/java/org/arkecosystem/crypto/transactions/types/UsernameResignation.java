@@ -2,30 +2,27 @@ package org.arkecosystem.crypto.transactions.types;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
-import org.arkecosystem.crypto.enums.CoreTransactionTypes;
-import org.arkecosystem.crypto.enums.TransactionTypeGroup;
+import java.util.Map;
 
-public class UsernameResignation extends Transaction {
-    @Override
-    public int getTransactionType() {
-        return CoreTransactionTypes.USERNAME_RESIGNATION.getValue();
+import org.arkecosystem.crypto.enums.AbiFunction;
+import org.arkecosystem.crypto.utils.AbiEncoder;
+
+public class UsernameResignation extends AbstractTransaction {
+    public UsernameResignation() {
+        super(); // Call the default constructor of AbstractTransaction
+    }
+
+    public UsernameResignation(Map<String, Object> data) {
+        super(data);
     }
 
     @Override
-    public int getTransactionTypeGroup() {
-        return TransactionTypeGroup.CORE.getValue();
+    public String getPayload() {
+        try {
+            return new AbiEncoder()
+                    .encodeFunctionCall(AbiFunction.USERNAME_RESIGNATION.toString());
+        } catch (Exception e) {
+            throw new RuntimeException("Error encoding function call", e);
+        }
     }
-
-    @Override
-    public HashMap<String, Object> assetToHashMap() {
-        return null;
-    }
-
-    @Override
-    public byte[] serialize() {
-        return new byte[0];
-    }
-
-    @Override
-    public void deserialize(ByteBuffer buffer) {}
 }

@@ -1,45 +1,42 @@
 package org.arkecosystem.crypto.transactions.types;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.HashMap;
-import org.arkecosystem.crypto.encoding.Hex;
-import org.arkecosystem.crypto.enums.CoreTransactionTypes;
-import org.arkecosystem.crypto.enums.TransactionTypeGroup;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import org.arkecosystem.crypto.enums.AbiFunction;
+import org.arkecosystem.crypto.utils.AbiEncoder;
 
-public class ValidatorRegistration extends Transaction {
-    @Override
-    public int getTransactionType() {
-        return CoreTransactionTypes.VALIDATOR_REGISTRATION.getValue();
+public class ValidatorRegistration extends AbstractTransaction {
+    public ValidatorRegistration() {
+        super(); // Call the default constructor of AbstractTransaction
+    }
+
+    public ValidatorRegistration(Map<String, Object> data) {
+        super(data);
+
+        // Use a local decodePayload method since we can't rely on AbstractTransaction's data field
+        List<Object> payload = decodePayload(data);
+        if (payload != null && !payload.isEmpty()) {
+            Object arg = payload.get(0);
+            this.validatorPublicKey = arg.toString().replaceFirst("^0x", "");
+        }
     }
 
     @Override
-    public int getTransactionTypeGroup() {
-        return TransactionTypeGroup.CORE.getValue();
-    }
+    public String getPayload() {
+        if (this.validatorPublicKey == null || this.validatorPublicKey.isEmpty()) {
+            return "";
+        }
 
-    @Override
-    public HashMap<String, Object> assetToHashMap() {
-        HashMap<String, Object> asset = new HashMap<>();
+        String validatorPublicKeyHex = "0x" + this.validatorPublicKey;
+        List<Object> args = new ArrayList<>();
+        args.add(validatorPublicKeyHex);
 
-        asset.put("validatorPublicKey", this.asset.validatorPublicKey);
-
-        return asset;
-    }
-
-    @Override
-    public byte[] serialize() {
-        ByteBuffer buffer = ByteBuffer.allocate(48);
-        buffer.order(ByteOrder.LITTLE_ENDIAN);
-        buffer.put(Hex.decode(this.asset.validatorPublicKey));
-
-        return buffer.array();
-    }
-
-    @Override
-    public void deserialize(ByteBuffer buffer) {
-        byte[] validatorPublicKey = new byte[48];
-        buffer.get(validatorPublicKey);
-        this.asset.validatorPublicKey = Hex.encode(validatorPublicKey);
+        try {
+            return new AbiEncoder()
+                    .encodeFunctionCall(AbiFunction.VALIDATOR_REGISTRATION.toString(), args);
+        } catch (Exception e) {
+            throw new RuntimeException("Error encoding function call", e);
+        }
     }
 }

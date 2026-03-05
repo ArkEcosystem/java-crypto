@@ -7,6 +7,10 @@ public class BlsPublicKey {
 
     public static boolean validate(String publicKeyHex) {
         try {
+            if (publicKeyHex == null) {
+                return false;
+            }
+
             if (publicKeyHex.startsWith("0x")) {
                 publicKeyHex = publicKeyHex.substring(2);
             }

@@ -27,6 +27,7 @@ dependencies {
     implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
     implementation 'org.web3j:core:4.8.7'
     implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'foundation.icon:blst-java:0.3.2'
 
     // Test dependencies
     testImplementation 'org.hamcrest:hamcrest-library:3.0'

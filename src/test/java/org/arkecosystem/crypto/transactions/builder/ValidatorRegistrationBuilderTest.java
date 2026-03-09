@@ -33,4 +33,13 @@ public class ValidatorRegistrationBuilderTest extends AbstractTest {
         assertEquals(data.get("id"), builder.transaction.getId());
         assertTrue(builder.verify());
     }
+
+    @Test
+    public void it_should_throw_on_invalid_bls_public_key() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    new ValidatorRegistrationBuilder().validatorPublicKey("invalid-bls-key");
+                });
+    }
 }

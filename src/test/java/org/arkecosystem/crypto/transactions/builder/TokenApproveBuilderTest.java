@@ -20,10 +20,10 @@ public class TokenApproveBuilderTest extends AbstractTest {
                 new TokenApproveBuilder()
                         .contractAddress((String) data.get("recipientAddress"))
                         .spender((String) data.get("recipientAddress"), BigInteger.ZERO)
-                        .gasPrice(((Number) data.get("gasPrice")).intValue())
+                        .gasPrice(((Number) data.get("gasPrice")).longValue())
                         .nonce(Long.parseLong(data.get("nonce").toString()))
                         .network(((Number) data.get("network")).intValue())
-                        .gasLimit(((Number) data.get("gasLimit")).intValue())
+                        .gasLimit(((Number) data.get("gasLimit")).longValue())
                         .sign(this.passphrase);
 
         byte[] serializedBytes = builder.transaction.serialize(false);

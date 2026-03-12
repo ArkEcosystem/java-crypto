@@ -17,10 +17,10 @@ public class UnvoteBuilderTest extends AbstractTest {
 
         UnvoteBuilder builder =
                 new UnvoteBuilder()
-                        .gasPrice(((Number) data.get("gasPrice")).intValue())
+                        .gasPrice(((Number) data.get("gasPrice")).longValue())
                         .nonce(Long.parseLong(data.get("nonce").toString()))
                         .network(((Number) data.get("network")).intValue())
-                        .gasLimit(((Number) data.get("gasLimit")).intValue())
+                        .gasLimit(((Number) data.get("gasLimit")).longValue())
                         .recipientAddress((String) data.get("recipientAddress"))
                         .sign(this.passphrase);
 

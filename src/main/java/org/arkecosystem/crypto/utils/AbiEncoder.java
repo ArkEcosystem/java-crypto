@@ -11,6 +11,10 @@ public class AbiEncoder extends AbiBase {
         super();
     }
 
+    public AbiEncoder(String abiFilePath) throws IOException {
+        super(abiFilePath);
+    }
+
     public String encodeFunctionCall(String functionName) throws Exception {
         return encodeFunctionCall(functionName, Collections.emptyList());
     }
@@ -266,7 +270,7 @@ public class AbiEncoder extends AbiBase {
             }
         }
         String hex = bigValue.toString(16);
-        String encoded = String.format("%064s", hex);
+        String encoded = "0".repeat(Math.max(0, 64 - hex.length())) + hex;
 
         return Map.of("dynamic", false, "encoded", "0x" + encoded);
     }

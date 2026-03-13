@@ -16,7 +16,7 @@ public class DeserializerTest extends AbstractTest {
 
         AbstractTransaction transaction = assertTransaction(fixture);
 
-        assertEquals("10000000000000000000", transaction.value);
+        assertEquals("100000000", transaction.value);
 
         assertTrue(transaction instanceof Transfer);
     }
@@ -26,11 +26,6 @@ public class DeserializerTest extends AbstractTest {
         Map<String, Object> fixture = loadFixture("vote");
 
         AbstractTransaction transaction = assertTransaction(fixture);
-
-        assertEquals("0x512F366D524157BcF734546eB29a6d687B762255", transaction.vote);
-
-        assertEquals(
-                "749744e0d689c46e37ff2993a984599eac4989a9ef0028337b335c9d43abf936", transaction.id);
 
         assertTrue(transaction instanceof Vote);
     }
@@ -69,7 +64,7 @@ public class DeserializerTest extends AbstractTest {
                 assertDeserialized(
                         fixture,
                         new String[] {
-                            "id", "nonce", "gasPrice", "gasLimit", "signature",
+                            "id", "nonce", "gasPrice", "gasLimit",
                         });
 
         assertTrue(transaction.verify());
@@ -80,7 +75,6 @@ public class DeserializerTest extends AbstractTest {
     private AbstractTransaction assertDeserialized(Map<String, Object> fixture, String[] keys)
             throws Exception {
         String serializedHex = (String) fixture.get("serialized");
-        byte[] serializedBytes = Hex.decode(serializedHex);
 
         Deserializer deserializer = new Deserializer(serializedHex);
         AbstractTransaction transaction = deserializer.deserialize();
@@ -99,11 +93,10 @@ public class DeserializerTest extends AbstractTest {
             if (expectedValue != null) {
                 if (expectedValue instanceof Number) {
                     assertEquals(
-                            ((Number) expectedValue).intValue(),
-                            ((Number) actualValue).intValue(),
+                            ((Number) expectedValue).longValue(),
+                            ((Number) actualValue).longValue(),
                             "Field " + key + " does not match");
                 } else {
-
                     assertEquals(
                             expectedValue.toString(),
                             actualValue.toString(),

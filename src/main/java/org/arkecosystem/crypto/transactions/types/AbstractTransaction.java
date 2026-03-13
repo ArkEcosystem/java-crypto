@@ -11,7 +11,7 @@ import org.arkecosystem.crypto.identities.Address;
 import org.arkecosystem.crypto.identities.PrivateKey;
 import org.arkecosystem.crypto.transactions.Serializer;
 import org.arkecosystem.crypto.utils.AbiDecoder;
-import org.arkecosystem.crypto.utils.TransactionHasher;
+import org.arkecosystem.crypto.utils.TransactionUtils;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
 
@@ -26,8 +26,8 @@ public abstract class AbstractTransaction {
     public String value = "0";
     public String recipientAddress;
     public String id;
-    public int gasLimit;
-    public int gasPrice;
+    public long gasLimit;
+    public long gasPrice;
     public String validatorPublicKey;
     public String vote;
 
@@ -38,13 +38,18 @@ public abstract class AbstractTransaction {
             this.network = ((Number) data.get("network")).intValue();
         }
         if (data.containsKey("nonce")) {
-            this.nonce = Long.parseLong(data.get("nonce").toString());
+            Object nonceVal = data.get("nonce");
+            if (nonceVal instanceof Number) {
+                this.nonce = ((Number) nonceVal).longValue();
+            } else {
+                this.nonce = Long.parseLong(nonceVal.toString());
+            }
         }
         if (data.containsKey("gasPrice")) {
-            this.gasPrice = ((Number) data.get("gasPrice")).intValue();
+            this.gasPrice = ((Number) data.get("gasPrice")).longValue();
         }
         if (data.containsKey("gasLimit")) {
-            this.gasLimit = ((Number) data.get("gasLimit")).intValue();
+            this.gasLimit = ((Number) data.get("gasLimit")).longValue();
         }
         if (data.containsKey("recipientAddress")) {
             this.recipientAddress = (String) data.get("recipientAddress");
@@ -93,18 +98,7 @@ public abstract class AbstractTransaction {
     }
 
     public byte[] hash(boolean skipSignature) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("gasPrice", this.gasPrice);
-        map.put("network", this.network);
-        map.put("nonce", this.nonce);
-        map.put("value", this.value);
-        map.put("gasLimit", this.gasLimit);
-        map.put("data", this.data);
-        map.put("recipientAddress", this.recipientAddress);
-        if (!skipSignature && this.signature != null) {
-            map.put("signature", this.signature);
-        }
-        return TransactionHasher.toHash(map, skipSignature);
+        return TransactionUtils.toHash(toHashMap(), skipSignature);
     }
 
     public AbstractTransaction sign(String passphrase) {
@@ -181,7 +175,6 @@ public abstract class AbstractTransaction {
 
         this.senderPublicKey = recoveredKey.getPublicKeyAsHex();
 
-        // Compute the sender's address (EVM address)
         this.senderAddress = Address.fromPublicKey(this.senderPublicKey);
     }
 

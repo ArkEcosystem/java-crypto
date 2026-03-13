@@ -24,7 +24,7 @@ public abstract class AbstractTransactionBuilder<
         this.transaction.refreshPayloadData();
     }
 
-    public TBuilder gasLimit(int gasLimit) {
+    public TBuilder gasLimit(long gasLimit) {
         this.transaction.gasLimit = gasLimit;
         return this.instance();
     }
@@ -34,7 +34,7 @@ public abstract class AbstractTransactionBuilder<
         return this.instance();
     }
 
-    public TBuilder gasPrice(int gasPrice) {
+    public TBuilder gasPrice(long gasPrice) {
         this.transaction.gasPrice = gasPrice;
         return this.instance();
     }

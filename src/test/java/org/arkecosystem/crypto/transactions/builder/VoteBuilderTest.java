@@ -17,11 +17,11 @@ public class VoteBuilderTest extends AbstractTest {
 
         VoteBuilder builder =
                 new VoteBuilder()
-                        .gasPrice(((Number) data.get("gasPrice")).intValue())
+                        .gasPrice(((Number) data.get("gasPrice")).longValue())
                         .nonce(Long.parseLong(data.get("nonce").toString()))
                         .network(((Number) data.get("network")).intValue())
-                        .vote("0x512F366D524157BcF734546eB29a6d687B762255")
-                        .gasLimit(((Number) data.get("gasLimit")).intValue())
+                        .vote("0xc3Bbe9B1CEe1FF85AD72b87414b0e9b7f2366763")
+                        .gasLimit(((Number) data.get("gasLimit")).longValue())
                         .recipientAddress((String) data.get("recipientAddress"))
                         .sign(this.passphrase);
 

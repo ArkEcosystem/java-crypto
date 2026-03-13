@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import org.arkecosystem.crypto.configuration.Network;
+import org.arkecosystem.crypto.networks.Devnet;
 import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractTest {
@@ -11,7 +13,9 @@ public abstract class AbstractTest {
 
     @BeforeEach
     public void setUp() {
-        this.passphrase = "my super secret passphrase";
+        Network.set(new Devnet());
+        this.passphrase =
+                "found lobster oblige describe ready addict body brave live vacuum display salute lizard combine gift resemble race senior quality reunion proud tell adjust angle";
     }
 
     protected Map<String, Object> loadFixture(String name) throws Exception {

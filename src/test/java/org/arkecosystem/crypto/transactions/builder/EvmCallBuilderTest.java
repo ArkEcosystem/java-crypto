@@ -16,11 +16,11 @@ public class EvmCallBuilderTest extends AbstractTest {
 
         EvmCallBuilder builder =
                 new EvmCallBuilder()
-                        .gasPrice(((Number) data.get("gasPrice")).intValue())
+                        .gasPrice(((Number) data.get("gasPrice")).longValue())
                         .nonce(Long.parseLong(data.get("nonce").toString()))
                         .network(((Number) data.get("network")).intValue())
                         .payload((String) data.get("data"))
-                        .gasLimit(((Number) data.get("gasLimit")).intValue())
+                        .gasLimit(((Number) data.get("gasLimit")).longValue())
                         .recipientAddress("0xE536720791A7DaDBeBdBCD8c8546fb0791a11901")
                         .sign(this.passphrase);
 

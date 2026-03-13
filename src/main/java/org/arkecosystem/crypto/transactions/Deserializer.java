@@ -1,24 +1,21 @@
 package org.arkecosystem.crypto.transactions;
 
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.util.List;
 import java.util.Map;
+import org.arkecosystem.crypto.configuration.Network;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.AbiFunction;
 import org.arkecosystem.crypto.transactions.types.*;
 import org.arkecosystem.crypto.utils.AbiDecoder;
+import org.arkecosystem.crypto.utils.RlpDecoder;
 
 public class Deserializer {
-    private static final int SIGNATURE_SIZE = 64;
-    private static final int RECOVERY_SIZE = 1;
 
-    private final ByteBuffer buffer;
+    private final byte[] rawBytes;
 
     public Deserializer(String serialized) {
-        byte[] bytes = serialized.contains("\0") ? serialized.getBytes() : Hex.decode(serialized);
-        this.buffer = ByteBuffer.wrap(bytes);
-        this.buffer.order(ByteOrder.LITTLE_ENDIAN);
+        this.rawBytes = Hex.decode(serialized);
     }
 
     public static Deserializer newDeserializer(String serialized) {
@@ -26,21 +23,61 @@ public class Deserializer {
     }
 
     public AbstractTransaction deserialize() {
-        int startPosition = buffer.position();
+        List<byte[]> fields = RlpDecoder.decode(rawBytes);
 
+        // Fields: [nonce, gasPrice, gasLimit, to, value, data, v, r, s]
+        long nonce = bytesToLong(fields.get(0));
+        long gasPrice = bytesToLong(fields.get(1));
+        long gasLimit = bytesToLong(fields.get(2));
+        String recipientAddress = fields.get(3).length > 0 ? "0x" + Hex.encode(fields.get(3)) : "";
+        String value = fields.get(4).length > 0 ? new BigInteger(1, fields.get(4)).toString() : "0";
+        String data = fields.get(5).length > 0 ? Hex.encode(fields.get(5)) : "";
+
+        // Recover signature
+        String signature = null;
+        if (fields.size() >= 9) {
+            int vEncoded =
+                    fields.get(6).length > 0 ? new BigInteger(1, fields.get(6)).intValue() : 0;
+            byte[] r = fields.get(7);
+            byte[] s = fields.get(8);
+
+            int chainId = Network.get().chainId();
+            int v = vEncoded - (chainId * 2 + 35);
+
+            if (r.length > 0 || s.length > 0) {
+                byte[] rPadded = padTo32(r);
+                byte[] sPadded = padTo32(s);
+                byte[] sigBytes = new byte[65];
+                System.arraycopy(rPadded, 0, sigBytes, 0, 32);
+                System.arraycopy(sPadded, 0, sigBytes, 32, 32);
+                sigBytes[64] = (byte) v;
+                signature = Hex.encode(sigBytes);
+            }
+        }
+
+        // Create temp transaction to guess type
         AbstractTransaction tempTransaction = new EvmCall();
-        deserializeCommon(tempTransaction);
-        deserializeData(tempTransaction);
+        tempTransaction.nonce = nonce;
+        tempTransaction.gasPrice = gasPrice;
+        tempTransaction.gasLimit = gasLimit;
+        tempTransaction.recipientAddress = recipientAddress;
+        tempTransaction.value = value;
+        tempTransaction.data = data;
+        tempTransaction.network = Network.get().version();
 
         AbstractTransaction transaction = guessTransactionFromTransactionData(tempTransaction);
+        transaction.nonce = nonce;
+        transaction.gasPrice = gasPrice;
+        transaction.gasLimit = gasLimit;
+        transaction.recipientAddress = recipientAddress;
+        transaction.value = value;
+        transaction.data = data;
+        transaction.network = Network.get().version();
+        transaction.signature = signature;
 
-        buffer.position(startPosition);
-
-        deserializeCommon(transaction);
-        deserializeData(transaction);
-        deserializeSignatures(transaction);
-
-        transaction.recoverSender();
+        if (signature != null) {
+            transaction.recoverSender();
+        }
 
         transaction.computeId();
 
@@ -49,7 +86,7 @@ public class Deserializer {
 
     private AbstractTransaction guessTransactionFromTransactionData(
             AbstractTransaction transactionData) {
-        if (!"0".equals(transactionData.value)) {
+        if (!"0".equals(transactionData.value) && !"".equals(transactionData.value)) {
             return new Transfer();
         }
 
@@ -87,41 +124,15 @@ public class Deserializer {
         }
     }
 
-    private void deserializeCommon(AbstractTransaction transaction) {
-        transaction.network = Byte.toUnsignedInt(buffer.get());
-        transaction.nonce = buffer.getLong();
-        transaction.gasPrice = buffer.getInt();
-        transaction.gasLimit = buffer.getInt();
+    private static long bytesToLong(byte[] bytes) {
+        if (bytes.length == 0) return 0;
+        return new BigInteger(1, bytes).longValue();
     }
 
-    private void deserializeData(AbstractTransaction transaction) {
-        byte[] valueBytes = new byte[32];
-        buffer.get(valueBytes);
-        transaction.value = new BigInteger(1, valueBytes).toString();
-
-        int recipientMarker = Byte.toUnsignedInt(buffer.get());
-        if (recipientMarker == 1) {
-            byte[] recipientBytes = new byte[20];
-            buffer.get(recipientBytes);
-            transaction.recipientAddress = "0x" + Hex.encode(recipientBytes);
-        }
-
-        int payloadLength = buffer.getInt();
-        if (payloadLength > 0) {
-            byte[] payloadBytes = new byte[payloadLength];
-            buffer.get(payloadBytes);
-            transaction.data = Hex.encode(payloadBytes);
-        } else {
-            transaction.data = "";
-        }
-    }
-
-    private void deserializeSignatures(AbstractTransaction transaction) {
-        int signatureLength = SIGNATURE_SIZE + RECOVERY_SIZE;
-        if (buffer.remaining() >= signatureLength) {
-            byte[] signatureBytes = new byte[signatureLength];
-            buffer.get(signatureBytes);
-            transaction.signature = Hex.encode(signatureBytes);
-        }
+    private static byte[] padTo32(byte[] input) {
+        if (input.length >= 32) return input;
+        byte[] padded = new byte[32];
+        System.arraycopy(input, 0, padded, 32 - input.length, input.length);
+        return padded;
     }
 }

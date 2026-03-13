@@ -17,10 +17,10 @@ public class TransferBuilderTest extends AbstractTest {
 
         TransferBuilder builder =
                 new TransferBuilder()
-                        .gasPrice(((Number) data.get("gasPrice")).intValue())
+                        .gasPrice(((Number) data.get("gasPrice")).longValue())
                         .nonce(Long.parseLong(data.get("nonce").toString()))
                         .network(((Number) data.get("network")).intValue())
-                        .gasLimit(((Number) data.get("gasLimit")).intValue())
+                        .gasLimit(((Number) data.get("gasLimit")).longValue())
                         .recipientAddress((String) data.get("recipientAddress"))
                         .value((String) data.get("value"))
                         .sign(this.passphrase);
@@ -28,7 +28,6 @@ public class TransferBuilderTest extends AbstractTest {
         byte[] serializedBytes = builder.transaction.serialize(false);
         String serializedHex = Hex.encode(serializedBytes);
 
-        // Compare the serialized transaction
         assertEquals(fixture.get("serialized"), serializedHex);
         assertEquals(data.get("id"), builder.transaction.getId());
         assertTrue(builder.verify());

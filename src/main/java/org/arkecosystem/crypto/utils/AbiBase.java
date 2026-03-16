@@ -14,8 +14,10 @@ public abstract class AbiBase {
     protected List<Map<String, Object>> abi;
 
     public AbiBase() throws IOException {
-        String abiFilePath = "Abi.Consensus.json";
+        this("Abi.Consensus.json");
+    }
 
+    public AbiBase(String abiFilePath) throws IOException {
         InputStream abiInputStream = getClass().getClassLoader().getResourceAsStream(abiFilePath);
 
         ObjectMapper mapper = new ObjectMapper();

@@ -64,9 +64,13 @@ class AbiJsonFilesTest {
     }
 
     @Test
-    void abi_encoder_loads_every_abi_file() throws Exception {
-        for (String file : ABI_FILES) {
-            new AbiEncoder(file);
+    void abi_encoder_loads_every_contract_abi_type() throws Exception {
+        for (org.arkecosystem.crypto.enums.ContractAbiType type :
+                org.arkecosystem.crypto.enums.ContractAbiType.values()) {
+            if (type == org.arkecosystem.crypto.enums.ContractAbiType.CUSTOM) {
+                continue;
+            }
+            new AbiEncoder(type);
         }
     }
 

@@ -2,13 +2,11 @@ package org.arkecosystem.crypto.transactions;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Map;
 import org.arkecosystem.crypto.configuration.Network;
 import org.arkecosystem.crypto.encoding.Hex;
-import org.arkecosystem.crypto.enums.AbiFunction;
 import org.arkecosystem.crypto.transactions.types.*;
-import org.arkecosystem.crypto.utils.AbiDecoder;
 import org.arkecosystem.crypto.utils.RlpDecoder;
+import org.arkecosystem.crypto.utils.TransactionTypeIdentifier;
 
 public class Deserializer {
 
@@ -90,38 +88,22 @@ public class Deserializer {
             return new Transfer();
         }
 
-        Map<String, Object> payloadData = decodePayload(transactionData);
-        if (payloadData == null) {
+        String payload = transactionData.data != null ? transactionData.data : "";
+        if (payload.isEmpty()) {
             return new EvmCall();
         }
 
-        String functionName = (String) payloadData.get("functionName");
-
-        if (functionName.equals(AbiFunction.VOTE.toString())) {
+        if (TransactionTypeIdentifier.isVote(payload)) {
             return new Vote(transactionData.toHashMap());
-        } else if (functionName.equals(AbiFunction.UNVOTE.toString())) {
+        } else if (TransactionTypeIdentifier.isUnvote(payload)) {
             return new Unvote(transactionData.toHashMap());
-        } else if (functionName.equals(AbiFunction.VALIDATOR_REGISTRATION.toString())) {
+        } else if (TransactionTypeIdentifier.isValidatorRegistration(payload)) {
             return new ValidatorRegistration(transactionData.toHashMap());
-        } else if (functionName.equals(AbiFunction.VALIDATOR_RESIGNATION.toString())) {
+        } else if (TransactionTypeIdentifier.isValidatorResignation(payload)) {
             return new ValidatorResignation(transactionData.toHashMap());
         }
 
         return new EvmCall();
-    }
-
-    private Map<String, Object> decodePayload(AbstractTransaction transaction) {
-        String payload = transaction.data != null ? transaction.data : "";
-        if (payload.isEmpty()) {
-            return null;
-        }
-
-        try {
-            AbiDecoder abiDecoder = new AbiDecoder();
-            return abiDecoder.decodeFunctionData(payload);
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     private static long bytesToLong(byte[] bytes) {

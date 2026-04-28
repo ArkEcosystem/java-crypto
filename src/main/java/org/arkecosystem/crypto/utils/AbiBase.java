@@ -3,9 +3,12 @@ package org.arkecosystem.crypto.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.arkecosystem.crypto.enums.ContractAbiType;
 import org.web3j.crypto.Hash;
 import org.web3j.utils.Numeric;
 
@@ -14,15 +17,35 @@ public abstract class AbiBase {
     protected List<Map<String, Object>> abi;
 
     public AbiBase() throws IOException {
-        this("Abi.Consensus.json");
+        this(ContractAbiType.CONSENSUS, null);
     }
 
-    public AbiBase(String abiFilePath) throws IOException {
-        InputStream abiInputStream = getClass().getClassLoader().getResourceAsStream(abiFilePath);
+    public AbiBase(ContractAbiType type) throws IOException {
+        this(type, null);
+    }
 
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> abiJson = mapper.readValue(abiInputStream, Map.class);
-        this.abi = (List<Map<String, Object>>) abiJson.get("abi");
+    public AbiBase(ContractAbiType type, String path) throws IOException {
+        String abiFilePath = contractAbiPath(type, path);
+        Map<String, Object> decodedAbi = loadAbiJson(abiFilePath);
+        this.abi = (List<Map<String, Object>>) decodedAbi.get("abi");
+    }
+
+    public static Map<String, String> methodIdentifiers(ContractAbiType type) throws IOException {
+        return methodIdentifiers(type, null);
+    }
+
+    public static Map<String, String> methodIdentifiers(ContractAbiType type, String path)
+            throws IOException {
+        String abiFilePath = contractAbiPath(type, path);
+        Map<String, Object> decodedAbi = loadAbiJson(abiFilePath);
+
+        Object methodIdentifiers = decodedAbi.get("methodIdentifiers");
+        if (!(methodIdentifiers instanceof Map)) {
+            throw new RuntimeException(
+                    "ABI JSON does not contain methodIdentifiers: " + abiFilePath);
+        }
+
+        return (Map<String, String>) methodIdentifiers;
     }
 
     protected static String[] getArrayComponents(String type) {
@@ -76,5 +99,49 @@ public abstract class AbiBase {
             result.append(stripHexPrefix(hex));
         }
         return result.toString();
+    }
+
+    protected static String contractAbiPath(ContractAbiType type, String path) {
+        switch (type) {
+            case CONSENSUS:
+                return "Abi.Consensus.json";
+            case MULTIPAYMENT:
+                return "Abi.Multipayment.json";
+            case USERNAMES:
+                return "Abi.Usernames.json";
+            case ERC20BATCH_TRANSFER:
+                return "Abi.ERC20BatchTransfer.json";
+            case TOKEN:
+                return "Abi.Token.json";
+            case CUSTOM:
+                if (path == null || path.isEmpty()) {
+                    throw new IllegalArgumentException(
+                            "A non-empty path must be provided when using ContractAbiType.CUSTOM.");
+                }
+                return path;
+            default:
+                throw new IllegalArgumentException("Unhandled ContractAbiType: " + type.name());
+        }
+    }
+
+    private static Map<String, Object> loadAbiJson(String path) throws IOException {
+        InputStream stream = AbiBase.class.getClassLoader().getResourceAsStream(path);
+        if (stream == null) {
+            if (Files.exists(Paths.get(path))) {
+                stream = Files.newInputStream(Paths.get(path));
+            } else {
+                throw new RuntimeException("Unable to load ABI JSON: " + path);
+            }
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> decoded = mapper.readValue(stream, Map.class);
+
+        Object abi = decoded.get("abi");
+        if (!(abi instanceof List)) {
+            throw new RuntimeException("ABI JSON does not contain a valid abi array: " + path);
+        }
+
+        return decoded;
     }
 }

@@ -68,7 +68,7 @@ public class AbiDecoder extends AbiBase {
         return values;
     }
 
-    private Object[] decodeParameter(byte[] bytes, int offset, Map<String, Object> param)
+    private static Object[] decodeParameter(byte[] bytes, int offset, Map<String, Object> param)
             throws Exception {
         String type = (String) param.get("type");
         String[] arrayComponents = getArrayComponents(type);
@@ -108,7 +108,7 @@ public class AbiDecoder extends AbiBase {
         }
     }
 
-    private Object[] decodeAddress(byte[] bytes, int offset) {
+    public static Object[] decodeAddress(byte[] bytes, int offset) {
         byte[] data = Arrays.copyOfRange(bytes, offset, offset + 32);
         byte[] addressBytes = Arrays.copyOfRange(data, 12, 32);
         String address = "0x" + Numeric.toHexStringNoPrefix(addressBytes);
@@ -117,14 +117,14 @@ public class AbiDecoder extends AbiBase {
         return new Object[] {address, 32};
     }
 
-    private Object[] decodeBool(byte[] bytes, int offset) {
+    public static Object[] decodeBool(byte[] bytes, int offset) {
         byte[] data = Arrays.copyOfRange(bytes, offset, offset + 32);
         boolean value = new BigInteger(data).compareTo(BigInteger.ZERO) != 0;
 
         return new Object[] {value, 32};
     }
 
-    private Object[] decodeNumber(byte[] bytes, int offset, int bits, boolean signed) {
+    public static Object[] decodeNumber(byte[] bytes, int offset, int bits, boolean signed) {
         byte[] data = Arrays.copyOfRange(bytes, offset, offset + 32);
         BigInteger value = new BigInteger(1, data);
         if (signed && value.testBit(bits - 1)) {
@@ -134,7 +134,7 @@ public class AbiDecoder extends AbiBase {
         return new Object[] {value.toString(), 32};
     }
 
-    private Object[] decodeString(byte[] bytes, int offset) {
+    public static Object[] decodeString(byte[] bytes, int offset) {
         int dataOffset = readUInt(bytes, offset).intValue();
         int stringOffset = offset + dataOffset;
         int length = readUInt(bytes, stringOffset).intValue();
@@ -145,7 +145,7 @@ public class AbiDecoder extends AbiBase {
         return new Object[] {value, 32};
     }
 
-    private Object[] decodeDynamicBytes(byte[] bytes, int offset) {
+    public static Object[] decodeDynamicBytes(byte[] bytes, int offset) {
         int dataOffset = readUInt(bytes, offset).intValue();
         int bytesOffset = offset + dataOffset;
         int length = readUInt(bytes, bytesOffset).intValue();
@@ -155,14 +155,14 @@ public class AbiDecoder extends AbiBase {
         return new Object[] {value, 32};
     }
 
-    private Object[] decodeFixedBytes(byte[] bytes, int offset, int size) {
+    public static Object[] decodeFixedBytes(byte[] bytes, int offset, int size) {
         byte[] data = Arrays.copyOfRange(bytes, offset, offset + 32);
         String value = "0x" + Numeric.toHexStringNoPrefix(Arrays.copyOfRange(data, 0, size));
 
         return new Object[] {value, 32};
     }
 
-    private Object[] decodeArray(
+    public static Object[] decodeArray(
             byte[] bytes, int offset, Map<String, Object> param, Integer length) throws Exception {
         String baseType = (String) param.get("type");
         Map<String, Object> elementType = new HashMap<>(param);
@@ -192,7 +192,7 @@ public class AbiDecoder extends AbiBase {
         return new Object[] {values, 32};
     }
 
-    private Object[] decodeTuple(byte[] bytes, int offset, Map<String, Object> param)
+    public static Object[] decodeTuple(byte[] bytes, int offset, Map<String, Object> param)
             throws Exception {
         List<Map<String, Object>> components = (List<Map<String, Object>>) param.get("components");
         Map<String, Object> values = new LinkedHashMap<>();
@@ -210,7 +210,7 @@ public class AbiDecoder extends AbiBase {
         return new Object[] {values, 32};
     }
 
-    private BigInteger readUInt(byte[] bytes, int offset) {
+    public static BigInteger readUInt(byte[] bytes, int offset) {
         byte[] data = Arrays.copyOfRange(bytes, offset, offset + 32);
         return new BigInteger(1, data);
     }

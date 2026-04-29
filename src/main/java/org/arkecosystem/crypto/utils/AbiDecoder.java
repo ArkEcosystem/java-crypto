@@ -33,15 +33,44 @@ public class AbiDecoder extends AbiBase {
         return result;
     }
 
+    public String decodeError(String data) throws Exception {
+        data = stripHexPrefix(data);
+
+        String errorSelector = data.substring(0, 8);
+
+        Map<String, Object> abiItem = findErrorBySelector(errorSelector);
+        if (abiItem == null) {
+            throw new Exception("Function selector not found in ABI: " + errorSelector);
+        }
+
+        return (String) abiItem.get("name");
+    }
+
     private Map<String, Object> findFunctionBySelector(String selector) {
         for (Map<String, Object> item : this.abi) {
-            if ("function".equals(item.get("type"))) {
-                String functionSignature = getFunctionSignature(item);
-                String functionSelector =
-                        stripHexPrefix(keccak256(functionSignature)).substring(0, 8);
-                if (functionSelector.equals(selector)) {
-                    return item;
-                }
+            if (!"function".equals(item.get("type"))) {
+                continue;
+            }
+
+            String functionSignature = getFunctionSignature(item);
+            String functionSelector = stripHexPrefix(keccak256(functionSignature)).substring(0, 8);
+            if (functionSelector.equals(selector)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    private Map<String, Object> findErrorBySelector(String selector) {
+        for (Map<String, Object> item : this.abi) {
+            if (!"error".equals(item.get("type"))) {
+                continue;
+            }
+
+            String errorSignature = getFunctionSignature(item);
+            String errorSelector = stripHexPrefix(keccak256(errorSignature)).substring(0, 8);
+            if (errorSelector.equals(selector)) {
+                return item;
             }
         }
         return null;

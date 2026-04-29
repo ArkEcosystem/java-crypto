@@ -25,7 +25,7 @@ public abstract class AbiBase {
         this.abi = (List<Map<String, Object>>) abiJson.get("abi");
     }
 
-    protected String[] getArrayComponents(String type) {
+    protected static String[] getArrayComponents(String type) {
         Pattern pattern = Pattern.compile("^(.*)\\[(\\d*)\\]$");
         Matcher matcher = pattern.matcher(type);
         if (matcher.find()) {

@@ -30,6 +30,8 @@ public abstract class AbstractTransaction {
     public long gasPrice;
     public String validatorPublicKey;
     public String vote;
+    public List<String> multipaymentRecipients;
+    public List<BigInteger> multipaymentAmounts;
 
     public AbstractTransaction() {}
 

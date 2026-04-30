@@ -23,18 +23,18 @@ repositories {
 
 dependencies {
     // Core dependencies
-    implementation 'org.bitcoinj:bitcoinj-core:0.16.3'
-    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
-    implementation 'org.web3j:core:4.8.7'
-    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'org.bitcoinj:bitcoinj-core:0.16.5'
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.80'
+    implementation 'org.web3j:core:4.12.3'
+    implementation 'com.google.code.gson:gson:2.13.1'
     implementation 'foundation.icon:blst-java:0.3.2'
 
     // Test dependencies
     testImplementation 'org.hamcrest:hamcrest-library:3.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.3'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.3'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.3'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.12.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.12.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.12.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.12.2'
 }
 
 test {

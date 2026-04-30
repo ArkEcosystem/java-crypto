@@ -32,6 +32,7 @@ public abstract class AbstractTransaction {
     public String vote;
     public List<String> multipaymentRecipients;
     public List<BigInteger> multipaymentAmounts;
+    public String username;
 
     public AbstractTransaction() {}
 

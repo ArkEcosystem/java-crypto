@@ -106,6 +106,8 @@ public class Deserializer {
             return new ValidatorRegistration(transactionData.toHashMap());
         } else if (TransactionTypeIdentifier.isValidatorResignation(payload)) {
             return new ValidatorResignation(transactionData.toHashMap());
+        } else if (TransactionTypeIdentifier.isUsernameRegistration(payload)) {
+            return new UsernameRegistration(transactionData.toHashMap());
         }
 
         return new EvmCall();

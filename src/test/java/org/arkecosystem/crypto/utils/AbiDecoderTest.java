@@ -191,4 +191,42 @@ class AbiDecoderTest {
 
         assertEquals(expectedData, decodedData);
     }
+
+    @Test
+    void it_should_decode_error_payload() throws Exception {
+        assertEquals("CallerIsNotValidator", decoder.decodeError("cd03235e"));
+    }
+
+    @Test
+    void it_should_decode_error_payload_with_hex_prefix() throws Exception {
+        assertEquals("CallerIsNotValidator", decoder.decodeError("0xcd03235e"));
+    }
+
+    @Test
+    void it_should_decode_error_with_parameters() throws Exception {
+        String selector = stripSelector("InvalidRange(uint256,uint256)");
+
+        assertEquals("InvalidRange", decoder.decodeError(selector));
+    }
+
+    @Test
+    void it_should_throw_when_error_selector_is_not_found() {
+        Exception thrown = assertThrows(Exception.class, () -> decoder.decodeError("123456ab"));
+
+        assertEquals("Function selector not found in ABI: 123456ab", thrown.getMessage());
+    }
+
+    @Test
+    void it_should_not_decode_function_selectors_as_errors() {
+        String voteSelector = "6dd7d8ea";
+
+        Exception thrown = assertThrows(Exception.class, () -> decoder.decodeError(voteSelector));
+
+        assertEquals("Function selector not found in ABI: " + voteSelector, thrown.getMessage());
+    }
+
+    private String stripSelector(String signature) {
+        String hash = org.web3j.crypto.Hash.sha3String(signature);
+        return hash.startsWith("0x") ? hash.substring(2, 10) : hash.substring(0, 8);
+    }
 }

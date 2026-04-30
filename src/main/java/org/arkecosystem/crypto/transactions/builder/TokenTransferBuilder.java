@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import org.arkecosystem.crypto.enums.AbiFunction;
+import org.arkecosystem.crypto.enums.ContractAbiType;
 import org.arkecosystem.crypto.transactions.types.AbstractTransaction;
 import org.arkecosystem.crypto.transactions.types.EvmCall;
 import org.arkecosystem.crypto.utils.AbiEncoder;
@@ -21,7 +22,7 @@ public class TokenTransferBuilder extends AbstractTransactionBuilder<TokenTransf
 
         try {
             String payload =
-                    new AbiEncoder("Abi.Token.json")
+                    new AbiEncoder(ContractAbiType.TOKEN)
                             .encodeFunctionCall(AbiFunction.TRANSFER.toString(), args);
 
             this.transaction.data = payload.replaceFirst("^0x", "");

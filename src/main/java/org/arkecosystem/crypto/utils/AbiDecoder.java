@@ -3,12 +3,21 @@ package org.arkecosystem.crypto.utils;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
+import org.arkecosystem.crypto.enums.ContractAbiType;
 import org.web3j.utils.Numeric;
 
 public class AbiDecoder extends AbiBase {
 
     public AbiDecoder() throws IOException {
         super();
+    }
+
+    public AbiDecoder(ContractAbiType type) throws IOException {
+        super(type);
+    }
+
+    public AbiDecoder(ContractAbiType type, String path) throws IOException {
+        super(type, path);
     }
 
     public Map<String, Object> decodeFunctionData(String data) throws Exception {

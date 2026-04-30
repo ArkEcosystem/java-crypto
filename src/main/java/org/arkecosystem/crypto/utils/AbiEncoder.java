@@ -3,6 +3,7 @@ package org.arkecosystem.crypto.utils;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
+import org.arkecosystem.crypto.enums.ContractAbiType;
 import org.web3j.utils.Numeric;
 
 public class AbiEncoder extends AbiBase {
@@ -11,8 +12,12 @@ public class AbiEncoder extends AbiBase {
         super();
     }
 
-    public AbiEncoder(String abiFilePath) throws IOException {
-        super(abiFilePath);
+    public AbiEncoder(ContractAbiType type) throws IOException {
+        super(type);
+    }
+
+    public AbiEncoder(ContractAbiType type, String path) throws IOException {
+        super(type, path);
     }
 
     public String encodeFunctionCall(String functionName) throws Exception {

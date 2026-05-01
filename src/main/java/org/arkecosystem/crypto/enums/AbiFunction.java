@@ -5,6 +5,8 @@ public enum AbiFunction {
     UNVOTE("unvote"),
     VALIDATOR_REGISTRATION("registerValidator"),
     VALIDATOR_RESIGNATION("resignValidator"),
+    USERNAME_REGISTRATION("registerUsername"),
+    USERNAME_RESIGNATION("resignUsername"),
     MULTIPAYMENT("pay"),
     TRANSFER("transfer"),
     APPROVE("approve");

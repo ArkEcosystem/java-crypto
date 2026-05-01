@@ -84,11 +84,16 @@ public class Deserializer {
 
     private AbstractTransaction guessTransactionFromTransactionData(
             AbstractTransaction transactionData) {
+        String payload = transactionData.data != null ? transactionData.data : "";
+
+        if (TransactionTypeIdentifier.isMultiPayment(payload)) {
+            return new Multipayment(transactionData.toHashMap());
+        }
+
         if (!"0".equals(transactionData.value) && !"".equals(transactionData.value)) {
             return new Transfer();
         }
 
-        String payload = transactionData.data != null ? transactionData.data : "";
         if (payload.isEmpty()) {
             return new EvmCall();
         }

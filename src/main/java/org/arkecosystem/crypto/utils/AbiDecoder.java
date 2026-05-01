@@ -209,8 +209,7 @@ public class AbiDecoder extends AbiBase {
         int arrayLength;
         int cursor;
         if (length == null) {
-            int dataOffset = readUInt(bytes, offset).intValue();
-            int arrayOffset = offset + dataOffset;
+            int arrayOffset = readUInt(bytes, offset).intValue();
             arrayLength = readUInt(bytes, arrayOffset).intValue();
             cursor = arrayOffset + 32;
         } else {

@@ -51,6 +51,31 @@ public class PrivateKeyTest {
     }
 
     @Test
+    public void sign_produces_a_65_byte_signature_recoverable_to_the_signer_public_key() {
+        byte[] message = org.bitcoinj.core.Sha256Hash.hash("payload".getBytes());
+
+        byte[] signature = PrivateKey.sign(message, "this is a top secret passphrase");
+
+        assertEquals(65, signature.length);
+        assertEquals(
+                "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192",
+                PublicKey.recover(message, signature).getPublicKeyAsHex());
+    }
+
+    @Test
+    public void sign_with_eckey_overload_matches_passphrase_overload() {
+        byte[] message = org.bitcoinj.core.Sha256Hash.hash("payload".getBytes());
+        org.bitcoinj.core.ECKey key = PrivateKey.fromPassphrase("this is a top secret passphrase");
+
+        byte[] viaPassphrase = PrivateKey.sign(message, "this is a top secret passphrase");
+        byte[] viaEcKey = PrivateKey.sign(message, key);
+
+        assertEquals(
+                org.arkecosystem.crypto.encoding.Hex.encode(viaPassphrase),
+                org.arkecosystem.crypto.encoding.Hex.encode(viaEcKey));
+    }
+
+    @Test
     public void fromWif_rejects_when_version_byte_belongs_to_another_network() throws IOException {
         String mainnetWif;
         try {

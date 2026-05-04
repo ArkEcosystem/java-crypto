@@ -55,6 +55,13 @@ public abstract class AbstractTransactionBuilder<
         return this.instance();
     }
 
+    public TBuilder legacySecondSign(String passphrase, String secondPassphrase) {
+        this.transaction.sign(passphrase);
+        this.transaction.legacySecondSign(secondPassphrase);
+        this.transaction.computeId();
+        return this.instance();
+    }
+
     public boolean verify() {
         return this.transaction.verify();
     }

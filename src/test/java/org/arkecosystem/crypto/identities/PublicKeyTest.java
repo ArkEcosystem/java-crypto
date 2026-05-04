@@ -12,12 +12,23 @@ public class PublicKeyTest {
     }
 
     @Test
-    public void fromHex() {
-        String actual =
-                PrivateKey.fromHex(
-                                "d8839c2432bfd0a67ef10a804ba991eabba19f154a3d707917681d45822a5712")
-                        .getPrivateKeyAsHex();
-        Assertions.assertEquals(
-                "d8839c2432bfd0a67ef10a804ba991eabba19f154a3d707917681d45822a5712", actual);
+    public void fromHex_round_trips_to_same_compressed_hex() {
+        String hex = "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192";
+
+        String actual = PublicKey.fromHex(hex).getPublicKeyAsHex();
+
+        Assertions.assertEquals(hex, actual);
+    }
+
+    @Test
+    public void fromHex_accepts_uncompressed_public_key() {
+        String compressed = "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192";
+        String uncompressed =
+                org.arkecosystem.crypto.encoding.Hex.encode(
+                        PublicKey.fromHex(compressed).getPubKeyPoint().getEncoded(false));
+
+        String actual = PublicKey.fromHex(uncompressed).getPublicKeyAsHex();
+
+        Assertions.assertEquals(compressed, actual);
     }
 }

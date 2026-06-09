@@ -9,7 +9,8 @@ public enum AbiFunction {
     USERNAME_RESIGNATION("resignUsername"),
     MULTIPAYMENT("pay"),
     TRANSFER("transfer"),
-    APPROVE("approve");
+    APPROVE("approve"),
+    BATCH_TRANSFER_FROM("batchTransferFrom");
 
     private final String functionName;
 

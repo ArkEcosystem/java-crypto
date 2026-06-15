@@ -2,18 +2,17 @@ package org.arkecosystem.crypto.transactions.types;
 
 import com.google.gson.GsonBuilder;
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.identities.Address;
 import org.arkecosystem.crypto.identities.PrivateKey;
+import org.arkecosystem.crypto.identities.PublicKey;
 import org.arkecosystem.crypto.transactions.Serializer;
 import org.arkecosystem.crypto.utils.AbiDecoder;
 import org.arkecosystem.crypto.utils.TransactionUtils;
 import org.bitcoinj.core.ECKey;
-import org.bitcoinj.core.Sha256Hash;
 
 public abstract class AbstractTransaction {
     public int network;
@@ -123,42 +122,7 @@ public abstract class AbstractTransaction {
     }
 
     private static String signHash(byte[] hash, ECKey privateKey) {
-        ECKey.ECDSASignature signature = privateKey.sign(Sha256Hash.wrap(hash));
-
-        int recId = -1;
-        for (int i = 0; i < 4; i++) {
-            ECKey k = ECKey.recoverFromSignature(i, signature, Sha256Hash.wrap(hash), true);
-            if (k != null && k.getPubKeyPoint().equals(privateKey.getPubKeyPoint())) {
-                recId = i;
-                break;
-            }
-        }
-        if (recId == -1) {
-            throw new RuntimeException("Could not find recId");
-        }
-
-        byte[] rBytes = bigIntegerToBytes(signature.r, 32);
-        byte[] sBytes = bigIntegerToBytes(signature.s, 32);
-
-        byte[] signatureBytes = new byte[64];
-        System.arraycopy(rBytes, 0, signatureBytes, 0, 32);
-        System.arraycopy(sBytes, 0, signatureBytes, 32, 32);
-
-        byte[] signatureWithRecId = new byte[65];
-        System.arraycopy(signatureBytes, 0, signatureWithRecId, 0, 64);
-        signatureWithRecId[64] = (byte) recId;
-
-        return Hex.encode(signatureWithRecId);
-    }
-
-    private static byte[] bigIntegerToBytes(BigInteger b, int numBytes) {
-        byte[] src = b.toByteArray();
-        byte[] dest = new byte[numBytes];
-        int srcPos = Math.max(0, src.length - numBytes);
-        int destPos = Math.max(0, numBytes - src.length);
-        int length = Math.min(src.length, numBytes);
-        System.arraycopy(src, srcPos, dest, destPos, length);
-        return dest;
+        return Hex.encode(PrivateKey.sign(hash, privateKey));
     }
 
     public void recoverSender() {
@@ -166,26 +130,7 @@ public abstract class AbstractTransaction {
             throw new RuntimeException("Invalid signature");
         }
 
-        byte[] signatureWithRecId = Hex.decode(this.signature);
-        if (signatureWithRecId.length != 65) {
-            throw new RuntimeException("Invalid signature length");
-        }
-
-        byte recId = signatureWithRecId[64];
-        byte[] signatureBytes = Arrays.copyOfRange(signatureWithRecId, 0, 64);
-
-        BigInteger r = new BigInteger(1, Arrays.copyOfRange(signatureBytes, 0, 32));
-        BigInteger s = new BigInteger(1, Arrays.copyOfRange(signatureBytes, 32, 64));
-
-        ECKey.ECDSASignature signature = new ECKey.ECDSASignature(r, s);
-
-        byte[] hash = this.hash(true);
-
-        ECKey recoveredKey =
-                ECKey.recoverFromSignature(recId, signature, Sha256Hash.wrap(hash), true);
-        if (recoveredKey == null) {
-            throw new RuntimeException("Could not recover public key from signature");
-        }
+        ECKey recoveredKey = PublicKey.recover(this.hash(true), Hex.decode(this.signature));
 
         this.senderPublicKey = recoveredKey.getPublicKeyAsHex();
 
@@ -199,27 +144,7 @@ public abstract class AbstractTransaction {
             }
 
             ECKey keys = ECKey.fromPublicOnly(Hex.decode(this.senderPublicKey));
-
-            byte[] signatureWithRecId = Hex.decode(this.signature);
-            if (signatureWithRecId.length != 65) {
-                return false;
-            }
-
-            byte recId = signatureWithRecId[64];
-            byte[] signatureBytes = Arrays.copyOfRange(signatureWithRecId, 0, 64);
-
-            BigInteger r = new BigInteger(1, Arrays.copyOfRange(signatureBytes, 0, 32));
-            BigInteger s = new BigInteger(1, Arrays.copyOfRange(signatureBytes, 32, 64));
-
-            ECKey.ECDSASignature signature = new ECKey.ECDSASignature(r, s);
-
-            byte[] hash = this.hash(true);
-
-            ECKey recoveredKey =
-                    ECKey.recoverFromSignature(recId, signature, Sha256Hash.wrap(hash), true);
-            if (recoveredKey == null) {
-                return false;
-            }
+            ECKey recoveredKey = PublicKey.recover(this.hash(true), Hex.decode(this.signature));
 
             return recoveredKey.getPubKeyPoint().equals(keys.getPubKeyPoint());
         } catch (Exception e) {

@@ -33,6 +33,7 @@ public abstract class AbstractTransaction {
     public List<String> multipaymentRecipients;
     public List<BigInteger> multipaymentAmounts;
     public String username;
+    public String legacySecondSignature;
 
     public AbstractTransaction() {}
 
@@ -105,11 +106,23 @@ public abstract class AbstractTransaction {
     }
 
     public AbstractTransaction sign(String passphrase) {
-        byte[] hash = this.hash(true);
-
         ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
         this.senderPublicKey = privateKey.getPublicKeyAsHex();
 
+        this.signature = signHash(this.hash(true), privateKey);
+
+        return this;
+    }
+
+    public AbstractTransaction legacySecondSign(String secondPassphrase) {
+        ECKey privateKey = PrivateKey.fromPassphrase(secondPassphrase);
+
+        this.legacySecondSignature = signHash(this.hash(true), privateKey);
+
+        return this;
+    }
+
+    private static String signHash(byte[] hash, ECKey privateKey) {
         ECKey.ECDSASignature signature = privateKey.sign(Sha256Hash.wrap(hash));
 
         int recId = -1;
@@ -135,9 +148,7 @@ public abstract class AbstractTransaction {
         System.arraycopy(signatureBytes, 0, signatureWithRecId, 0, 64);
         signatureWithRecId[64] = (byte) recId;
 
-        this.signature = Hex.encode(signatureWithRecId);
-
-        return this;
+        return Hex.encode(signatureWithRecId);
     }
 
     private static byte[] bigIntegerToBytes(BigInteger b, int numBytes) {

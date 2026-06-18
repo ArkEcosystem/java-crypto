@@ -11,6 +11,11 @@ import org.junit.jupiter.api.Test;
 
 public class TransactionEncoderTest {
 
+    private static final String VALIDATOR_PASSPHRASE =
+            "gold favorite math anchor detect march purpose such sausage crucial reform novel"
+                    + " connect misery update episode invite salute barely garbage exclude winner"
+                    + " visa cruise";
+
     @Test
     public void it_should_encode_a_vote_payload() throws Exception {
         String address = "0xC3bBE9B1CeE1ff85Ad72b87414B0E9B7F2366763";
@@ -32,9 +37,7 @@ public class TransactionEncoderTest {
 
     @Test
     public void it_should_encode_a_validator_registration_payload() throws Exception {
-        String passphrase = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about";
-
-        String payload = TransactionEncoder.validatorRegistration(passphrase);
+        String payload = TransactionEncoder.validatorRegistration(VALIDATOR_PASSPHRASE);
 
         Map<String, Object> decoded = new AbiDecoder().decodeFunctionData(payload);
         assertEquals("registerValidator", decoded.get("functionName"));
@@ -50,9 +53,7 @@ public class TransactionEncoderTest {
 
     @Test
     public void it_should_encode_a_validator_update_payload() throws Exception {
-        String passphrase = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about";
-
-        String payload = TransactionEncoder.validatorUpdate(passphrase);
+        String payload = TransactionEncoder.validatorUpdate(VALIDATOR_PASSPHRASE);
 
         Map<String, Object> decoded = new AbiDecoder().decodeFunctionData(payload);
         assertEquals("updateValidator", decoded.get("functionName"));

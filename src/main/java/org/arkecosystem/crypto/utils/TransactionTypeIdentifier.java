@@ -76,11 +76,11 @@ public class TransactionTypeIdentifier {
             map.put("multiPayment", multipaymentMethods.get("pay(address[],uint256[])"));
             map.put("registerUsername", usernamesMethods.get("registerUsername(string)"));
             map.put("resignUsername", usernamesMethods.get("resignUsername()"));
-            map.put("registerValidator", consensusMethods.get("registerValidator(bytes)"));
+            map.put("registerValidator", consensusMethods.get("registerValidator(bytes,bytes)"));
             map.put("resignValidator", consensusMethods.get("resignValidator()"));
             map.put("vote", consensusMethods.get("vote(address)"));
             map.put("unvote", consensusMethods.get("unvote()"));
-            map.put("updateValidator", consensusMethods.get("updateValidator(bytes)"));
+            map.put("updateValidator", consensusMethods.get("updateValidator(bytes,bytes)"));
             map.put("transfer", "transfer");
 
             signatures = map;

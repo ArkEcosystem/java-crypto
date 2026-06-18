@@ -8,29 +8,31 @@ import org.arkecosystem.crypto.utils.AbiEncoder;
 
 public class ValidatorRegistration extends AbstractTransaction {
     public ValidatorRegistration() {
-        super(); // Call the default constructor of AbstractTransaction
+        super();
     }
 
     public ValidatorRegistration(Map<String, Object> data) {
         super(data);
 
-        // Use a local decodePayload method since we can't rely on AbstractTransaction's data field
         List<Object> payload = decodePayload(data);
-        if (payload != null && !payload.isEmpty()) {
-            Object arg = payload.get(0);
-            this.validatorPublicKey = arg.toString().replaceFirst("^0x", "");
+        if (payload != null && payload.size() >= 2) {
+            this.validatorPublicKey = payload.get(0).toString().replaceFirst("^0x", "");
+            this.validatorProof = payload.get(1).toString().replaceFirst("^0x", "");
         }
     }
 
     @Override
     public String getPayload() {
-        if (this.validatorPublicKey == null || this.validatorPublicKey.isEmpty()) {
+        if (this.validatorPublicKey == null
+                || this.validatorPublicKey.isEmpty()
+                || this.validatorProof == null
+                || this.validatorProof.isEmpty()) {
             return "";
         }
 
-        String validatorPublicKeyHex = "0x" + this.validatorPublicKey;
         List<Object> args = new ArrayList<>();
-        args.add(validatorPublicKeyHex);
+        args.add("0x" + this.validatorPublicKey);
+        args.add("0x" + this.validatorProof);
 
         try {
             return new AbiEncoder()

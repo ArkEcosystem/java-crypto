@@ -19,7 +19,7 @@ class AbiBaseTest {
 
         assertEquals("6dd7d8ea", identifiers.get("vote(address)"));
         assertEquals("3174b689", identifiers.get("unvote()"));
-        assertEquals("602a9eee", identifiers.get("registerValidator(bytes)"));
+        assertEquals("226f2645", identifiers.get("registerValidator(bytes,bytes)"));
     }
 
     @Test

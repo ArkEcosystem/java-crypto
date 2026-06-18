@@ -9,10 +9,14 @@ import org.junit.jupiter.api.Test;
 
 public class ValidatorRegistrationBuilderTest extends AbstractTest {
 
+    private static final String VALIDATOR_PASSPHRASE =
+            "gold favorite math anchor detect march purpose such sausage crucial reform novel"
+                    + " connect misery update episode invite salute barely garbage exclude winner"
+                    + " visa cruise";
+
     @Test
     public void it_should_sign_it_with_a_passphrase() throws Exception {
         Map<String, Object> fixture = loadFixture("validator-registration");
-
         Map<String, Object> data = (Map<String, Object>) fixture.get("data");
 
         ValidatorRegistrationBuilder builder =
@@ -21,25 +25,12 @@ public class ValidatorRegistrationBuilderTest extends AbstractTest {
                         .nonce(Long.parseLong(data.get("nonce").toString()))
                         .network(((Number) data.get("network")).intValue())
                         .gasLimit(((Number) data.get("gasLimit")).longValue())
-                        .validatorPublicKey(
-                                "a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118")
+                        .validatorPassphrase(VALIDATOR_PASSPHRASE)
                         .recipientAddress((String) data.get("recipientAddress"))
                         .sign(this.passphrase);
 
-        byte[] serializedBytes = builder.transaction.serialize(false);
-        String serializedHex = Hex.encode(serializedBytes);
-
-        assertEquals(fixture.get("serialized"), serializedHex);
+        assertEquals(fixture.get("serialized"), Hex.encode(builder.transaction.serialize(false)));
         assertEquals(data.get("id"), builder.transaction.getId());
         assertTrue(builder.verify());
-    }
-
-    @Test
-    public void it_should_throw_on_invalid_bls_public_key() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> {
-                    new ValidatorRegistrationBuilder().validatorPublicKey("invalid-bls-key");
-                });
     }
 }

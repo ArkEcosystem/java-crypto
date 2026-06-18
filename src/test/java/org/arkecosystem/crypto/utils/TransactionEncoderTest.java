@@ -32,24 +32,12 @@ public class TransactionEncoderTest {
 
     @Test
     public void it_should_encode_a_validator_registration_payload() throws Exception {
-        String key =
-                "954f46d6097a1d314e900e66e11e0dad0a57cd03e04ec99f0dedd1c765dcb11e6d7fa02e22cf40f9ee23d9cc1c0624bd";
+        String passphrase = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about";
 
-        String payload = TransactionEncoder.validatorRegistration(key);
+        String payload = TransactionEncoder.validatorRegistration(passphrase);
 
         Map<String, Object> decoded = new AbiDecoder().decodeFunctionData(payload);
         assertEquals("registerValidator", decoded.get("functionName"));
-    }
-
-    @Test
-    public void it_should_normalise_validator_public_key_prefix() {
-        String key =
-                "954f46d6097a1d314e900e66e11e0dad0a57cd03e04ec99f0dedd1c765dcb11e6d7fa02e22cf40f9ee23d9cc1c0624bd";
-
-        String withoutPrefix = TransactionEncoder.validatorRegistration(key);
-        String withPrefix = TransactionEncoder.validatorRegistration("0x" + key);
-
-        assertEquals(withoutPrefix, withPrefix);
     }
 
     @Test
@@ -61,11 +49,10 @@ public class TransactionEncoderTest {
     }
 
     @Test
-    public void it_should_encode_an_update_validator_payload() throws Exception {
-        String key =
-                "954f46d6097a1d314e900e66e11e0dad0a57cd03e04ec99f0dedd1c765dcb11e6d7fa02e22cf40f9ee23d9cc1c0624bd";
+    public void it_should_encode_a_validator_update_payload() throws Exception {
+        String passphrase = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about";
 
-        String payload = TransactionEncoder.updateValidator(key);
+        String payload = TransactionEncoder.validatorUpdate(passphrase);
 
         Map<String, Object> decoded = new AbiDecoder().decodeFunctionData(payload);
         assertEquals("updateValidator", decoded.get("functionName"));

@@ -12,13 +12,13 @@ public class ValidatorRegistrationBuilder
         this.transaction.validatorPublicKey = bytesToHex(pop.pk);
         this.transaction.validatorProof = bytesToHex(pop.pop);
         this.transaction.refreshPayloadData();
-        return this;
+        return this.instance();
     }
 
     public ValidatorRegistrationBuilder value(String value) {
         this.transaction.value = value;
         this.transaction.refreshPayloadData();
-        return this;
+        return this.instance();
     }
 
     @Override

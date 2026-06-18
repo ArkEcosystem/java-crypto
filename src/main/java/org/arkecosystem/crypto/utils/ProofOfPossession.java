@@ -23,37 +23,33 @@ public class ProofOfPossession {
         }
     }
 
-    /** Derives a 32-byte BLS secret key from a BIP-39 mnemonic via PBKDF2 + EIP-2333. */
     public static byte[] deriveBlsPrivateKey(String mnemonic) {
-        byte[] seed = mnemonicToSeed(mnemonic);
-        SecretKey master = new SecretKey();
-        master.derive_master_eip2333(seed);
-        SecretKey child = new SecretKey();
-        child.derive_child_eip2333(master, 0L);
-        return child.to_bendian();
+        return deriveChildSk(mnemonic).to_bendian();
     }
 
-    /** Derives a BLS public key from a BIP-39 mnemonic. Returns a 96-character hex string. */
     public static String deriveBlsPublicKey(String mnemonic) {
-        SecretKey sk = skFromBytes(deriveBlsPrivateKey(mnemonic));
-        return bytesToHex(new P1(sk).compress());
+        return bytesToHex(new P1(deriveChildSk(mnemonic)).compress());
     }
 
-    /**
-     * Builds a BLS Proof of Possession for the given 32-byte secret key. Returns the compressed
-     * G1 public key (48 bytes) and the G2 PoP signature (96 bytes).
-     */
     public static Result buildProofOfPossession(byte[] secretKeyBytes) {
-        SecretKey sk = skFromBytes(secretKeyBytes);
+        SecretKey sk = new SecretKey();
+        sk.from_bendian(secretKeyBytes);
         byte[] pk = new P1(sk).compress();
         P2 sig = new P2().hash_to(pk, POP_DST).sign_with(sk);
         return new Result(pk, sig.compress());
     }
 
-    private static SecretKey skFromBytes(byte[] bytes) {
-        SecretKey sk = new SecretKey();
-        sk.from_bendian(bytes);
-        return sk;
+    public static Result fromMnemonic(String mnemonic) {
+        return buildProofOfPossession(deriveBlsPrivateKey(mnemonic));
+    }
+
+    private static SecretKey deriveChildSk(String mnemonic) {
+        byte[] seed = mnemonicToSeed(mnemonic);
+        SecretKey master = new SecretKey();
+        master.derive_master_eip2333(seed);
+        SecretKey child = new SecretKey();
+        child.derive_child_eip2333(master, 0L);
+        return child;
     }
 
     private static byte[] mnemonicToSeed(String mnemonic) {

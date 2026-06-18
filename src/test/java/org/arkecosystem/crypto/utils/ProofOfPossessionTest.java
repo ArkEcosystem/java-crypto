@@ -1,6 +1,5 @@
 package org.arkecosystem.crypto.utils;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
@@ -44,11 +43,10 @@ public class ProofOfPossessionTest {
     }
 
     @Test
-    public void buildProofOfPossessionIsDeterministic() {
-        ProofOfPossession.Result a = ProofOfPossession.buildProofOfPossession(fromHex(SK_A_HEX));
-        ProofOfPossession.Result b = ProofOfPossession.buildProofOfPossession(fromHex(SK_A_HEX));
-        assertArrayEquals(a.pk, b.pk);
-        assertArrayEquals(a.pop, b.pop);
+    public void fromMnemonicChineseMnemonicPkAndPop() {
+        ProofOfPossession.Result result = ProofOfPossession.fromMnemonic(PASSPHRASE_ZH);
+        assertEquals(PASSPHRASE_ZH_PK, toHex(result.pk));
+        assertEquals(PASSPHRASE_ZH_POP, toHex(result.pop));
     }
 
     @Test

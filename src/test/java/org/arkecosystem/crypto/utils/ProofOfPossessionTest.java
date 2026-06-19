@@ -2,8 +2,18 @@ package org.arkecosystem.crypto.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.stream.Stream;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class ProofOfPossessionTest {
 
@@ -71,6 +81,46 @@ public class ProofOfPossessionTest {
         ProofOfPossession.Result result = ProofOfPossession.buildProofOfPossession(sk);
         assertEquals(PASSPHRASE_ZH_PK, Hex.encode(result.pk));
         assertEquals(PASSPHRASE_ZH_POP, Hex.encode(result.pop));
+    }
+
+    record BlsKeyVector(String language, int index, String mnemonic, String sk, String pk, String pop) {
+        @Override
+        public String toString() {
+            return language + "[" + index + "]";
+        }
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("blsKeyVectors")
+    public void blsKeyVectorsMatchJsonDataset(BlsKeyVector v) {
+        assertEquals(v.sk(), Hex.encode(ProofOfPossession.deriveBlsPrivateKey(v.mnemonic())));
+        ProofOfPossession.Result result = ProofOfPossession.fromMnemonic(v.mnemonic());
+        assertEquals(v.pk(), Hex.encode(result.pk));
+        assertEquals(v.pop(), Hex.encode(result.pop));
+    }
+
+    static Stream<BlsKeyVector> blsKeyVectors() throws Exception {
+        Type type = new TypeToken<Map<String, List<Map<String, String>>>>() {}.getType();
+        Map<String, List<Map<String, String>>> data;
+        try (InputStreamReader reader =
+                new InputStreamReader(
+                        ProofOfPossessionTest.class.getResourceAsStream("/bls-keys.json"))) {
+            data = new Gson().fromJson(reader, type);
+        }
+        List<BlsKeyVector> vectors = new ArrayList<>();
+        for (var entry : data.entrySet()) {
+            int i = 1;
+            for (var v : entry.getValue()) {
+                vectors.add(new BlsKeyVector(
+                        entry.getKey(),
+                        i++,
+                        v.get("mnemonic"),
+                        v.get("validatorPrivateKey"),
+                        v.get("validatorPublicKey").substring(2),
+                        v.get("validatorPop").substring(2)));
+            }
+        }
+        return vectors.stream();
     }
 
 }

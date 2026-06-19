@@ -18,7 +18,9 @@ public class ValidatorRegistrationBuilder
 
     public ValidatorRegistrationBuilder value(String value) {
         this.transaction.value = value;
+
         this.transaction.refreshPayloadData();
+
         return this.instance();
     }
 
@@ -31,5 +33,4 @@ public class ValidatorRegistrationBuilder
     protected ValidatorRegistrationBuilder instance() {
         return this;
     }
-
 }

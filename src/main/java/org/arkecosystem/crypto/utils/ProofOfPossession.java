@@ -24,12 +24,12 @@ public class ProofOfPossession {
         }
     }
 
-    public static byte[] deriveBlsPrivateKey(String mnemonic) {
-        return deriveChildSk(mnemonic).to_bendian();
+    public static byte[] deriveBlsPrivateKey(String passphrase) {
+        return deriveChildSk(passphrase).to_bendian();
     }
 
-    public static String deriveBlsPublicKey(String mnemonic) {
-        return Hex.encode(new P1(deriveChildSk(mnemonic)).compress());
+    public static String deriveBlsPublicKey(String passphrase) {
+        return Hex.encode(new P1(deriveChildSk(passphrase)).compress());
     }
 
     public static Result buildProofOfPossession(byte[] secretKeyBytes) {
@@ -40,12 +40,12 @@ public class ProofOfPossession {
         return new Result(pk, sig.compress());
     }
 
-    public static Result fromMnemonic(String mnemonic) {
-        return buildProofOfPossession(deriveBlsPrivateKey(mnemonic));
+    public static Result fromMnemonic(String passphrase) {
+        return buildProofOfPossession(deriveBlsPrivateKey(passphrase));
     }
 
-    private static SecretKey deriveChildSk(String mnemonic) {
-        byte[] seed = mnemonicToSeed(mnemonic);
+    private static SecretKey deriveChildSk(String passphrase) {
+        byte[] seed = passphraseToSeed(passphrase);
         SecretKey master = new SecretKey();
         master.derive_master_eip2333(seed);
         SecretKey child = new SecretKey();
@@ -53,9 +53,9 @@ public class ProofOfPossession {
         return child;
     }
 
-    private static byte[] mnemonicToSeed(String mnemonic) {
+    private static byte[] passphraseToSeed(String passphrase) {
         byte[] pass =
-                Normalizer.normalize(mnemonic, Normalizer.Form.NFKD)
+                Normalizer.normalize(passphrase, Normalizer.Form.NFKD)
                         .getBytes(StandardCharsets.UTF_8);
         byte[] salt = "mnemonic".getBytes(StandardCharsets.UTF_8);
         PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator(new SHA512Digest());

@@ -46,7 +46,7 @@ public final class TransactionEncoder {
         return encode(
                 ContractAbiType.CONSENSUS,
                 AbiFunction.VALIDATOR_REGISTRATION,
-                Arrays.asList("0x" + Hex.encode(pop.pk), "0x" + Hex.encode(pop.pop)));
+                Arrays.asList(addHexPrefix(Hex.encode(pop.pk)), addHexPrefix(Hex.encode(pop.pop))));
     }
 
     public static String validatorResignation() {
@@ -61,7 +61,7 @@ public final class TransactionEncoder {
         return encode(
                 ContractAbiType.CONSENSUS,
                 AbiFunction.UPDATE_VALIDATOR,
-                Arrays.asList("0x" + Hex.encode(pop.pk), "0x" + Hex.encode(pop.pop)));
+                Arrays.asList(addHexPrefix(Hex.encode(pop.pk)), addHexPrefix(Hex.encode(pop.pop))));
     }
 
     public static String vote(String voteAddress) {
@@ -84,5 +84,7 @@ public final class TransactionEncoder {
         }
     }
 
-
+    private static String addHexPrefix(String value) {
+        return value.startsWith("0x") ? value : "0x" + value;
+    }
 }

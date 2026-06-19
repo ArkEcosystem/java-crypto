@@ -7,7 +7,7 @@ import org.arkecosystem.crypto.AbstractTest;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.junit.jupiter.api.Test;
 
-public class ValidatorRegistrationBuilderTest extends AbstractTest {
+public class ValidatorUpdateBuilderTest extends AbstractTest {
 
     private static final String VALIDATOR_PASSPHRASE =
             "gold favorite math anchor detect march purpose such sausage crucial reform novel"
@@ -16,11 +16,11 @@ public class ValidatorRegistrationBuilderTest extends AbstractTest {
 
     @Test
     public void it_should_sign_it_with_a_passphrase() throws Exception {
-        Map<String, Object> fixture = loadFixture("validator-registration");
+        Map<String, Object> fixture = loadFixture("validator-update");
         Map<String, Object> data = (Map<String, Object>) fixture.get("data");
 
-        ValidatorRegistrationBuilder builder =
-                new ValidatorRegistrationBuilder()
+        ValidatorUpdateBuilder builder =
+                new ValidatorUpdateBuilder()
                         .gasPrice(((Number) data.get("gasPrice")).longValue())
                         .nonce(Long.parseLong(data.get("nonce").toString()))
                         .network(((Number) data.get("network")).intValue())

@@ -104,6 +104,8 @@ public class Deserializer {
             return new Unvote(transactionData.toHashMap());
         } else if (TransactionTypeIdentifier.isValidatorRegistration(payload)) {
             return new ValidatorRegistration(transactionData.toHashMap());
+        } else if (TransactionTypeIdentifier.isUpdateValidator(payload)) {
+            return new ValidatorUpdate(transactionData.toHashMap());
         } else if (TransactionTypeIdentifier.isValidatorResignation(payload)) {
             return new ValidatorResignation(transactionData.toHashMap());
         } else if (TransactionTypeIdentifier.isUsernameRegistration(payload)) {

@@ -15,9 +15,9 @@ class TransactionTypeIdentifierTest {
 
     private static final String VOTE = "6dd7d8ea";
     private static final String UNVOTE = "3174b689";
-    private static final String REGISTER_VALIDATOR = "602a9eee";
+    private static final String REGISTER_VALIDATOR = "226f2645";
     private static final String RESIGN_VALIDATOR = "b85f5da2";
-    private static final String UPDATE_VALIDATOR = "5a8eed73";
+    private static final String UPDATE_VALIDATOR = "8f062626";
     private static final String PAY = "084ce708";
     private static final String REGISTER_USERNAME = "36a94134";
     private static final String RESIGN_USERNAME = "ebed6dab";

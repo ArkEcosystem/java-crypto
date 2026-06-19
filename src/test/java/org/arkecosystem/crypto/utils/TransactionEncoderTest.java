@@ -11,6 +11,11 @@ import org.junit.jupiter.api.Test;
 
 public class TransactionEncoderTest {
 
+    private static final String VALIDATOR_PASSPHRASE =
+            "gold favorite math anchor detect march purpose such sausage crucial reform novel"
+                    + " connect misery update episode invite salute barely garbage exclude winner"
+                    + " visa cruise";
+
     @Test
     public void it_should_encode_a_vote_payload() throws Exception {
         String address = "0xC3bBE9B1CeE1ff85Ad72b87414B0E9B7F2366763";
@@ -32,24 +37,10 @@ public class TransactionEncoderTest {
 
     @Test
     public void it_should_encode_a_validator_registration_payload() throws Exception {
-        String key =
-                "954f46d6097a1d314e900e66e11e0dad0a57cd03e04ec99f0dedd1c765dcb11e6d7fa02e22cf40f9ee23d9cc1c0624bd";
-
-        String payload = TransactionEncoder.validatorRegistration(key);
+        String payload = TransactionEncoder.validatorRegistration(VALIDATOR_PASSPHRASE);
 
         Map<String, Object> decoded = new AbiDecoder().decodeFunctionData(payload);
         assertEquals("registerValidator", decoded.get("functionName"));
-    }
-
-    @Test
-    public void it_should_normalise_validator_public_key_prefix() {
-        String key =
-                "954f46d6097a1d314e900e66e11e0dad0a57cd03e04ec99f0dedd1c765dcb11e6d7fa02e22cf40f9ee23d9cc1c0624bd";
-
-        String withoutPrefix = TransactionEncoder.validatorRegistration(key);
-        String withPrefix = TransactionEncoder.validatorRegistration("0x" + key);
-
-        assertEquals(withoutPrefix, withPrefix);
     }
 
     @Test
@@ -61,11 +52,8 @@ public class TransactionEncoderTest {
     }
 
     @Test
-    public void it_should_encode_an_update_validator_payload() throws Exception {
-        String key =
-                "954f46d6097a1d314e900e66e11e0dad0a57cd03e04ec99f0dedd1c765dcb11e6d7fa02e22cf40f9ee23d9cc1c0624bd";
-
-        String payload = TransactionEncoder.updateValidator(key);
+    public void it_should_encode_a_validator_update_payload() throws Exception {
+        String payload = TransactionEncoder.validatorUpdate(VALIDATOR_PASSPHRASE);
 
         Map<String, Object> decoded = new AbiDecoder().decodeFunctionData(payload);
         assertEquals("updateValidator", decoded.get("functionName"));

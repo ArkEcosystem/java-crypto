@@ -28,6 +28,7 @@ public abstract class AbstractTransaction {
     public long gasLimit;
     public long gasPrice;
     public String validatorPublicKey;
+    public String validatorProof;
     public String vote;
     public List<String> multipaymentRecipients;
     public List<BigInteger> multipaymentAmounts;
@@ -74,6 +75,9 @@ public abstract class AbstractTransaction {
         }
         if (data.containsKey("validatorPublicKey")) {
             this.validatorPublicKey = (String) data.get("validatorPublicKey");
+        }
+        if (data.containsKey("validatorProof")) {
+            this.validatorProof = (String) data.get("validatorProof");
         }
         if (data.containsKey("vote")) {
             this.vote = (String) data.get("vote");

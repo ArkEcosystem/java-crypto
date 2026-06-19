@@ -174,10 +174,8 @@ public class AbiDecoder extends AbiBase {
 
     public static Object[] decodeString(byte[] bytes, int offset) {
         int dataOffset = readUInt(bytes, offset).intValue();
-        int stringOffset = offset + dataOffset;
-        int length = readUInt(bytes, stringOffset).intValue();
-        byte[] stringData =
-                Arrays.copyOfRange(bytes, stringOffset + 32, stringOffset + 32 + length);
+        int length = readUInt(bytes, dataOffset).intValue();
+        byte[] stringData = Arrays.copyOfRange(bytes, dataOffset + 32, dataOffset + 32 + length);
         String value = new String(stringData);
 
         return new Object[] {value, 32};
@@ -185,9 +183,8 @@ public class AbiDecoder extends AbiBase {
 
     public static Object[] decodeDynamicBytes(byte[] bytes, int offset) {
         int dataOffset = readUInt(bytes, offset).intValue();
-        int bytesOffset = offset + dataOffset;
-        int length = readUInt(bytes, bytesOffset).intValue();
-        byte[] bytesData = Arrays.copyOfRange(bytes, bytesOffset + 32, bytesOffset + 32 + length);
+        int length = readUInt(bytes, dataOffset).intValue();
+        byte[] bytesData = Arrays.copyOfRange(bytes, dataOffset + 32, dataOffset + 32 + length);
         String value = "0x" + Numeric.toHexStringNoPrefix(bytesData);
 
         return new Object[] {value, 32};

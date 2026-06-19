@@ -6,12 +6,12 @@ import java.util.Map;
 import org.arkecosystem.crypto.enums.AbiFunction;
 import org.arkecosystem.crypto.utils.AbiEncoder;
 
-public class ValidatorRegistration extends AbstractTransaction {
-    public ValidatorRegistration() {
+public class ValidatorUpdate extends AbstractTransaction {
+    public ValidatorUpdate() {
         super();
     }
 
-    public ValidatorRegistration(Map<String, Object> data) {
+    public ValidatorUpdate(Map<String, Object> data) {
         super(data);
 
         List<Object> payload = decodePayload(data);
@@ -36,7 +36,7 @@ public class ValidatorRegistration extends AbstractTransaction {
 
         try {
             return new AbiEncoder()
-                    .encodeFunctionCall(AbiFunction.VALIDATOR_REGISTRATION.toString(), args);
+                    .encodeFunctionCall(AbiFunction.UPDATE_VALIDATOR.toString(), args);
         } catch (Exception e) {
             throw new RuntimeException("Error encoding function call", e);
         }

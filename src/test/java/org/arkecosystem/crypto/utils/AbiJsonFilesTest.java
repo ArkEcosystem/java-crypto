@@ -92,9 +92,9 @@ class AbiJsonFilesTest {
 
         assertEquals("6dd7d8ea", identifiers.get("vote(address)"));
         assertNotNull(identifiers.get("unvote()"));
-        assertNotNull(identifiers.get("registerValidator(bytes)"));
+        assertNotNull(identifiers.get("registerValidator(bytes,bytes)"));
         assertNotNull(identifiers.get("resignValidator()"));
-        assertNotNull(identifiers.get("updateValidator(bytes)"));
+        assertNotNull(identifiers.get("updateValidator(bytes,bytes)"));
     }
 
     @Test

@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.AbiFunction;
 import org.arkecosystem.crypto.enums.ContractAbiType;
 import org.arkecosystem.crypto.utils.ProofOfPossession;
@@ -45,7 +46,7 @@ public final class TransactionEncoder {
         return encode(
                 ContractAbiType.CONSENSUS,
                 AbiFunction.VALIDATOR_REGISTRATION,
-                Arrays.asList(addHexPrefix(bytesToHex(pop.pk)), addHexPrefix(bytesToHex(pop.pop))));
+                Arrays.asList("0x" + Hex.encode(pop.pk), "0x" + Hex.encode(pop.pop)));
     }
 
     public static String validatorResignation() {
@@ -60,7 +61,7 @@ public final class TransactionEncoder {
         return encode(
                 ContractAbiType.CONSENSUS,
                 AbiFunction.UPDATE_VALIDATOR,
-                Arrays.asList(addHexPrefix(bytesToHex(pop.pk)), addHexPrefix(bytesToHex(pop.pop))));
+                Arrays.asList("0x" + Hex.encode(pop.pk), "0x" + Hex.encode(pop.pop)));
     }
 
     public static String vote(String voteAddress) {
@@ -83,13 +84,5 @@ public final class TransactionEncoder {
         }
     }
 
-    private static String addHexPrefix(String value) {
-        return value.startsWith("0x") ? value : "0x" + value;
-    }
 
-    private static String bytesToHex(byte[] bytes) {
-        StringBuilder sb = new StringBuilder(bytes.length * 2);
-        for (byte b : bytes) sb.append(String.format("%02x", b));
-        return sb.toString();
-    }
 }

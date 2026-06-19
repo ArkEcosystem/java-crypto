@@ -2,6 +2,7 @@ package org.arkecosystem.crypto.utils;
 
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
+import org.arkecosystem.crypto.encoding.Hex;
 import org.bouncycastle.crypto.digests.SHA512Digest;
 import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
 import org.bouncycastle.crypto.params.KeyParameter;
@@ -28,7 +29,7 @@ public class ProofOfPossession {
     }
 
     public static String deriveBlsPublicKey(String mnemonic) {
-        return bytesToHex(new P1(deriveChildSk(mnemonic)).compress());
+        return Hex.encode(new P1(deriveChildSk(mnemonic)).compress());
     }
 
     public static Result buildProofOfPossession(byte[] secretKeyBytes) {
@@ -62,9 +63,5 @@ public class ProofOfPossession {
         return ((KeyParameter) gen.generateDerivedParameters(512)).getKey();
     }
 
-    private static String bytesToHex(byte[] bytes) {
-        StringBuilder sb = new StringBuilder(bytes.length * 2);
-        for (byte b : bytes) sb.append(String.format("%02x", b));
-        return sb.toString();
-    }
+
 }

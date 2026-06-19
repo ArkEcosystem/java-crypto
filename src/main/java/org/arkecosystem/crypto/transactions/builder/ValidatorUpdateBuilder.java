@@ -11,7 +11,9 @@ public class ValidatorUpdateBuilder extends AbstractTransactionBuilder<Validator
         ProofOfPossession.Result pop = ProofOfPossession.fromMnemonic(passphrase);
         this.transaction.validatorPublicKey = Hex.encode(pop.pk);
         this.transaction.validatorProof = Hex.encode(pop.pop);
+
         this.transaction.refreshPayloadData();
+
         return this.instance();
     }
 

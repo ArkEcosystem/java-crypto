@@ -2,6 +2,7 @@ package org.arkecosystem.crypto.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.arkecosystem.crypto.encoding.Hex;
 import org.junit.jupiter.api.Test;
 
 public class ProofOfPossessionTest {
@@ -32,21 +33,21 @@ public class ProofOfPossessionTest {
 
     @Test
     public void buildProofOfPossessionPkMatchesPinnedVector() {
-        ProofOfPossession.Result result = ProofOfPossession.buildProofOfPossession(fromHex(SK_A_HEX));
-        assertEquals(SK_A_PK, toHex(result.pk));
+        ProofOfPossession.Result result = ProofOfPossession.buildProofOfPossession(Hex.decode(SK_A_HEX));
+        assertEquals(SK_A_PK, Hex.encode(result.pk));
     }
 
     @Test
     public void buildProofOfPossessionPopMatchesPinnedVector() {
-        ProofOfPossession.Result result = ProofOfPossession.buildProofOfPossession(fromHex(SK_A_HEX));
-        assertEquals(SK_A_POP, toHex(result.pop));
+        ProofOfPossession.Result result = ProofOfPossession.buildProofOfPossession(Hex.decode(SK_A_HEX));
+        assertEquals(SK_A_POP, Hex.encode(result.pop));
     }
 
     @Test
     public void fromMnemonicChineseMnemonicPkAndPop() {
         ProofOfPossession.Result result = ProofOfPossession.fromMnemonic(PASSPHRASE_ZH);
-        assertEquals(PASSPHRASE_ZH_PK, toHex(result.pk));
-        assertEquals(PASSPHRASE_ZH_POP, toHex(result.pop));
+        assertEquals(PASSPHRASE_ZH_PK, Hex.encode(result.pk));
+        assertEquals(PASSPHRASE_ZH_POP, Hex.encode(result.pop));
     }
 
     @Test
@@ -56,7 +57,7 @@ public class ProofOfPossessionTest {
 
     @Test
     public void deriveBlsPrivateKeyChineseMnemonic() {
-        assertEquals(PASSPHRASE_ZH_SK, toHex(ProofOfPossession.deriveBlsPrivateKey(PASSPHRASE_ZH)));
+        assertEquals(PASSPHRASE_ZH_SK, Hex.encode(ProofOfPossession.deriveBlsPrivateKey(PASSPHRASE_ZH)));
     }
 
     @Test
@@ -68,25 +69,8 @@ public class ProofOfPossessionTest {
     public void buildProofOfPossessionChineseMnemonicPkAndPop() {
         byte[] sk = ProofOfPossession.deriveBlsPrivateKey(PASSPHRASE_ZH);
         ProofOfPossession.Result result = ProofOfPossession.buildProofOfPossession(sk);
-        assertEquals(PASSPHRASE_ZH_PK, toHex(result.pk));
-        assertEquals(PASSPHRASE_ZH_POP, toHex(result.pop));
+        assertEquals(PASSPHRASE_ZH_PK, Hex.encode(result.pk));
+        assertEquals(PASSPHRASE_ZH_POP, Hex.encode(result.pop));
     }
 
-    private static String toHex(byte[] bytes) {
-        StringBuilder sb = new StringBuilder(bytes.length * 2);
-        for (byte b : bytes) sb.append(String.format("%02x", b));
-        return sb.toString();
-    }
-
-    private static byte[] fromHex(String hex) {
-        int len = hex.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] =
-                    (byte)
-                            ((Character.digit(hex.charAt(i), 16) << 4)
-                                    + Character.digit(hex.charAt(i + 1), 16));
-        }
-        return data;
-    }
 }

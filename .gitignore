@@ -29,3 +29,6 @@ IgnoreLexer.java~
 .DS_Store
 
 /verification
+
+# airc
+CLAUDE.local.md

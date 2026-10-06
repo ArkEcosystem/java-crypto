@@ -7,7 +7,6 @@ import java.util.List;
 import org.arkecosystem.crypto.encoding.Hex;
 import org.arkecosystem.crypto.enums.AbiFunction;
 import org.arkecosystem.crypto.enums.ContractAbiType;
-import org.arkecosystem.crypto.utils.ProofOfPossession;
 
 public final class TransactionEncoder {
 
@@ -41,8 +40,9 @@ public final class TransactionEncoder {
                 Collections.emptyList());
     }
 
-    public static String validatorRegistration(String passphrase) {
-        ProofOfPossession.Result pop = ProofOfPossession.fromMnemonic(passphrase);
+    public static String validatorRegistration(String passphrase, String registrantAddress) {
+        ProofOfPossession.Result pop =
+                ProofOfPossession.fromMnemonic(passphrase, registrantAddress);
         return encode(
                 ContractAbiType.CONSENSUS,
                 AbiFunction.VALIDATOR_REGISTRATION,
@@ -56,8 +56,9 @@ public final class TransactionEncoder {
                 Collections.emptyList());
     }
 
-    public static String validatorUpdate(String passphrase) {
-        ProofOfPossession.Result pop = ProofOfPossession.fromMnemonic(passphrase);
+    public static String validatorUpdate(String passphrase, String registrantAddress) {
+        ProofOfPossession.Result pop =
+                ProofOfPossession.fromMnemonic(passphrase, registrantAddress);
         return encode(
                 ContractAbiType.CONSENSUS,
                 AbiFunction.UPDATE_VALIDATOR,

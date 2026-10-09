@@ -16,6 +16,8 @@ public class TransactionEncoderTest {
                     + " connect misery update episode invite salute barely garbage exclude winner"
                     + " visa cruise";
 
+    private static final String REGISTRANT_ADDRESS = "0xb0FF9213f7226bBB72b84dE16af86e56f1f38B01";
+
     @Test
     public void it_should_encode_a_vote_payload() throws Exception {
         String address = "0xC3bBE9B1CeE1ff85Ad72b87414B0E9B7F2366763";
@@ -37,7 +39,8 @@ public class TransactionEncoderTest {
 
     @Test
     public void it_should_encode_a_validator_registration_payload() throws Exception {
-        String payload = TransactionEncoder.validatorRegistration(VALIDATOR_PASSPHRASE);
+        String payload =
+                TransactionEncoder.validatorRegistration(VALIDATOR_PASSPHRASE, REGISTRANT_ADDRESS);
 
         Map<String, Object> decoded = new AbiDecoder().decodeFunctionData(payload);
         assertEquals("registerValidator", decoded.get("functionName"));
@@ -53,7 +56,8 @@ public class TransactionEncoderTest {
 
     @Test
     public void it_should_encode_a_validator_update_payload() throws Exception {
-        String payload = TransactionEncoder.validatorUpdate(VALIDATOR_PASSPHRASE);
+        String payload =
+                TransactionEncoder.validatorUpdate(VALIDATOR_PASSPHRASE, REGISTRANT_ADDRESS);
 
         Map<String, Object> decoded = new AbiDecoder().decodeFunctionData(payload);
         assertEquals("updateValidator", decoded.get("functionName"));

@@ -8,8 +8,10 @@ import org.arkecosystem.crypto.utils.ProofOfPossession;
 public class ValidatorRegistrationBuilder
         extends AbstractTransactionBuilder<ValidatorRegistrationBuilder> {
 
-    public ValidatorRegistrationBuilder validatorPassphrase(String passphrase) {
-        ProofOfPossession.Result pop = ProofOfPossession.fromMnemonic(passphrase);
+    public ValidatorRegistrationBuilder validatorProof(
+            String passphrase, String registrantAddress) {
+        ProofOfPossession.Result pop =
+                ProofOfPossession.fromMnemonic(passphrase, registrantAddress);
         this.transaction.validatorPublicKey = Hex.encode(pop.pk);
         this.transaction.validatorProof = Hex.encode(pop.pop);
 

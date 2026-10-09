@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Map;
 import org.arkecosystem.crypto.AbstractTest;
 import org.arkecosystem.crypto.encoding.Hex;
+import org.arkecosystem.crypto.identities.Address;
 import org.junit.jupiter.api.Test;
 
 public class ValidatorUpdateBuilderTest extends AbstractTest {
@@ -25,7 +26,8 @@ public class ValidatorUpdateBuilderTest extends AbstractTest {
                         .nonce(Long.parseLong(data.get("nonce").toString()))
                         .network(((Number) data.get("network")).intValue())
                         .gasLimit(((Number) data.get("gasLimit")).longValue())
-                        .validatorPassphrase(VALIDATOR_PASSPHRASE)
+                        .validatorProof(
+                                VALIDATOR_PASSPHRASE, Address.fromPassphrase(this.passphrase))
                         .recipientAddress((String) data.get("recipientAddress"))
                         .sign(this.passphrase);
 

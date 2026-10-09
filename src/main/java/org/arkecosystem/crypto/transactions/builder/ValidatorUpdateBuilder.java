@@ -7,8 +7,9 @@ import org.arkecosystem.crypto.utils.ProofOfPossession;
 
 public class ValidatorUpdateBuilder extends AbstractTransactionBuilder<ValidatorUpdateBuilder> {
 
-    public ValidatorUpdateBuilder validatorPassphrase(String passphrase) {
-        ProofOfPossession.Result pop = ProofOfPossession.fromMnemonic(passphrase);
+    public ValidatorUpdateBuilder validatorProof(String passphrase, String registrantAddress) {
+        ProofOfPossession.Result pop =
+                ProofOfPossession.fromMnemonic(passphrase, registrantAddress);
         this.transaction.validatorPublicKey = Hex.encode(pop.pk);
         this.transaction.validatorProof = Hex.encode(pop.pop);
 
@@ -26,5 +27,4 @@ public class ValidatorUpdateBuilder extends AbstractTransactionBuilder<Validator
     protected ValidatorUpdateBuilder instance() {
         return this;
     }
-
 }

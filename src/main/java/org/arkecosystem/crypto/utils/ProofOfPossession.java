@@ -2,17 +2,22 @@ package org.arkecosystem.crypto.utils;
 
 import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
+import org.arkecosystem.crypto.configuration.Network;
 import org.arkecosystem.crypto.encoding.Hex;
+import org.arkecosystem.crypto.exceptions.InvalidProofOfPossessionException;
 import org.bouncycastle.crypto.digests.SHA512Digest;
 import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
 import org.bouncycastle.crypto.params.KeyParameter;
+import org.web3j.abi.TypeEncoder;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.generated.Uint256;
 import supranational.blst.P1;
 import supranational.blst.P2;
 import supranational.blst.SecretKey;
 
 public class ProofOfPossession {
 
-    private static final String POP_DST = "BLS_POP_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_";
+    private static final String POP_DST = "MAINSAIL_BLS_POP_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_";
 
     public static final class Result {
         public final byte[] pk;
@@ -32,16 +37,33 @@ public class ProofOfPossession {
         return Hex.encode(new P1(deriveChildSk(passphrase)).compress());
     }
 
-    public static Result buildProofOfPossession(byte[] secretKeyBytes) {
+    public static Result buildProofOfPossession(byte[] secretKeyBytes, String registrantAddress) {
+        if (!Address.validate(registrantAddress)) {
+            throw new InvalidProofOfPossessionException(
+                    "registrantAddress must be a valid address. Got " + registrantAddress + ".");
+        }
+
         SecretKey sk = new SecretKey();
         sk.from_bendian(secretKeyBytes);
+
+        // 1. Derive the compressed public key (48-byte G1).
         byte[] pk = new P1(sk).compress();
-        P2 sig = new P2().hash_to(pk, POP_DST).sign_with(sk);
+
+        // 2. Hash chainId ‖ registrantAddress ‖ pk to a G2 point under POP_DST, binding
+        //    the proof to the registrant and chain.
+        String packedChainId = TypeEncoder.encodePacked(new Uint256(Network.get().chainId()));
+        String packedAddress =
+                TypeEncoder.encodePacked(new org.web3j.abi.datatypes.Address(registrantAddress));
+        String packedPk = TypeEncoder.encodePacked(new DynamicBytes(pk));
+        byte[] message = Hex.decode(packedChainId + packedAddress + packedPk);
+
+        // 3. Sign the hashed G2 point with the secret key.
+        P2 sig = new P2().hash_to(message, POP_DST).sign_with(sk);
         return new Result(pk, sig.compress());
     }
 
-    public static Result fromMnemonic(String passphrase) {
-        return buildProofOfPossession(deriveBlsPrivateKey(passphrase));
+    public static Result fromMnemonic(String passphrase, String registrantAddress) {
+        return buildProofOfPossession(deriveBlsPrivateKey(passphrase), registrantAddress);
     }
 
     private static SecretKey deriveChildSk(String passphrase) {
@@ -62,6 +84,4 @@ public class ProofOfPossession {
         gen.init(pass, salt, 2048);
         return ((KeyParameter) gen.generateDerivedParameters(512)).getKey();
     }
-
-
 }

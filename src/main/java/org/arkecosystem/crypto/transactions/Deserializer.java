@@ -23,7 +23,7 @@ public class Deserializer {
     public AbstractTransaction deserialize() {
         List<byte[]> fields = RlpDecoder.decode(rawBytes);
 
-        // Fields: [nonce, gasPrice, gasLimit, to, value, data, v, r, s]
+        // Fields: [nonce, gasPrice, gasLimit, to, value, data, v, r, s, legacySecondSignature?]
         long nonce = bytesToLong(fields.get(0));
         long gasPrice = bytesToLong(fields.get(1));
         long gasLimit = bytesToLong(fields.get(2));
@@ -53,6 +53,8 @@ public class Deserializer {
             }
         }
 
+        String legacySecondSignature = fields.size() == 10 ? Hex.encode(fields.get(9)) : null;
+
         // Create temp transaction to guess type
         AbstractTransaction tempTransaction = new EvmCall();
         tempTransaction.nonce = nonce;
@@ -72,6 +74,7 @@ public class Deserializer {
         transaction.data = data;
         transaction.network = Network.get().version();
         transaction.signature = signature;
+        transaction.legacySecondSignature = legacySecondSignature;
 
         if (signature != null) {
             transaction.recoverSender();

@@ -13,8 +13,13 @@ import org.arkecosystem.crypto.transactions.Serializer;
 import org.arkecosystem.crypto.utils.AbiDecoder;
 import org.arkecosystem.crypto.utils.TransactionUtils;
 import org.bitcoinj.core.ECKey;
+import org.web3j.crypto.Hash;
 
 public abstract class AbstractTransaction {
+    // 0x8f ‖ "MAINSAIL_LSS_V1"
+    private static final byte[] LEGACY_SECOND_SIGNATURE_DOMAIN =
+            Hex.decode("8f4d41494e5341494c5f4c53535f5631");
+
     public int network;
     public long nonce;
     public String senderPublicKey;
@@ -85,6 +90,9 @@ public abstract class AbstractTransaction {
         if (data.containsKey("senderAddress")) {
             this.senderAddress = (String) data.get("senderAddress");
         }
+        if (data.containsKey("legacySecondSignature")) {
+            this.legacySecondSignature = (String) data.get("legacySecondSignature");
+        }
     }
 
     public String getPayload() {
@@ -109,7 +117,10 @@ public abstract class AbstractTransaction {
     }
 
     public AbstractTransaction sign(String passphrase) {
-        ECKey privateKey = PrivateKey.fromPassphrase(passphrase);
+        return sign(PrivateKey.fromPassphrase(passphrase));
+    }
+
+    public AbstractTransaction sign(ECKey privateKey) {
         this.senderPublicKey = privateKey.getPublicKeyAsHex();
 
         this.signature = signHash(this.hash(true), privateKey);
@@ -118,9 +129,31 @@ public abstract class AbstractTransaction {
     }
 
     public AbstractTransaction legacySecondSign(String secondPassphrase) {
-        ECKey privateKey = PrivateKey.fromPassphrase(secondPassphrase);
+        return legacySecondSign(PrivateKey.fromPassphrase(secondPassphrase));
+    }
 
-        this.legacySecondSignature = signHash(this.hash(true), privateKey);
+    public AbstractTransaction legacySecondSign(ECKey secondPrivateKey) {
+        if (this.signature == null) {
+            throw new IllegalStateException(
+                    "Transaction must be signed before adding a legacy second signature");
+        }
+
+        byte[] transactionHash = this.hash(false);
+        byte[] message = new byte[LEGACY_SECOND_SIGNATURE_DOMAIN.length + transactionHash.length];
+        System.arraycopy(
+                LEGACY_SECOND_SIGNATURE_DOMAIN,
+                0,
+                message,
+                0,
+                LEGACY_SECOND_SIGNATURE_DOMAIN.length);
+        System.arraycopy(
+                transactionHash,
+                0,
+                message,
+                LEGACY_SECOND_SIGNATURE_DOMAIN.length,
+                transactionHash.length);
+
+        this.legacySecondSignature = signHash(Hash.sha3(message), secondPrivateKey);
 
         return this;
     }
@@ -181,6 +214,7 @@ public abstract class AbstractTransaction {
         map.put("recipientAddress", this.recipientAddress);
         map.put("value", this.value);
         map.put("data", this.data);
+        map.put("legacySecondSignature", this.legacySecondSignature);
         return map;
     }
 

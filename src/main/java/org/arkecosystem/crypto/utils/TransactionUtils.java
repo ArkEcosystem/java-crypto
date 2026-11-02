@@ -12,6 +12,13 @@ import org.web3j.crypto.Hash;
 public class TransactionUtils {
 
     public static byte[] toBuffer(Map<String, Object> transaction, boolean skipSignature) {
+        return toBuffer(transaction, skipSignature, false);
+    }
+
+    public static byte[] toBuffer(
+            Map<String, Object> transaction,
+            boolean skipSignature,
+            boolean skipLegacySecondSignature) {
         String toHex = parseHexFromStr((String) transaction.get("recipientAddress"));
         if (toHex.length() % 2 != 0) {
             toHex = "0" + toHex;
@@ -42,8 +49,12 @@ public class TransactionUtils {
 
             int chainId = Network.get().chainId();
             fields.add(RlpEncoder.toBeArray(BigInteger.valueOf(v + chainId * 2 + 35)));
-            fields.add(r);
-            fields.add(s);
+            fields.add(stripLeadingZeroBytes(r));
+            fields.add(stripLeadingZeroBytes(s));
+
+            if (!skipLegacySecondSignature && transaction.get("legacySecondSignature") != null) {
+                fields.add(Hex.decode((String) transaction.get("legacySecondSignature")));
+            }
         } else {
             int chainId = Network.get().chainId();
             fields.add(RlpEncoder.toBeArray(BigInteger.valueOf(chainId)));
@@ -55,13 +66,22 @@ public class TransactionUtils {
     }
 
     public static byte[] toHash(Map<String, Object> transaction, boolean skipSignature) {
-        byte[] buffer = toBuffer(transaction, skipSignature);
+        // The transaction hash never covers the legacy second signature
+        byte[] buffer = toBuffer(transaction, skipSignature, true);
         return Hash.sha3(buffer);
     }
 
     public static String getId(Map<String, Object> transaction) {
         byte[] hash = toHash(transaction, false);
         return Hex.encode(hash);
+    }
+
+    private static byte[] stripLeadingZeroBytes(byte[] value) {
+        int start = 0;
+        while (start < value.length && value[start] == 0) {
+            start++;
+        }
+        return Arrays.copyOfRange(value, start, value.length);
     }
 
     private static String parseHexFromStr(String value) {
